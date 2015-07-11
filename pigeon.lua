@@ -6,7 +6,7 @@ function Pigeon:init()
   self.w = 20
   self.h = 40
   self.speed = 100
-  self.direction = 0
+  self.direction = {x = 1, y = 0}
   self.laser = false
 
   self.lives = 3
@@ -17,19 +17,30 @@ end
 function Pigeon:update()
   if love.keyboard.isDown('left') then
     self.x = self.x - self.speed * ls.tickrate
-    self.direction = -1
+    self.direction.x = -1
   elseif love.keyboard.isDown('right') then
     self.x = self.x + self.speed * ls.tickrate
-    self.direction = 1
+    self.direction.x = 1
+  end
+
+  if love.keyboard.isDown('up') then
+    self.direction.y = -1
+  elseif love.keyboard.isDown('down') then
+    self.direction.y = 1
+  else
+    self.direction.y = 0
   end
 
   self.laser = love.keyboard.isDown(' ')
 
   if self.laser then
     local kills = 0
+
+    local x1, y1 = self.x, self.y
+    local x2, y2 = self.x + self.direction.x * 1000, self.y + self.direction.y * 1000
+
     lume.each(ctx.people, function(person, i)
-      local x1, x2 = self.x, self.x + 1000 * self.direction
-      if person.x > math.min(x1, x2) and person.x < math.max(x1, x2) then
+      if math.hlora(x1, y1, x2, y2, person.x - person.w / 2, person.y - person.h / 2, self.w, self.h) then
         kills = kills + 1
         table.remove(ctx.people, i)
       end
@@ -61,7 +72,10 @@ function Pigeon:draw()
   g.rectangle('line', self.x - self.w / 2, self.y - self.h / 2, self.w, self.h)
 
   if self.laser then
-    love.graphics.setColor(255, 0, 0)
-    love.graphics.line(self.x, self.y, self.x + 1000 * self.direction, self.y)
+    local x1, y1 = self.x, self.y
+    local x2, y2 = self.x + self.direction.x * 1000, self.y + self.direction.y * 1000
+
+    g.setColor(255, 0, 0)
+    g.line(x1, y1, x2, y2)
   end
 end
