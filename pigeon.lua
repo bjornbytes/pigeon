@@ -13,10 +13,6 @@ function Pigeon:init()
   self.laser = false
   self.laserLength = 0
 
-  self.gravity = 0--180
-  self.jumpspeed = 120
-  self.vy = 0
-
   self.lives = 3
   self.health = 100
   self.maxHealth = 100
@@ -45,13 +41,6 @@ function Pigeon:update()
     end
 
     flux.to(self.direction, .4, self.targetDirection):ease('expoout')
-
-    self.vy = self.vy + self.gravity * ls.tickrate
-    self.y = self.y + self.vy * ls.tickrate
-
-    if self.y + self.h / 2 > 600 then
-      self.vy = math.abs(self.vy) * -1
-    end
   end
 
   local kills = 0
@@ -78,17 +67,6 @@ function Pigeon:update()
           return -1
         end)
       end
-
-      --[[for i, person in lume.ripairs(ctx.people) do
-
-        local px, py, px2, py2 = person.body:getWorldPoints(person.shape:getPoints())
-        local pw, ph = px2 - px, py2 - py
-        if math.hlora(x1, y1, x2, y2, px, py, pw, ph) then
-          kills = kills + 1
-          table.remove(ctx.people, i)
-        end
-      end]]
-
     else
       if self.laserTween then
         self.laserTween:stop()
@@ -135,11 +113,5 @@ function Pigeon:draw()
     g.setLineWidth(self.w / 5)
     g.line(x, y - self.h / 2, x2, y2 - self.h / 2)
     g.setLineWidth(1)
-  end
-end
-
-function Pigeon:keypressed(key)
-  if key == 'z' then
-    self.vy = -self.jumpspeed
   end
 end

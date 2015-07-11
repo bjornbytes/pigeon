@@ -14,7 +14,7 @@ function Game:update()
     person:update()
   end)
 
-  if love.math.random() < .5 * ls.tickrate then
+  if love.math.random() < .7 * ls.tickrate then
     local x, dir
 
     if love.math.random() < .5 then
@@ -45,6 +45,4 @@ function Game:keypressed(key)
   if key == 'escape' then
     love.event.quit()
   end
-
-  self.pigeon:keypressed(key)
 end
