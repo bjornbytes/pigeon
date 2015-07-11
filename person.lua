@@ -2,13 +2,14 @@ Person = class()
 
 function Person:init()
   self.x = 800
+  self.direction = -1
   self.y = 500
   self.w = 20
   self.h = 40
 end
 
 function Person:update()
-  self.x = self.x - 100 * ls.tickrate
+  self.x = self.x + 100 * self.direction * ls.tickrate
 end
 
 function Person:draw()
