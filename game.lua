@@ -1,8 +1,10 @@
 Game = class()
 
 function Game:load()
+  self.world = love.physics.newWorld(0, 98)
+  self.map = Map(ctx)
   self.pigeon = Pigeon()
-  self.people = {Person()}
+  self.people = {}
   self.hud = Hud()
 end
 
@@ -13,25 +15,25 @@ function Game:update()
   end)
 
   if love.math.random() < .5 * ls.tickrate then
-    local p = Person()
+    local x, dir
 
     if love.math.random() < .5 then
-      p.x = 0
-      p.direction = 1
+      x = 0
+      dir = 1
     else
-      p.x = 800
-      p.direction = -1
+      x = 800
+      dir = -1
     end
 
-    lume.push(self.people, p)
+    lume.push(self.people, Person(x, 400, dir))
   end
+
+  self.world:update(ls.tickrate)
 end
 
 function Game:draw()
-  local g = love.graphics
   flux.update(ls.dt)
-  g.setColor(0, 50, 0)
-  g.rectangle('fill', 0, 0, 800, 600)
+  self.map:draw()
   self.pigeon:draw()
   lume.each(self.people, function(person)
     person:draw()

@@ -9,5 +9,6 @@ require 'context'
 require 'game'
 require 'person'
 require 'pigeon'
+require 'map'
 
 require 'hud'
