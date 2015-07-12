@@ -1,0 +1,154 @@
+{
+"skeleton": { "hash": "+aXukBFuk86JeciF+TzXAV+VW14", "spine": "2.1.27", "width": 1222.73, "height": 1500.37 },
+"bones": [
+	{ "name": "root" },
+	{
+		"name": "body1",
+		"parent": "root",
+		"length": 204.7,
+		"x": 54.09,
+		"y": 971.34,
+		"scaleX": 3.274,
+		"scaleY": 3.274,
+		"rotation": -137.28
+	},
+	{ "name": "body2", "parent": "body1", "length": 71.18, "x": 7.92, "y": 19.92, "rotation": 115.65 },
+	{ "name": "leftthigh", "parent": "body1", "length": 41.26, "x": 113.34, "y": 105.87, "rotation": 45.68 },
+	{ "name": "leftwing", "parent": "body1", "length": 100.44, "x": 56.09, "y": 20.75, "rotation": -32.08 },
+	{ "name": "neck4", "parent": "body1", "length": 8.46, "x": -30.1, "y": -6.61, "rotation": -171.05 },
+	{ "name": "rightthigh", "parent": "body1", "length": 76.97, "x": 148.38, "y": 103.93, "rotation": 47.34 },
+	{ "name": "rightwing", "parent": "body1", "length": 134.5, "x": 116.07, "y": 18.52, "rotation": -32.2 },
+	{ "name": "body3", "parent": "body2", "length": 76.47, "x": -6.96, "y": -32.57, "rotation": -18.91 },
+	{ "name": "leftshin", "parent": "leftthigh", "length": 32.21, "x": 49.76, "y": 4.44, "rotation": 27.46 },
+	{ "name": "neck3", "parent": "neck4", "length": 12.62, "x": 16.48, "y": 2.12, "rotation": 18.29 },
+	{ "name": "rightshin", "parent": "rightthigh", "length": 45.48, "x": 75.43, "y": 1.46, "rotation": 23.96 },
+	{ "name": "body4", "parent": "body3", "length": 66.4, "x": 9.12, "y": -50.94, "rotation": -3.58 },
+	{ "name": "leftfoot", "parent": "leftshin", "length": 16.74, "x": 39.38, "y": -0.61, "rotation": 81.49 },
+	{ "name": "neck2", "parent": "neck3", "length": 11.12, "x": 23.7, "y": 1.56 },
+	{ "name": "rightfoot", "parent": "rightshin", "length": 22.79, "x": 46.34, "y": 3.9, "rotation": 64.71 },
+	{ "name": "leftclaw1", "parent": "leftfoot", "length": 17.86, "x": 21.33, "y": -6.02, "rotation": -19.1 },
+	{ "name": "leftclaw2", "parent": "leftfoot", "length": 19.71, "x": 23.68, "y": 3.56, "rotation": -19.1 },
+	{ "name": "leftclaw3", "parent": "leftfoot", "length": 12.92, "x": 25.01, "y": 5.73, "rotation": -17.07 },
+	{ "name": "neck1", "parent": "neck2", "length": 7.9, "x": 17.74, "y": -0.1, "rotation": -12.43 },
+	{ "name": "rightclaw1", "parent": "rightfoot", "length": 33.09, "x": 29.63, "y": -3.66, "rotation": -8.06 },
+	{ "name": "rightclaw2", "parent": "rightfoot", "length": 33.52, "x": 30.57, "y": 9.89, "rotation": -6.26 },
+	{ "name": "rightclaw3", "parent": "rightfoot", "length": 23.59, "x": 27.31, "y": 18.44, "rotation": -6.26 },
+	{ "name": "head", "parent": "neck1", "length": 30.9, "x": 29.81, "y": 0.93, "rotation": 30.56 },
+	{ "name": "beakclosed", "parent": "head", "length": 26.24, "x": 11.06, "y": -32.91, "rotation": -130.11 },
+	{ "name": "beakopen", "parent": "head", "length": 26.59, "x": 9.08, "y": -30.6, "rotation": -129.66 },
+	{ "name": "pupil", "parent": "head", "length": 5.54, "x": 23.09, "y": -8.27, "rotation": 32.52 }
+],
+"slots": [
+	{ "name": "leftwing", "bone": "leftwing", "attachment": "leftwing" },
+	{ "name": "leftthigh", "bone": "leftthigh", "attachment": "leftthigh" },
+	{ "name": "leftshin", "bone": "leftshin", "attachment": "leftshin" },
+	{ "name": "leftclaw3", "bone": "leftclaw3", "attachment": "leftclaw3" },
+	{ "name": "leftclaw2", "bone": "leftclaw2", "attachment": "leftclaw2" },
+	{ "name": "leftclaw1", "bone": "leftclaw1", "attachment": "leftclaw1" },
+	{ "name": "leftfoot", "bone": "leftfoot", "attachment": "leftfoot" },
+	{ "name": "body4", "bone": "body4", "attachment": "body4" },
+	{ "name": "body3", "bone": "body3", "attachment": "body3" },
+	{ "name": "body2", "bone": "body2", "attachment": "body2" },
+	{ "name": "body1", "bone": "body1", "attachment": "body1" },
+	{ "name": "neck4", "bone": "neck4", "attachment": "neck4" },
+	{ "name": "neck3", "bone": "neck3", "attachment": "neck3" },
+	{ "name": "neck2", "bone": "neck2", "attachment": "neck2" },
+	{ "name": "neck1", "bone": "neck1", "attachment": "neck1" },
+	{ "name": "beakopen", "bone": "beakopen", "attachment": "beakopen" },
+	{ "name": "beakclosed", "bone": "beakclosed", "attachment": "beakclosed" },
+	{ "name": "head", "bone": "beakclosed", "attachment": "head" },
+	{ "name": "rightthigh", "bone": "rightthigh", "attachment": "rightthigh" },
+	{ "name": "rightshin", "bone": "rightshin", "attachment": "rightshin" },
+	{ "name": "rightclaw3", "bone": "rightclaw3", "attachment": "rightclaw3" },
+	{ "name": "rightclaw2", "bone": "rightclaw2", "attachment": "rightclaw2" },
+	{ "name": "rightclaw1", "bone": "rightclaw1", "attachment": "rightclaw1" },
+	{ "name": "rightfoot", "bone": "rightfoot", "attachment": "rightfoot" },
+	{ "name": "rightwing", "bone": "rightwing", "attachment": "rightwing" },
+	{ "name": "pupil", "bone": "pupil", "attachment": "pupil" }
+],
+"skins": {
+	"default": {
+		"beakclosed": {
+			"beakclosed": { "x": 6.59, "y": 0.3, "scaleX": 0.305, "scaleY": 0.305, "rotation": 42.02, "width": 139, "height": 133 }
+		},
+		"beakopen": {
+			"beakopen": { "x": 9.27, "y": 1.5, "scaleX": 0.305, "scaleY": 0.305, "rotation": 41.57, "width": 136, "height": 149 }
+		},
+		"body1": {
+			"body1": { "x": 104.22, "y": -14.22, "scaleX": 0.305, "scaleY": 0.305, "rotation": 137.28, "width": 1134, "height": 681 }
+		},
+		"body2": {
+			"body2": { "x": 36.78, "y": -41.87, "scaleX": 0.305, "scaleY": 0.305, "rotation": 21.63, "width": 320, "height": 333 }
+		},
+		"body3": {
+			"body3": { "x": 43.03, "y": -35.77, "scaleX": 0.305, "scaleY": 0.305, "rotation": 40.55, "width": 284, "height": 414 }
+		},
+		"body4": {
+			"body4": { "x": -31.43, "y": -43.2, "scaleX": 0.305, "scaleY": 0.305, "rotation": 44.13, "width": 1002, "height": 599 }
+		},
+		"head": {
+			"head": { "x": -18.73, "y": -13.75, "scaleX": 0.305, "scaleY": 0.305, "rotation": 42.02, "width": 325, "height": 237 }
+		},
+		"leftclaw1": {
+			"leftclaw1": { "x": 15.74, "y": -0.02, "scaleX": 0.305, "scaleY": 0.305, "rotation": 1.76, "width": 125, "height": 45 }
+		},
+		"leftclaw2": {
+			"leftclaw2": { "x": 11.48, "y": -0.53, "scaleX": 0.305, "scaleY": 0.305, "rotation": 1.76, "width": 125, "height": 45 }
+		},
+		"leftclaw3": {
+			"leftclaw3": { "x": 8.85, "y": -1.7, "scaleX": 0.305, "scaleY": 0.305, "rotation": -0.27, "width": 90, "height": 24 }
+		},
+		"leftfoot": {
+			"leftfoot": { "x": -0.57, "y": 5.73, "scaleX": 0.305, "scaleY": 0.305, "rotation": -17.34, "width": 168, "height": 85 }
+		},
+		"leftshin": {
+			"leftshin": { "x": 10.19, "scaleX": 0.305, "scaleY": 0.305, "rotation": 64.14, "width": 99, "height": 178 }
+		},
+		"leftthigh": {
+			"leftthigh": { "x": 18.92, "y": -1.27, "scaleX": 0.305, "scaleY": 0.305, "rotation": 91.6, "width": 134, "height": 189 }
+		},
+		"leftwing": {
+			"leftwing": { "x": 73.58, "y": -1.93, "scaleX": 0.305, "scaleY": 0.305, "rotation": 169.37, "width": 697, "height": 294 }
+		},
+		"neck1": {
+			"neck1": { "x": 6.48, "y": 0.89, "scaleX": 0.305, "scaleY": 0.305, "rotation": -57.52, "width": 316, "height": 170 }
+		},
+		"neck2": {
+			"neck2": { "x": 8.1, "y": -4.89, "scaleX": 0.305, "scaleY": 0.305, "rotation": -69.96, "width": 282, "height": 181 }
+		},
+		"neck3": {
+			"neck3": { "x": 13.87, "y": -2.72, "scaleX": 0.305, "scaleY": 0.305, "rotation": -69.96, "width": 276, "height": 198 }
+		},
+		"neck4": {
+			"neck4": { "x": 8.34, "y": -7.2, "scaleX": 0.305, "scaleY": 0.305, "rotation": -51.66, "width": 293, "height": 217 }
+		},
+		"pupil": {
+			"pupil": { "x": 5.36, "y": -6.39, "scaleX": 0.305, "scaleY": 0.305, "rotation": -120.62, "width": 65, "height": 66 }
+		},
+		"rightclaw1": {
+			"rightclaw1": { "x": 12.84, "y": 1.75, "scaleX": 0.305, "scaleY": 0.305, "rotation": 9.33, "width": 202, "height": 47 }
+		},
+		"rightclaw2": {
+			"rightclaw2": { "x": 20.88, "y": -0.94, "scaleX": 0.305, "scaleY": 0.305, "rotation": 7.53, "width": 206, "height": 68 }
+		},
+		"rightclaw3": {
+			"rightclaw3": { "x": 11.35, "y": 1.43, "scaleX": 0.305, "scaleY": 0.305, "rotation": 7.53, "width": 118, "height": 34 }
+		},
+		"rightfoot": {
+			"rightfoot": { "x": -0.52, "y": 5.56, "scaleX": 0.305, "scaleY": 0.305, "rotation": 1.26, "width": 195, "height": 114 }
+		},
+		"rightshin": {
+			"rightshin": { "x": 11.92, "y": 0.75, "scaleX": 0.305, "scaleY": 0.305, "rotation": 65.97, "width": 117, "height": 177 }
+		},
+		"rightthigh": {
+			"rightthigh": { "x": 31.34, "y": 2.62, "scaleX": 0.305, "scaleY": 0.305, "rotation": 89.94, "width": 148, "height": 283 }
+		},
+		"rightwing": {
+			"rightwing": { "x": 70.26, "y": -6.73, "scaleX": 0.305, "scaleY": 0.305, "rotation": 169.49, "width": 748, "height": 412 }
+		}
+	}
+},
+"animations": {
+	"animation": {}
+}
+}
