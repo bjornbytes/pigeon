@@ -1,6 +1,6 @@
-[submodule "deps/spine-runtimes"]
-	path = deps/spine-runtimes
-	url = https://github.com/bjornswenson/spine-runtimes
 [submodule "deps/lovestep"]
 	path = deps/lovestep
 	url = https://github.com/bjornswenson/lovestep
+[submodule "deps/spine"]
+	path = deps/spine
+	url = git@github.com:bjornswenson/spine-runtimes

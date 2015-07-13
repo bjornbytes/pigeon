@@ -16,8 +16,21 @@ function math.hlora(x1, y1, x2, y2, rx, ry, rw, rh) -- Hot line on rectangle act
       or math.hlola(x1, y1, x2, y2, rx, ryh, rxw, ryh)
 end
 
-function drawPhysicsObject(how, obj)
+physics = {}
+function physics.draw(how, obj)
   if obj.shape:typeOf('PolygonShape') then
     love.graphics.polygon(how, obj.body:getWorldPoints(obj.shape:getPoints()))
   end
+end
+
+timer = {}
+function timer.rot(v, fn)
+ if v > 0 then
+   v = v - ls.tickrate
+   if v <= 0 then
+     v = 0
+     v = f.exe(fn) or 0
+   end
+ end
+ return v
 end

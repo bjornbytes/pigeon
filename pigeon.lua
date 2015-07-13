@@ -20,6 +20,8 @@ function Pigeon:init()
   self.lives = 3
   self.health = 100
   self.maxHealth = 100
+
+  self.animation = data.animation.pigeon()
 end
 
 function Pigeon:update()
@@ -136,6 +138,8 @@ function Pigeon:draw()
     g.line(x, y - self.h / 2, x2, y2 - self.h / 2)
     g.setLineWidth(1)
   end
+
+  self.animation:draw(self.x, self.y)
 end
 
 function Pigeon:keypressed(key)
