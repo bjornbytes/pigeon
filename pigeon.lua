@@ -19,6 +19,8 @@ function Pigeon:init()
 
   self.animation = data.animation.pigeon()
 
+  ctx.view.target = self
+
   ctx.event:emit('view.register', {object = self})
 end
 
@@ -119,5 +121,5 @@ function Pigeon:draw()
     g.setLineWidth(1)
   end
 
-  self.animation:draw(self.x, self.y)
+  self.animation:draw(x, y)
 end

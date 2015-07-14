@@ -53,6 +53,7 @@ function View:update()
   self.x = self.x + self.vx * ls.tickrate
   self.y = self.y + self.vy * ls.tickrate
 
+  self:follow()
   self:contain()
 
   self.shake = lume.lerp(self.shake, 0, 8 * ls.tickrate)
@@ -186,6 +187,15 @@ end
 
 function View:threeDepth(x, y, z)
   return math.clamp(lume.distance(x, y, self.x + self.width / 2, self.y + self.height / 2) * self.scale - 1000 - z, -4096, -16)
+end
+
+function View:follow()
+  if not self.target then return end
+
+  local margin = 0.5
+
+  self.x = self.target.x - self.width * margin
+  self.y = self.target.y - self.height * margin
 end
 
 function View:contain()

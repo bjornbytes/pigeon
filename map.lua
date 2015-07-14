@@ -1,5 +1,5 @@
 Map = class()
-Map.width = 800
+Map.width = 1600
 Map.height = 600
 
 function Map:init()
@@ -9,6 +9,9 @@ function Map:init()
   self.ground.shape = love.physics.newRectangleShape(self.width, self.ground.height)
 
   self.ground.fixture = love.physics.newFixture(self.ground.body, self.ground.shape)
+
+  ctx.view.xmax = self.width
+  ctx.view.ymax = self.height
   ctx.event:emit('view.register', {object = self})
 end
 
