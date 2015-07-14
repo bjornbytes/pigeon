@@ -9,7 +9,7 @@ function Context:add(obj, ...)
 
   local tmp = ctx
   ctx = c
-  f.exe(ctx.load, ctx, ...)
+  lume.call(ctx.load, ctx, ...)
   ctx = tmp
 
   return c
@@ -31,7 +31,7 @@ end
 function Context:remove(ctx, ...)
   for i = 1, #self.list do
     if self.list[i] == ctx then
-      f.exe(ctx.unload, ctx, ...)
+      lume.call(ctx.unload, ctx, ...)
       table.remove(self.list, i)
       collectgarbage()
       return

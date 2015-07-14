@@ -9,6 +9,7 @@ function Map:init()
   self.ground.shape = love.physics.newRectangleShape(self.width, self.ground.height)
 
   self.ground.fixture = love.physics.newFixture(self.ground.body, self.ground.shape)
+  ctx.event:emit('view.register', {object = self})
 end
 
 function Map:draw()

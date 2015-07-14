@@ -18,6 +18,8 @@ function Pigeon:init()
   self.maxHealth = 100
 
   self.animation = data.animation.pigeon()
+
+  ctx.event:emit('view.register', {object = self})
 end
 
 function Pigeon:update()

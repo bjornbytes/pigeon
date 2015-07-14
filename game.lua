@@ -1,7 +1,9 @@
 Game = class()
 
 function Game:load()
+  self.event = Event()
   self.world = love.physics.newWorld(0, 500)
+  self.view = View()
   self.map = Map(ctx)
   self.pigeon = Pigeon()
   self.people = {}
@@ -29,16 +31,12 @@ function Game:update()
   end
 
   self.world:update(ls.tickrate)
+  self.view:update()
 end
 
 function Game:draw()
   flux.update(ls.dt)
-  self.map:draw()
-  self.pigeon:draw()
-  lume.each(self.people, function(person)
-    person:draw()
-  end)
-  self.hud:draw()
+  self.view:draw()
 end
 
 function Game:keypressed(key)

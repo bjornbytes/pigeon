@@ -22,6 +22,8 @@ function Person:init(x, y, dir)
 
   self.stable = true
   self.walkTimer = 1
+
+  ctx.event:emit('view.register', {object = self})
 end
 
 function Person:update()
@@ -44,4 +46,5 @@ end
 
 function Person:die()
   self.body:destroy()
+  ctx.event:emit('view.unregister', {object = self})
 end

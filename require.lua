@@ -7,6 +7,7 @@ ls = require 'deps/lovestep/lovestep'
 require 'deps/util'
 require 'deps/animation'
 require 'deps/event'
+require 'deps/view'
 
 require 'context'
 require 'game'

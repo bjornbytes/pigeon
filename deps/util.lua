@@ -1,5 +1,13 @@
-f = {}
-f.exe = function(x, ...) if type(x) == 'function' then return x(...) end return x end
+function table.interpolate(t1, t2, x)
+  local res = {}
+  for k, v in pairs(t2) do
+    if not t1[k] then return t2[k] end
+    res[k] = lume.lerp(t1[k], t2[k], x)
+  end
+  return res
+end
+
+function math.clamp(x, l, h) return math.min(math.max(x, l), h) end
 
 function math.hlola(x1, y1, x2, y2, x3, y3, x4, y4) -- Hot line on line action (boolean).
   local function s(x1, y1, x2, y2, x3, y3)
@@ -29,7 +37,7 @@ function timer.rot(v, fn)
    v = v - ls.tickrate
    if v <= 0 then
      v = 0
-     v = f.exe(fn) or 0
+     v = lume.call(fn) or 0
    end
  end
  return v
