@@ -1,5 +1,7 @@
 Person = class()
 
+Person.category = 3
+
 function Person:init(x, y, dir)
   self.x = x
   self.y = y
@@ -14,16 +16,30 @@ function Person:init(x, y, dir)
   self.body:setUserData(self)
 
   self.body:setMass(10)
+  self.fixture:setFriction(.35)
+  self.fixture:setCategory(self.category)
+  self.fixture:setMask(self.category)
+
+  self.stable = true
+  self.walkTimer = 1
 end
 
 function Person:update()
-  self.body:applyLinearImpulse(300 * self.direction * ls.tickrate, 0)
+  self.body:setFixedRotation(self.stable)
+  self.walkTimer = timer.rot(self.walkTimer, function()
+    self.body:applyLinearImpulse(self.direction * 50, -100)
+    return .6 + love.math.random() * .2
+  end)
 end
 
 function Person:draw()
   local g = love.graphics
+
+  g.setColor(255, 255, 255, 35)
+  physics.draw('fill', self)
+
   g.setColor(255, 255, 255)
-  drawPhysicsObject('line', self)
+  physics.draw('line', self)
 end
 
 function Person:die()

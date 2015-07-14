@@ -17,5 +17,5 @@ function Map:draw()
   g.rectangle('fill', 0, 0, self.width, self.height)
 
   g.setColor(100, 80, 0)
-  drawPhysicsObject('fill', self.ground)
+  physics.draw('fill', self.ground)
 end
