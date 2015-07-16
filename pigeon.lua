@@ -18,6 +18,13 @@ function Pigeon:init()
   self.maxHealth = 100
 
   self.animation = data.animation.pigeon()
+  self.animation:set('idle')
+
+  self.animation:on('complete', function(event)
+    if event.state.name == 'peck' then
+      self.animation:set('idle', {force = true})
+    end
+  end)
 
   ctx.view.target = self
 
@@ -29,13 +36,15 @@ function Pigeon:update()
   self.prevy = self.y
 
   -- Movement
-  do
+  if self.animation.state.name ~= 'peck' then
     if love.keyboard.isDown('left') then
       self.x = self.x - self.speed * ls.tickrate
       self.targetDirection.x = -1
+      self.animation.flipped = true
     elseif love.keyboard.isDown('right') then
       self.x = self.x + self.speed * ls.tickrate
       self.targetDirection.x = 1
+      self.animation.flipped = false
     end
 
     if love.keyboard.isDown('up') then
@@ -54,6 +63,7 @@ function Pigeon:update()
   -- Laser
   do
     self.laser = love.keyboard.isDown(' ')
+    self.laser = false
 
     if self.laser then
       self.laserTween = flux.to(self, 1, {laserLength = 1000}):ease('expoout')
@@ -103,6 +113,12 @@ function Pigeon:update()
 
   -- Health decay
   self.health = self.health - 10 * ls.tickrate
+
+  if love.keyboard.isDown(' ') then self.animation:set('peck') end
+
+  if self.animation.state.name == 'peck' then
+    self:killThingsOnBeak()
+  end
 end
 
 function Pigeon:draw()
@@ -122,4 +138,39 @@ function Pigeon:draw()
   end
 
   self.animation:draw(x, y)
+end
+
+-- Kill everything near the beak. Uses very dumb AABB checking but can be improved.
+function Pigeon:killThingsOnBeak()
+  local spine = self.animation.spine
+
+  spine.skeleton.flipY = true
+  spine.skeleton:updateWorldTransform()
+  spine.skeletonBounds:update(spine.skeleton)
+  spine.skeleton.flipY = false
+
+  for _, slotName in pairs({'beakbottom', 'beaktop'}) do
+    local beakSlot = spine.skeleton:findSlot(slotName)
+    local beakAttachment = spine.skeleton:getAttachment(beakSlot.data.name, beakSlot.data.name .. '_bb')
+    local polygon = spine.skeletonBounds:getPolygon(beakAttachment)
+
+    if polygon then
+      local x1, y1, x2, y2
+      for i = 1, #polygon, 2 do
+        x1 = math.min(x1 or math.huge, polygon[i])
+        x2 = math.max(x2 or -math.huge, polygon[i])
+        y1 = math.min(y1 or math.huge, polygon[i + 1])
+        y2 = math.max(y2 or -math.huge, polygon[i + 1])
+      end
+
+      ctx.world:queryBoundingBox(x1, y1, x2, y2, function(fixture)
+        local person = fixture:getBody():getUserData()
+        if person and person.die then
+          person:die()
+
+          return true
+        end
+      end)
+    end
+  end
 end

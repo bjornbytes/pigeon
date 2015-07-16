@@ -103,9 +103,7 @@
 			}
 		},
 		"beaktop": {
-			"beaktop": { "x": 10.96, "y": 0.08, "scaleX": 0.305, "scaleY": 0.305, "rotation": 48.2, "width": 111, "height": 132 }
-		},
-		"beaktop_bb": {
+			"beaktop": { "x": 10.96, "y": 0.08, "scaleX": 0.305, "scaleY": 0.305, "rotation": 48.2, "width": 111, "height": 132 },
 			"beaktop_bb": {
 				"type": "boundingbox",
 				"vertices": [ 36.72046, -0.79315, -4.59355, 12.52102, -7.11737, -5.9205 ]

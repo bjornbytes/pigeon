@@ -103,7 +103,7 @@ data.load = function()
         end
       end)
 
-      lume.each(animation.states[i].mix, function(time, to)
+      lume.each(animation.states[i].mix or {}, function(time, to)
         s.animationStateData:setMix(animation.states[i].name, to, time)
       end)
     end

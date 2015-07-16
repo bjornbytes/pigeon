@@ -15,23 +15,35 @@ function Person:init(x, y, dir)
 
   self.body:setUserData(self)
 
-  self.body:setMass(10)
+  self.body:setMass(100)
+  self.body:setFixedRotation(true)
   self.fixture:setFriction(.35)
   self.fixture:setCategory(self.category)
   self.fixture:setMask(self.category, Building.category)
 
-  self.stable = true
+  self.dead = false
   self.walkTimer = 1
+  self.deathTimer = 0
 
   ctx.event:emit('view.register', {object = self})
 end
 
 function Person:update()
-  self.body:setFixedRotation(self.stable)
-  self.walkTimer = timer.rot(self.walkTimer, function()
-    self.body:applyLinearImpulse(self.direction * 50, -100)
-    return .6 + love.math.random() * .2
-  end)
+  if not self.dead then
+    self.walkTimer = timer.rot(self.walkTimer, function()
+      self.body:applyLinearImpulse(self.direction * 50, -100)
+      return .6 + love.math.random() * .2
+    end)
+  end
+
+  if self.dead then
+    local x, y = self.body:getLinearVelocity()
+    if (math.abs(x) < 1 and math.abs(y) < 1) or (math.abs(x) > 5000 and math.abs(y) > 5000) then
+      lume.remove(ctx.people, self)
+      self.body:destroy()
+      ctx.event:emit('view.unregister', {object = self})
+    end
+  end
 end
 
 function Person:draw()
@@ -45,6 +57,11 @@ function Person:draw()
 end
 
 function Person:die()
-  self.body:destroy()
-  ctx.event:emit('view.unregister', {object = self})
+  if not self.dead then
+    self.dead = true
+    self.body:applyLinearImpulse(-500 + love.math.random() * 1000, love.math.random() * -800)
+    self.body:applyTorque(-200 * love.math.random() * 400)
+    self.body:setFixedRotation(false)
+    self.deathTimer = 1
+  end
 end

@@ -2,7 +2,7 @@ Game = class()
 
 function Game:load()
   self.event = Event()
-  self.world = love.physics.newWorld(0, 500)
+  self.world = love.physics.newWorld(0, 1000)
   self.view = View()
   self.map = Map(ctx)
   self.pigeon = Pigeon()
