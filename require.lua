@@ -12,6 +12,7 @@ require 'deps/view'
 require 'context'
 require 'game'
 require 'person'
+require 'building'
 require 'pigeon'
 require 'map'
 

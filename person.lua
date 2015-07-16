@@ -18,7 +18,7 @@ function Person:init(x, y, dir)
   self.body:setMass(10)
   self.fixture:setFriction(.35)
   self.fixture:setCategory(self.category)
-  self.fixture:setMask(self.category)
+  self.fixture:setMask(self.category, Building.category)
 
   self.stable = true
   self.walkTimer = 1

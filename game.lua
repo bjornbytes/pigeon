@@ -7,7 +7,10 @@ function Game:load()
   self.map = Map(ctx)
   self.pigeon = Pigeon()
   self.people = {}
+  self.buildings = {}
   self.hud = Hud()
+
+  lume.push(self.buildings, Building(650, 60, 100), Building(800, 60, 200))
 end
 
 function Game:update()
@@ -15,6 +18,10 @@ function Game:update()
   lume.each(self.people, function(person)
     person:update()
   end)
+
+  --[[lume.each(self.buildings, function(building)
+    building:update()
+  end)]]
 
   if love.math.random() < .7 * ls.tickrate then
     local x, dir
