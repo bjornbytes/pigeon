@@ -1,9 +1,16 @@
 Game = class()
 
 function Game:load()
+  self.event = Event()
+  self.world = love.physics.newWorld(0, 1000)
+  self.view = View()
+  self.map = Map(ctx)
   self.pigeon = Pigeon()
-  self.people = {Person()}
+  self.people = {}
+  self.buildings = {}
   self.hud = Hud()
+
+  lume.push(self.buildings, Building(650, 60, 100), Building(800, 60, 200))
 end
 
 function Game:update()
@@ -12,37 +19,35 @@ function Game:update()
     person:update()
   end)
 
-  if love.math.random() < .5 * ls.tickrate then
-    local p = Person()
+  --[[lume.each(self.buildings, function(building)
+    building:update()
+  end)]]
+
+  if love.math.random() < .7 * ls.tickrate then
+    local x, dir
 
     if love.math.random() < .5 then
-      p.x = 0
-      p.direction = 1
+      x = 0
+      dir = 1
     else
-      p.x = 800
-      p.direction = -1
+      x = 800
+      dir = -1
     end
 
-    lume.push(self.people, p)
+    lume.push(self.people, Person(x, 400, dir))
   end
+
+  self.world:update(ls.tickrate)
+  self.view:update()
 end
 
 function Game:draw()
-  local g = love.graphics
   flux.update(ls.dt)
-  g.setColor(0, 50, 0)
-  g.rectangle('fill', 0, 0, 800, 600)
-  self.pigeon:draw()
-  lume.each(self.people, function(person)
-    person:draw()
-  end)
-  self.hud:draw()
+  self.view:draw()
 end
 
 function Game:keypressed(key)
   if key == 'escape' then
     love.event.quit()
   end
-
-  self.pigeon:keypressed(key)
 end

@@ -2,9 +2,10 @@ Hud = class()
 
 function Hud:init()
   self.font = love.graphics.newFont(12)
+  ctx.event:emit('view.register', {object = self, mode = 'gui'})
 end
 
-function Hud:draw()
+function Hud:gui()
   local g = love.graphics
   g.setColor(255, 255, 255)
 
