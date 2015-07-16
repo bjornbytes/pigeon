@@ -3,4 +3,4 @@
 	url = https://github.com/bjornswenson/lovestep
 [submodule "deps/spine"]
 	path = deps/spine
-	url = git@github.com:bjornswenson/spine-runtimes
+	url = git@github.com:bjornswenson/spine
