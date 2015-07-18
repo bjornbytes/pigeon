@@ -1,37 +1,10 @@
 {
-"skeleton": { "hash": "vVMm/KMPt5fVMy9PWaAryj2t6bk", "spine": "2.1.27", "width": 1225.48, "height": 1500.37, "images": "./../pigeonimages/" },
+"skeleton": { "hash": "kodH3QMkWqoBYxZm7PBUm86CL9Y", "spine": "2.1.27", "width": 377.38, "height": 453.27 },
 "bones": [
 	{ "name": "root" },
-	{
-		"name": "body1",
-		"parent": "root",
-		"length": 204.7,
-		"x": 54.09,
-		"y": 971.34,
-		"scaleX": 3.274,
-		"scaleY": 3.274,
-		"rotation": -137.28
-	},
-	{
-		"name": "leftthigh",
-		"parent": "root",
-		"length": 41.26,
-		"x": 16.65,
-		"y": 464.82,
-		"scaleX": 3.274,
-		"scaleY": 3.274,
-		"rotation": -91.6
-	},
-	{
-		"name": "rightthigh",
-		"parent": "root",
-		"length": 76.97,
-		"x": -71.93,
-		"y": 391.62,
-		"scaleX": 3.274,
-		"scaleY": 3.274,
-		"rotation": -89.94
-	},
+	{ "name": "body1", "parent": "root", "length": 204.7, "x": 18.69, "y": 289.12, "rotation": 222.71 },
+	{ "name": "leftthigh", "parent": "root", "length": 41.26, "x": 2.17, "y": 133.37, "rotation": 268.4 },
+	{ "name": "rightthigh", "parent": "root", "length": 76.97, "x": -26.87, "y": 118.09, "rotation": -89.94 },
 	{ "name": "body2", "parent": "body1", "length": 71.18, "x": 7.92, "y": 19.92, "rotation": 115.65 },
 	{ "name": "leftshin", "parent": "leftthigh", "length": 32.21, "x": 49.76, "y": 4.44, "rotation": 27.46 },
 	{ "name": "leftwing", "parent": "body1", "length": 100.44, "x": 56.09, "y": 20.75, "rotation": -32.08 },
@@ -52,7 +25,7 @@
 	{ "name": "rightclaw3", "parent": "rightfoot", "length": 23.59, "x": 27.31, "y": 18.44, "rotation": -6.26 },
 	{ "name": "neck1", "parent": "neck2", "length": 7.9, "x": 17.74, "y": -0.1, "rotation": -12.43 },
 	{ "name": "head", "parent": "neck1", "length": 30.9, "x": 29.81, "y": 0.93, "rotation": 30.56 },
-	{ "name": "beakopen", "parent": "head", "length": 26.59, "x": 6.89, "y": -28.55, "rotation": -123.25 },
+	{ "name": "beakbottom", "parent": "head", "length": 26.59, "x": 6.89, "y": -28.55, "rotation": -123.25 },
 	{ "name": "beaktop", "parent": "head", "length": 26.24, "x": 14.53, "y": -35.34, "rotation": -136.29 },
 	{ "name": "pupil", "parent": "head", "length": 5.54, "x": 23.09, "y": -8.27, "rotation": 32.52 }
 ],
@@ -81,16 +54,16 @@
 	{ "name": "rightfoot", "bone": "rightfoot", "attachment": "rightfoot" },
 	{ "name": "rightwing", "bone": "rightwing", "attachment": "rightwing" },
 	{ "name": "pupil", "bone": "pupil", "attachment": "pupil" },
-	{ "name": "beakbottom", "bone": "beakopen", "attachment": "beakbottom2" },
+	{ "name": "beakbottom", "bone": "beakbottom", "attachment": "beakbottom2" },
 	{ "name": "beaktop", "bone": "beaktop", "attachment": "beaktop" },
 	{ "name": "beaktop_bb", "bone": "beaktop", "attachment": "beaktop_bb" },
-	{ "name": "beakbottom_bb", "bone": "beakopen", "attachment": "beakbottom_bb" }
+	{ "name": "beakbottom_bb", "bone": "beakbottom", "attachment": "beakbottom_bb" }
 ],
 "skins": {
 	"default": {
 		"beakbottom": {
-			"beakbottom": { "x": 11.4, "y": 1.77, "scaleX": 0.305, "scaleY": 0.305, "rotation": 35.16, "width": 139, "height": 102 },
-			"beakbottom2": { "path": "beakbottom", "x": 11.79, "y": 1.69, "scaleX": 0.305, "scaleY": 0.305, "rotation": 35.16, "width": 139, "height": 102 },
+			"beakbottom": { "x": 11.4, "y": 1.77, "scaleX": 0.305, "scaleY": 0.305, "rotation": 35.16, "width": 43, "height": 32 },
+			"beakbottom2": { "path": "beakbottom", "x": 11.79, "y": 1.69, "rotation": 35.16, "width": 43, "height": 32 },
 			"beakbottom_bb": {
 				"type": "boundingbox",
 				"vertices": [ -5.666, -11.64202, 36.26625, 0.48342, -6.8283, 5.66918 ]
@@ -103,7 +76,7 @@
 			}
 		},
 		"beaktop": {
-			"beaktop": { "x": 10.96, "y": 0.08, "scaleX": 0.305, "scaleY": 0.305, "rotation": 48.2, "width": 111, "height": 132 }
+			"beaktop": { "x": 10.96, "y": 0.08, "rotation": 48.2, "width": 34, "height": 40 }
 		},
 		"beaktop_bb": {
 			"beaktop_bb": {
@@ -112,76 +85,76 @@
 			}
 		},
 		"body1": {
-			"body1": { "x": 104.22, "y": -14.22, "scaleX": 0.305, "scaleY": 0.305, "rotation": 137.28, "width": 1134, "height": 681 }
+			"body1": { "x": 104.22, "y": -14.22, "rotation": 137.28, "width": 352, "height": 211 }
 		},
 		"body2": {
-			"body2": { "x": 36.78, "y": -41.87, "scaleX": 0.305, "scaleY": 0.305, "rotation": 21.63, "width": 320, "height": 333 }
+			"body2": { "x": 36.78, "y": -41.87, "rotation": 21.63, "width": 99, "height": 103 }
 		},
 		"body3": {
-			"body3": { "x": 43.03, "y": -35.77, "scaleX": 0.305, "scaleY": 0.305, "rotation": 40.55, "width": 284, "height": 414 }
+			"body3": { "x": 43.03, "y": -35.77, "rotation": 40.55, "width": 88, "height": 128 }
 		},
 		"body4": {
-			"body4": { "x": -31.43, "y": -43.2, "scaleX": 0.305, "scaleY": 0.305, "rotation": 44.13, "width": 1002, "height": 599 }
+			"body4": { "x": -31.43, "y": -43.2, "rotation": 44.13, "width": 311, "height": 186 }
 		},
 		"head": {
-			"head": { "x": 12.61, "y": -9.73, "scaleX": 0.305, "scaleY": 0.305, "rotation": -88.09, "width": 325, "height": 237 }
+			"head": { "x": 12.61, "y": -9.73, "rotation": -88.09, "width": 101, "height": 74 }
 		},
 		"leftclaw1": {
-			"leftclaw1": { "x": 15.74, "y": -0.02, "scaleX": 0.305, "scaleY": 0.305, "rotation": 1.76, "width": 125, "height": 45 }
+			"leftclaw1": { "x": 15.74, "y": -0.02, "rotation": 1.76, "width": 39, "height": 14 }
 		},
 		"leftclaw2": {
-			"leftclaw2": { "x": 11.48, "y": -0.53, "scaleX": 0.305, "scaleY": 0.305, "rotation": 1.76, "width": 125, "height": 45 }
+			"leftclaw2": { "x": 11.48, "y": -0.53, "rotation": 1.76, "width": 39, "height": 14 }
 		},
 		"leftclaw3": {
-			"leftclaw3": { "x": 8.85, "y": -1.7, "scaleX": 0.305, "scaleY": 0.305, "rotation": -0.27, "width": 90, "height": 24 }
+			"leftclaw3": { "x": 8.85, "y": -1.7, "rotation": -0.27, "width": 28, "height": 7 }
 		},
 		"leftfoot": {
-			"leftfoot": { "x": -0.57, "y": 5.73, "scaleX": 0.305, "scaleY": 0.305, "rotation": -17.34, "width": 168, "height": 85 }
+			"leftfoot": { "x": -0.57, "y": 5.73, "rotation": -17.34, "width": 52, "height": 26 }
 		},
 		"leftshin": {
-			"leftshin": { "x": 10.19, "scaleX": 0.305, "scaleY": 0.305, "rotation": 64.14, "width": 99, "height": 178 }
+			"leftshin": { "x": 10.19, "rotation": 64.14, "width": 31, "height": 56 }
 		},
 		"leftthigh": {
-			"leftthigh": { "x": 18.92, "y": -1.27, "scaleX": 0.305, "scaleY": 0.305, "rotation": 91.6, "width": 134, "height": 189 }
+			"leftthigh": { "x": 18.92, "y": -1.27, "rotation": 91.6, "width": 42, "height": 59 }
 		},
 		"leftwing": {
-			"leftwing": { "x": 73.58, "y": -1.93, "scaleX": 0.305, "scaleY": 0.305, "rotation": 169.37, "width": 697, "height": 294 }
+			"leftwing": { "x": 73.58, "y": -1.93, "rotation": 169.37, "width": 216, "height": 91 }
 		},
 		"neck1": {
-			"neck1": { "x": 6.48, "y": 0.89, "scaleX": 0.305, "scaleY": 0.305, "rotation": -57.52, "width": 316, "height": 170 }
+			"neck1": { "x": 6.48, "y": 0.89, "rotation": -57.52, "width": 98, "height": 53 }
 		},
 		"neck2": {
-			"neck2": { "x": 8.1, "y": -4.89, "scaleX": 0.305, "scaleY": 0.305, "rotation": -69.96, "width": 282, "height": 181 }
+			"neck2": { "x": 8.1, "y": -4.89, "rotation": -69.96, "width": 87, "height": 56 }
 		},
 		"neck3": {
-			"neck3": { "x": 13.87, "y": -2.72, "scaleX": 0.305, "scaleY": 0.305, "rotation": -69.96, "width": 276, "height": 198 }
+			"neck3": { "x": 13.87, "y": -2.72, "rotation": -69.96, "width": 86, "height": 62 }
 		},
 		"neck4": {
-			"neck4": { "x": 8.34, "y": -7.2, "scaleX": 0.305, "scaleY": 0.305, "rotation": -51.66, "width": 293, "height": 217 }
+			"neck4": { "x": 8.34, "y": -7.2, "rotation": -51.66, "width": 91, "height": 67 }
 		},
 		"pupil": {
-			"pupil": { "x": 5.36, "y": -6.39, "scaleX": 0.305, "scaleY": 0.305, "rotation": -120.62, "width": 65, "height": 66 }
+			"pupil": { "x": 5.36, "y": -6.39, "rotation": -120.62, "width": 20, "height": 20 }
 		},
 		"rightclaw1": {
-			"rightclaw1": { "x": 12.84, "y": 1.75, "scaleX": 0.305, "scaleY": 0.305, "rotation": 9.33, "width": 202, "height": 47 }
+			"rightclaw1": { "x": 12.84, "y": 1.75, "rotation": 9.33, "width": 63, "height": 15 }
 		},
 		"rightclaw2": {
-			"rightclaw2": { "x": 20.88, "y": -0.94, "scaleX": 0.305, "scaleY": 0.305, "rotation": 7.53, "width": 206, "height": 68 }
+			"rightclaw2": { "x": 20.88, "y": -0.94, "rotation": 7.53, "width": 64, "height": 21 }
 		},
 		"rightclaw3": {
-			"rightclaw3": { "x": 11.35, "y": 1.43, "scaleX": 0.305, "scaleY": 0.305, "rotation": 7.53, "width": 118, "height": 34 }
+			"rightclaw3": { "x": 11.35, "y": 1.43, "rotation": 7.53, "width": 37, "height": 11 }
 		},
 		"rightfoot": {
-			"rightfoot": { "x": -0.52, "y": 5.56, "scaleX": 0.305, "scaleY": 0.305, "rotation": 1.26, "width": 195, "height": 114 }
+			"rightfoot": { "x": -0.52, "y": 5.56, "rotation": 1.26, "width": 60, "height": 35 }
 		},
 		"rightshin": {
-			"rightshin": { "x": 11.92, "y": 0.75, "scaleX": 0.305, "scaleY": 0.305, "rotation": 65.97, "width": 117, "height": 177 }
+			"rightshin": { "x": 11.92, "y": 0.75, "rotation": 65.97, "width": 36, "height": 54 }
 		},
 		"rightthigh": {
-			"rightthigh": { "x": 31.34, "y": 2.62, "scaleX": 0.305, "scaleY": 0.305, "rotation": 89.94, "width": 148, "height": 283 }
+			"rightthigh": { "x": 31.34, "y": 2.62, "rotation": 89.94, "width": 46, "height": 88 }
 		},
 		"rightwing": {
-			"rightwing": { "x": 70.26, "y": -6.73, "scaleX": 0.305, "scaleY": 0.305, "rotation": 169.49, "width": 748, "height": 412 }
+			"rightwing": { "x": 70.26, "y": -6.73, "rotation": 169.49, "width": 232, "height": 128 }
 		}
 	}
 },
@@ -455,7 +428,7 @@
 					{ "time": 0, "x": 1, "y": 1 }
 				]
 			},
-			"beakopen": {
+			"beakbottom": {
 				"rotate": [
 					{ "time": 0, "angle": 0 }
 				],
@@ -903,7 +876,7 @@
 					{ "time": 0, "x": 1, "y": 1 }
 				]
 			},
-			"beakopen": {
+			"beakbottom": {
 				"rotate": [
 					{ "time": 0, "angle": 0 }
 				],
