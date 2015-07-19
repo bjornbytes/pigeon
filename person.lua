@@ -6,8 +6,12 @@ function Person:init(x, y, dir)
   self.x = x
   self.y = y
   self.direction = dir
-  self.w = 20
+
+  self.image = data.media.graphics.dinoland[love.math.random() < .5 and 'female' or 'male'].normal
+  local widthRatio = self.image:getWidth() / self.image:getHeight()
   self.h = 40
+  self.w = self.h * widthRatio
+  self.scale = self.h / self.image:getHeight()
 
   self.body = love.physics.newBody(ctx.world, self.x - self.w / 2, self.y - self.h / 2, 'dynamic')
   self.shape = love.physics.newRectangleShape(self.w, self.h)
@@ -23,7 +27,6 @@ function Person:init(x, y, dir)
 
   self.dead = false
   self.walkTimer = 1
-  self.throwTimer = 3
 
   ctx.event:emit('view.register', {object = self})
 end
@@ -34,15 +37,10 @@ function Person:update()
       self.body:applyLinearImpulse(self.direction * 50, -100)
       return .6 + love.math.random() * .2
     end)
-
-    self.throwTimer = timer.rot(self.throwTimer, function()
-      local rock = Rock(self.body:getX(), self.body:getY())
-      return 3 + love.math.random()
-    end)
   else
     local x, y = self.body:getLinearVelocity()
     if (math.abs(x) < 1 and math.abs(y) < 1) or (math.abs(x) > 5000 and math.abs(y) > 5000) then
-      lume.remove(ctx.people, self)
+      ctx.people:remove(self)
       self.body:destroy()
       ctx.event:emit('view.unregister', {object = self})
     end
@@ -51,12 +49,7 @@ end
 
 function Person:draw()
   local g = love.graphics
-
-  g.setColor(255, 255, 255, 35)
-  physics.draw('fill', self)
-
-  g.setColor(255, 255, 255)
-  physics.draw('line', self)
+  g.draw(self.image, self.body:getX(), self.body:getY(), self.body:getAngle(), self.scale * self.direction, self.scale, self.image:getWidth() / 2, self.image:getHeight() / 2)
 end
 
 function Person:die()

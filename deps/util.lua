@@ -1,3 +1,13 @@
+function table.each(t, ...)
+  if not t then return end
+  return lume.each(t, ...)
+end
+
+function table.with(t, k, ...)
+  local args = {...}
+  table.each(t, function(v) lume.call(v[k], v, unpack(args)) end)
+end
+
 function table.interpolate(t1, t2, x)
   local res = {}
   for k, v in pairs(t2) do

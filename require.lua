@@ -18,7 +18,6 @@ require 'pigeon'
 require 'map'
 require 'goal'
 require 'projectile'
-require 'rock'
 
 require 'hud'
 

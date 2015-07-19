@@ -5,11 +5,11 @@ function Manager:init()
 end
 
 function Manager:update()
-  lume.each(self.objects, 'update')
+  table.with(self.objects, 'update')
 end
 
 function Manager:paused()
-  lume.each(self.objects, 'paused')
+  table.with(self.objects, 'paused')
 end
 
 function Manager:add(object)
@@ -21,7 +21,7 @@ end
 
 function Manager:remove(object)
   if not object then return end
-  f.exe(object.deactivate, object)
+  lume.call(object.deactivate, object)
   self.objects[object] = nil
 end
 
