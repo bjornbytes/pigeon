@@ -1,5 +1,5 @@
 Map = class()
-Map.width = 1600
+Map.width = 2400
 Map.height = 600
 
 function Map:init()

@@ -5,13 +5,17 @@ function Pigeon:init()
   self.y = 500
   self.prevx = self.x
   self.prevy = self.y
-  self.w = 20
-  self.h = 40
+
+  self.scale = .3
   self.speed = 200
-  self.direction = {x = 1, y = 0}
-  self.targetDirection = {x = 1, y = 0}
-  self.laser = false
-  self.laserLength = 0
+
+  self.laser = {
+    active = false,
+    length = 0,
+    angle = 0,
+    speed = .2,
+    tween = nil
+  }
 
   self.lives = 3
   self.health = 100
@@ -26,6 +30,8 @@ function Pigeon:init()
     end
   end)
 
+  self.animation.spine.skeleton:setToSetupPose()
+
   ctx.view.target = self
 
   ctx.event:emit('view.register', {object = self})
@@ -36,65 +42,15 @@ function Pigeon:update()
   self.prevy = self.y
 
   -- Movement
-  if self.animation.state.name ~= 'peck' then
-    if love.keyboard.isDown('left') then
-      self.x = self.x - self.speed * ls.tickrate
-      self.targetDirection.x = -1
-      self.animation.flipped = true
-    elseif love.keyboard.isDown('right') then
-      self.x = self.x + self.speed * ls.tickrate
-      self.targetDirection.x = 1
-      self.animation.flipped = false
-    end
-
-    if love.keyboard.isDown('up') then
-      self.targetDirection.y = -1
-    elseif love.keyboard.isDown('down') then
-      self.targetDirection.y = 1
-    else
-      self.targetDirection.y = 0
-    end
-
-    flux.to(self.direction, .4, self.targetDirection):ease('expoout')
-  end
-
-  local kills = 0
+  self:move()
 
   -- Laser
-  do
-    self.laser = love.keyboard.isDown(' ')
-    self.laser = false
+  self:updateLaser()
 
-    if self.laser then
-      self.laserTween = flux.to(self, 1, {laserLength = 1000}):ease('expoout')
-
-      if self.laserLength > 0 then
-        local x1, y1 = self.x, self.y - self.h / 2
-        local x2, y2 = self.x + self.direction.x * self.laserLength, self.y + self.direction.y * self.laserLength - self.h / 2
-
-        ctx.world:rayCast(x1, y1, x2, y2, function(fixture)
-          local person = fixture:getBody():getUserData()
-          if person and person.die then
-            person:die()
-            lume.remove(ctx.people, person)
-            kills = kills + 1
-            return 1
-          end
-          return -1
-        end)
-      end
-    else
-      if self.laserTween then
-        self.laserTween:stop()
-        self.laserLength = 0
-      end
-    end
-  end
-
-  -- Increase size and health on kill
-  if kills > 0 then
-    flux.to(self, .6, {w = self.w + 5 * kills, h = self.h + 10 * kills}):ease('elasticout')
-    self.health = math.min(self.health + 15 * kills, self.maxHealth)
+  -- Pecking
+  if not self.laser.active and love.keyboard.isDown('down') then self.animation:set('peck') end
+  if self.animation.state.name == 'peck' then
+    self:killThingsOnBeak()
   end
 
   -- Death
@@ -107,17 +63,7 @@ function Pigeon:update()
 
     self.health = self.maxHealth
     self.lives = self.lives - 1
-    self.w = self.w / 2
-    self.h = self.h / 2
-  end
-
-  -- Health decay
-  self.health = self.health - 10 * ls.tickrate
-
-  if love.keyboard.isDown(' ') then self.animation:set('peck') end
-
-  if self.animation.state.name == 'peck' then
-    self:killThingsOnBeak()
+    flux.to(self.animation, .6, {scale = self.animation.scale / 2}):ease('elasticin')
   end
 end
 
@@ -125,19 +71,73 @@ function Pigeon:draw()
   local g = love.graphics
   local x = lume.lerp(self.prevx, self.x, ls.accum / ls.tickrate)
   local y = lume.lerp(self.prevy, self.y, ls.accum / ls.tickrate)
-  g.setColor(255, 255, 255)
-  g.rectangle('line', x - self.w / 2, y - self.h, self.w, self.h)
 
-  if self.laser then
-    local x2, y2 = x + self.direction.x * self.laserLength, y + self.direction.y * self.laserLength
+  if self.laser.active then
+    local x2, y2 = x + math.cos(self.laser.angle) * self.laser.length, y + math.sin(self.laser.angle) * self.laser.length
 
     g.setColor(255, 0, 0)
-    g.setLineWidth(self.w / 5)
-    g.line(x, y - self.h / 2, x2, y2 - self.h / 2)
-    g.setLineWidth(1)
+    g.line(x, y, x2, y2)
   end
 
   self.animation:draw(x, y)
+end
+
+function Pigeon:move()
+  if not self.laser.active then
+    if self.animation.state.name ~= 'peck' then
+      if love.keyboard.isDown('left') then
+        self.x = self.x - self.speed * ls.tickrate
+        self.animation.flipped = true
+      elseif love.keyboard.isDown('right') then
+        self.x = self.x + self.speed * ls.tickrate
+        self.animation.flipped = false
+      end
+    end
+  end
+end
+
+function Pigeon:updateLaser()
+  self.laser.active = love.keyboard.isDown(' ')
+
+  if self.laser.active then
+    self.laser.tween = flux.to(self.laser, 1, {length = 1000}):ease('expoout')
+
+    if self.laser.length == 0 then
+      self.laser.angle = self.animation.flipped and math.pi or 0
+    else
+      local x1, y1 = self.x, self.y
+      local x2, y2 = self.x + math.cos(self.laser.angle) * self.laser.length, self.y + math.sin(self.laser.angle) * self.laser.length
+
+      ctx.world:rayCast(x1, y1, x2, y2, function(fixture)
+        local person = fixture:getBody():getUserData()
+        if person and not person.dead and person.die then
+          self:kill(person)
+          return 1
+        end
+        return -1
+      end)
+    end
+
+    local diff = self.laser.speed * ls.tickrate * lume.sign(math.pi / 2 - self.laser.angle)
+    if love.keyboard.isDown('up') then
+      self.laser.angle = self.laser.angle - diff
+    elseif love.keyboard.isDown('down') then
+      self.laser.angle = self.laser.angle + diff
+    end
+  else
+    if self.laser.tween then
+      self.laser.tween:stop()
+      self.laser.length = 0
+    end
+  end
+end
+
+function Pigeon:kill(person)
+  if person and not person.dead then
+    person:die()
+    self.health = math.min(self.health + 15, self.maxHealth)
+    flux.to(self.animation, .6, {scale = self.animation.scale + .02}):ease('elasticout')
+  end
 end
 
 -- Kill everything near the beak. Uses very dumb AABB checking but can be improved.
@@ -152,25 +152,26 @@ function Pigeon:killThingsOnBeak()
   for _, slotName in pairs({'beakbottom', 'beaktop'}) do
     local beakSlot = spine.skeleton:findSlot(slotName)
     local beakAttachment = spine.skeleton:getAttachment(beakSlot.data.name, beakSlot.data.name .. '_bb')
-    local polygon = spine.skeletonBounds:getPolygon(beakAttachment)
+    if beakAttachment then
+      local polygon = spine.skeletonBounds:getPolygon(beakAttachment)
 
-    if polygon then
-      local x1, y1, x2, y2
-      for i = 1, #polygon, 2 do
-        x1 = math.min(x1 or math.huge, polygon[i])
-        x2 = math.max(x2 or -math.huge, polygon[i])
-        y1 = math.min(y1 or math.huge, polygon[i + 1])
-        y2 = math.max(y2 or -math.huge, polygon[i + 1])
-      end
-
-      ctx.world:queryBoundingBox(x1, y1, x2, y2, function(fixture)
-        local person = fixture:getBody():getUserData()
-        if person and person.die then
-          person:die()
-
-          return true
+      if polygon then
+        local x1, y1, x2, y2
+        for i = 1, #polygon, 2 do
+          x1 = math.min(x1 or math.huge, polygon[i])
+          x2 = math.max(x2 or -math.huge, polygon[i])
+          y1 = math.min(y1 or math.huge, polygon[i + 1])
+          y2 = math.max(y2 or -math.huge, polygon[i + 1])
         end
-      end)
+
+        ctx.world:queryBoundingBox(x1, y1, x2, y2, function(fixture)
+          local person = fixture:getBody():getUserData()
+          if person and person.die then
+            self:kill(person)
+            return true
+          end
+        end)
+      end
     end
   end
 end

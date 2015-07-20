@@ -8,6 +8,7 @@ require 'deps/util'
 require 'deps/animation'
 require 'deps/event'
 require 'deps/view'
+require 'deps/manager'
 
 require 'context'
 require 'game'
@@ -15,6 +16,9 @@ require 'person'
 require 'building'
 require 'pigeon'
 require 'map'
+require 'goal'
+require 'projectile'
+require 'rock'
 
 require 'hud'
 

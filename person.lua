@@ -23,7 +23,7 @@ function Person:init(x, y, dir)
 
   self.dead = false
   self.walkTimer = 1
-  self.deathTimer = 0
+  self.throwTimer = 3
 
   ctx.event:emit('view.register', {object = self})
 end
@@ -34,9 +34,12 @@ function Person:update()
       self.body:applyLinearImpulse(self.direction * 50, -100)
       return .6 + love.math.random() * .2
     end)
-  end
 
-  if self.dead then
+    self.throwTimer = timer.rot(self.throwTimer, function()
+      local rock = Rock(self.body:getX(), self.body:getY())
+      return 3 + love.math.random()
+    end)
+  else
     local x, y = self.body:getLinearVelocity()
     if (math.abs(x) < 1 and math.abs(y) < 1) or (math.abs(x) > 5000 and math.abs(y) > 5000) then
       lume.remove(ctx.people, self)
@@ -62,6 +65,5 @@ function Person:die()
     self.body:applyLinearImpulse(-500 + love.math.random() * 1000, love.math.random() * -800)
     self.body:applyTorque(-200 * love.math.random() * 400)
     self.body:setFixedRotation(false)
-    self.deathTimer = 1
   end
 end
