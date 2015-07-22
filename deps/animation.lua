@@ -69,7 +69,6 @@ function Animation:set(name, options)
   local target = self.states[name]
 
   if self.state and self.state.name == target.name then return end
-  if not options.force and self.state and self.state.priority > target.priority then return end
 
   self.state = target
   if self.spine.skeletonData:findAnimation(self.state.name) then

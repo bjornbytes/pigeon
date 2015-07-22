@@ -1,5 +1,14 @@
 Game = class()
 
+Game.categories = {
+  ground = 1,
+  building = 2,
+  person = 3,
+  pigeon = 4,
+  oneWayPlatform = 5,
+  debris = 6
+}
+
 function Game:load()
   self.event = Event()
   self.world = love.physics.newWorld(0, 1000)
@@ -12,13 +21,8 @@ function Game:load()
   self.hud = Hud()
   self.goal = Goal()
 
-  for i = 1, 5 do
-    self.buildings:add(Building(300 + lume.random(self.map.width - 300), lume.random(20, 100), lume.random(60, 300)))
-  end
-
-  for i = 1, 50 do
-    self.people:add(Person(500 + lume.random(self.map.width - 500), 400, -1))
-  end
+  --self.people:add(Caveman, {x = 500, y = 300})
+  self.buildings:add(Building, {x = 600, width = 200, height = 80})
 end
 
 function Game:update()
@@ -28,6 +32,8 @@ function Game:update()
   self.projectiles:update()
   self.world:update(ls.tickrate)
   self.view:update()
+
+  lurker.update()
 end
 
 function Game:draw()

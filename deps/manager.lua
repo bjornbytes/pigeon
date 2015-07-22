@@ -12,7 +12,9 @@ function Manager:paused()
   table.with(self.objects, 'paused')
 end
 
-function Manager:add(object)
+function Manager:add(kind, vars)
+  local object = kind()
+  table.merge(vars, object)
   lume.call(object.activate, object)
   self.objects[object] = object
 

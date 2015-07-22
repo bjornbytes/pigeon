@@ -190,12 +190,13 @@ function View:threeDepth(x, y, z)
 end
 
 function View:follow()
-  if not self.target then return end
+  if not ctx.pigeon then return end
 
+  local x, y = ctx.pigeon.body:getPosition()
   local margin = 0.5
 
-  self.x = self.target.x - self.width * margin
-  self.y = self.target.y - self.height * margin
+  self.x = x - self.width * margin
+  self.y = y - self.height * margin
 end
 
 function View:contain()

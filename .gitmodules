@@ -4,3 +4,6 @@
 [submodule "deps/spine"]
 	path = deps/spine
 	url = git@github.com:bjornswenson/spine-runtimes
+[submodule "deps/lutil"]
+	path = deps/lutil
+	url = https://github.com/bjornswenson/lutil

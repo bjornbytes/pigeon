@@ -1,38 +1,76 @@
 Building = class()
 
-Building.category = 4
+Building.wallWidth = 16
 
-function Building:init(x, w, h)
-  self.x = x
+function Building:activate()
   self.y = ctx.map.height - ctx.map.ground.height
-  self.w = w
-  self.h = h
 
-  self.body = love.physics.newBody(ctx.world, self.x - self.w / 2, self.y - self.h / 2, 'kinematic')
-  self.shape = love.physics.newRectangleShape(self.w, self.h)
-  self.fixture = love.physics.newFixture(self.body, self.shape)
+  self.pieces = {}
 
-  self.body:setUserData(self)
+  -- Roof
+  local piece = {}
+  piece.body = love.physics.newBody(ctx.world, self.x, self.y - self.height - self.wallWidth / 2, 'kinematic')
+  piece.body:setUserData(self)
+  piece.shape = love.physics.newRectangleShape(self.width, self.wallWidth)
+  piece.fixture = love.physics.newFixture(piece.body, piece.shape)
+  piece.fixture:setCategory(ctx.categories.building)
+  piece.fixture:setMask(ctx.categories.debris)
+  piece.phlerp = PhysicsInterpolator(piece.body)
+  table.insert(self.pieces, piece)
 
-  self.body:setMass(1000)
-  self.fixture:setCategory(self.category)
-  self.fixture:setMask(self.category, Person.category)
+  -- Left wall
+  piece = {}
+  piece.body = love.physics.newBody(ctx.world, self.x - self.width / 2 + self.wallWidth / 2, self.y - self.height / 2, 'kinematic')
+  piece.body:setUserData(self)
+  piece.shape = love.physics.newRectangleShape(self.wallWidth, self.height)
+  piece.fixture = love.physics.newFixture(piece.body, piece.shape)
+  piece.fixture:setCategory(ctx.categories.building)
+  piece.fixture:setMask(ctx.categories.debris)
+  piece.phlerp = PhysicsInterpolator(piece.body)
+  table.insert(self.pieces, piece)
+
+  -- Right wall
+  piece = {}
+  piece.body = love.physics.newBody(ctx.world, self.x + self.width / 2 - self.wallWidth / 2, self.y - self.height / 2, 'kinematic')
+  piece.body:setUserData(self)
+  piece.shape = love.physics.newRectangleShape(self.wallWidth, self.height)
+  piece.fixture = love.physics.newFixture(piece.body, piece.shape)
+  piece.fixture:setCategory(ctx.categories.building)
+  piece.fixture:setMask(ctx.categories.debris)
+  piece.phlerp = PhysicsInterpolator(piece.body)
+  table.insert(self.pieces, piece)
 
   ctx.event:emit('view.register', {object = self})
+end
+
+function Building:update()
+  table.each(self.pieces, function(piece)
+    piece.phlerp:update()
+  end)
+
+  if ctx.pigeon.body:getY() + ctx.pigeon.shapeSize / 2 > self.pieces[1].body:getY() - self.wallWidth / 2 then
+    self.pieces[1].fixture:setCategory(ctx.categories.oneWayPlatform)
+  else
+    self.pieces[1].fixture:setCategory(ctx.categories.building)
+  end
 end
 
 function Building:draw()
   local g = love.graphics
 
-  g.setColor(128, 128, 128, 35)
-  physics.draw('fill', self)
-
-  g.setColor(255, 255, 255)
-  physics.draw('line', self)
+  table.each(self.pieces, function(piece)
+    piece.phlerp:lerp()
+    local points = {piece.body:getWorldPoints(piece.shape:getPoints())}
+    g.setColor(255, 255, 255)
+    g.polygon('line', points)
+    piece.phlerp:delerp()
+  end)
 end
 
-function Building:die()
-  self.body:destroy()
-  ctx.event:emit('view.unregister', {object = self})
+function Building:destroy()
+  table.each(self.pieces, function(piece)
+    piece.body:setType('dynamic')
+    piece.body:applyTorque(lume.random(50000, 100000) * (love.math.random() > .5 and 1 or -1))
+    piece.fixture:setCategory(ctx.categories.debris)
+  end)
 end
-
