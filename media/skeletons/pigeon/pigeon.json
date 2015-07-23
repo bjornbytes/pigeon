@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "wsBfC2+71ALpWTTIqZgWDEgg6bk", "spine": "2.1.27", "width": 397.66, "height": 460.32 },
+"skeleton": { "hash": "9EZ+s7sGfuHMAdjLfCxaLqKaDcE", "spine": "2.1.27", "width": 397.66, "height": 460.32 },
 "bones": [
 	{ "name": "root" },
 	{ "name": "body1", "parent": "root", "length": 204.7, "x": 18.69, "y": 289.12, "rotation": 222.71 },
@@ -4078,13 +4078,13 @@
 					{ "time": 0.4333, "angle": 0 },
 					{ "time": 0.5, "angle": -23.99 },
 					{ "time": 0.6, "angle": -37.44 },
-					{ "time": 0.6666, "angle": -56.5 },
+					{ "time": 0.7, "angle": -56.5 },
 					{ "time": 0.8333, "angle": 0, "curve": "stepped" },
 					{ "time": 1.0333, "angle": 0 }
 				],
 				"translate": [
 					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 0.6666, "x": 19.89, "y": 1.92 },
+					{ "time": 0.7, "x": 19.89, "y": 1.92 },
 					{ "time": 0.8333, "x": 0, "y": 0, "curve": "stepped" },
 					{ "time": 1.0333, "x": 0, "y": 0 }
 				],
@@ -4129,13 +4129,13 @@
 					{ "time": 0.4333, "angle": 0 },
 					{ "time": 0.5, "angle": -30.47 },
 					{ "time": 0.6, "angle": -42.35 },
-					{ "time": 0.6666, "angle": -61.41 },
+					{ "time": 0.7, "angle": -61.41 },
 					{ "time": 0.8333, "angle": 0, "curve": "stepped" },
 					{ "time": 1.0333, "angle": 0 }
 				],
 				"translate": [
 					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 0.6666, "x": 19.89, "y": 1.92 },
+					{ "time": 0.7, "x": 19.89, "y": 1.92 },
 					{ "time": 0.8333, "x": 0, "y": 0, "curve": "stepped" },
 					{ "time": 1.0333, "x": 0, "y": 0 }
 				],
@@ -4143,7 +4143,7 @@
 					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
 					{ "time": 0.5333, "x": 1, "y": 1 },
 					{ "time": 0.6, "x": 1.161, "y": 1.161, "curve": "stepped" },
-					{ "time": 0.6666, "x": 1.161, "y": 1.161 },
+					{ "time": 0.7, "x": 1.161, "y": 1.161 },
 					{ "time": 0.7666, "x": 1, "y": 1, "curve": "stepped" },
 					{ "time": 0.8333, "x": 1, "y": 1, "curve": "stepped" },
 					{ "time": 1.0333, "x": 1, "y": 1 }
@@ -4339,6 +4339,7 @@
 					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
 					{ "time": 0.0333, "x": 0, "y": 0 },
 					{ "time": 0.0666, "x": -0.33, "y": -0.86 },
+					{ "time": 0.6, "x": -4.81, "y": -5.56 },
 					{ "time": 0.8333, "x": 0, "y": 0, "curve": "stepped" },
 					{ "time": 1.0333, "x": 0, "y": 0 }
 				],
