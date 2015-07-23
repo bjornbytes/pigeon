@@ -30,11 +30,29 @@ function Pigeon:init()
   self.state = self.idle
 
   self.animation = data.animation.pigeon()
+
   self.animation:on('complete', function(event)
     if event.state.name == 'jump' then
       self.animation:set('idle')
     end
   end)
+
+  self.animation:on('event', function(event)
+    local name = event.data.name
+    if name == 'rightstep' then
+      self.slide = 'left'
+    elseif name == 'leftstep' then
+      self.slide = 'right'
+    elseif name == 'leftstop' or name == 'rightstop' then
+      self.slide = nil
+    end
+  end)
+
+  self.slide = nil
+  self.slideSpeeds = {
+    left = 693,
+    right = 555
+  }
 
   ctx.event:emit('view.register', {object = self})
 end
@@ -53,7 +71,7 @@ function Pigeon:draw()
 
   local points = {self.body:getWorldPoints(self.shape:getPoints())}
   g.setColor(255, 255, 255)
-  g.polygon('line', points)
+  --g.polygon('line', points)
 
   local x, y = self.body:getPosition()
   self.animation:draw(x, y + self.shapeSize / 2)
@@ -103,11 +121,19 @@ function Pigeon:move()
   local left, right = love.keyboard.isDown('left'), love.keyboard.isDown('right')
 
   if left then
-    self.body:applyLinearImpulse(-self.walkForce, 0)
+    --self.body:applyLinearImpulse(-self.walkForce, 0)
     self.animation.flipped = true
+
+    if self.slide then
+      self.body:setX(self.body:getX() - self.slideSpeeds[self.slide] * ls.tickrate * self.animation.state.speed * self.animation.scale)
+    end
   elseif right then
-    self.body:applyLinearImpulse(self.walkForce, 0)
+    --self.body:applyLinearImpulse(self.walkForce, 0)
     self.animation.flipped = false
+
+    if self.slide then
+      self.body:setX(self.body:getX() + self.slideSpeeds[self.slide] * ls.tickrate * self.animation.state.speed * self.animation.scale)
+    end
   end
 
   local vx, vy = self.body:getLinearVelocity()

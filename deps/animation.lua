@@ -3,7 +3,7 @@ Animation = class()
 Animation.defaultMix = .2
 
 function Animation:init(vars)
-  --table.merge(vars, self, true)
+  table.merge(vars, self, true)
 
   self:initSpine(self.code)
 

@@ -97,13 +97,13 @@ data.load = function()
 
     -- Set mixes
     for i = 1, #animation.states do
-      lume.each(animation.states, function(state)
+      table.each(animation.states, function(state)
         if state.index ~= i then
           s.animationStateData:setMix(animation.states[i].name, state.name, Animation.defaultMix)
         end
       end)
 
-      lume.each(animation.states[i].mix or {}, function(time, to)
+      table.each(animation.states[i].mix or {}, function(time, to)
         s.animationStateData:setMix(animation.states[i].name, to, time)
       end)
     end
