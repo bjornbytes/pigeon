@@ -1,6 +1,6 @@
 local Pigeon = extend(Animation)
 
-Pigeon.scale = .5
+Pigeon.scale = .6
 Pigeon.default = 'idle'
 Pigeon.states = {}
 

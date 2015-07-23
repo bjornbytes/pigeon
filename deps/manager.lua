@@ -1,7 +1,7 @@
 Manager = class()
 
 function Manager:init()
-  self.objects = {}
+  self.objects = setmetatable({}, {__mode = 'kv'})
 end
 
 function Manager:update()

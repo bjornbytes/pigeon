@@ -45,6 +45,8 @@ function Pigeon:init()
       self.slide = 'right'
     elseif name == 'leftstop' or name == 'rightstop' then
       self.slide = nil
+    elseif name == 'jump' then
+      self:jump()
     end
   end)
 
@@ -141,8 +143,10 @@ function Pigeon:move()
 end
 
 function Pigeon:jump()
-  self.body:applyLinearImpulse(0, -self.jumpForce)
-  self.animation:set('jump')
+  if not self.jumped then
+    self.body:applyLinearImpulse(0, -self.jumpForce)
+    self.jumped = true
+  end
 end
 
 function Pigeon:recoverFuel()
@@ -168,7 +172,7 @@ function Pigeon.idle:update()
   end
 
   if love.keyboard.isDown('up') then
-    self:jump()
+    self.animation:set('jump')
     self:changeState('air')
   else
     local vx, vy = self.body:getLinearVelocity()
@@ -184,7 +188,7 @@ function Pigeon.walk:update()
   self:recoverFuel()
 
   if love.keyboard.isDown('up') then
-    self:jump()
+    self.animation:set('jump')
     return self:changeState('air')
   end
 
@@ -196,11 +200,15 @@ function Pigeon.walk:update()
 end
 
 Pigeon.air = {}
+function Pigeon.air:enter()
+  self.jumped = false
+end
+
 function Pigeon.air:update()
   local left, right = love.keyboard.isDown('left'), love.keyboard.isDown('right')
   local vx, vy = self.body:getLinearVelocity()
 
-  if self.grounded then
+  if self.jumped and self.grounded and vy >= 0 then
     return self:changeState('idle').update(self)
   end
 

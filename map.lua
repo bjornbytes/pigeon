@@ -1,6 +1,4 @@
 Map = class()
-Map.width = 2400
-Map.height = 600
 
 function Map:init()
   self.ground = {}
@@ -16,6 +14,10 @@ function Map:init()
   ctx.event:emit('view.register', {object = self})
 end
 
+function Map:update()
+  ctx.view.xmax = self:getMaxX()
+end
+
 function Map:draw()
   local g = love.graphics
   g.setColor(0, 50, 0)
@@ -23,4 +25,14 @@ function Map:draw()
 
   g.setColor(100, 80, 0)
   physics.draw('fill', self.ground)
+end
+
+function Map:getMaxX()
+  for i = 1, #self.zones do
+    if self.zones[i].active then
+      return self.zones[i].x
+    end
+  end
+
+  return self.width
 end
