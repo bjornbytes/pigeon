@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "65ESLqDIpQ5Kd4/YIiKrvMSbaGY", "spine": "2.1.27", "width": 397.66, "height": 460.32 },
+"skeleton": { "hash": "BBTnsAnQMhKH1NZJ6g90DloGj24", "spine": "2.1.27", "width": 397.66, "height": 460.32 },
 "bones": [
 	{ "name": "root" },
 	{ "name": "body1", "parent": "root", "length": 204.7, "x": 18.69, "y": 289.12, "rotation": 222.71 },
@@ -169,10 +169,14 @@
 	}
 },
 "events": {
+	"fly": {},
+	"jump": {},
 	"laser": {},
 	"leftstep": {},
+	"leftstop": {},
 	"peck": {},
-	"rightstep": {}
+	"rightstep": {},
+	"rightstop": {}
 },
 "animations": {
 	"fly": {
@@ -1331,7 +1335,10 @@
 					{ "time": 2.3, "x": 1, "y": 1 }
 				]
 			}
-		}
+		},
+		"events": [
+			{ "time": 0.0666, "name": "fly" }
+		]
 	},
 	"idle": {
 		"bones": {
@@ -3070,7 +3077,10 @@
 					{ "time": 0.8666, "x": 1, "y": 1 }
 				]
 			}
-		}
+		},
+		"events": [
+			{ "time": 0.2666, "name": "jump" }
+		]
 	},
 	"laser": {
 		"bones": {
@@ -4779,7 +4789,10 @@
 			}
 		},
 		"events": [
-			{ "time": 0.7333, "name": "leftstep" }
+			{ "time": 0.3, "name": "rightstep" },
+			{ "time": 0.4333, "name": "rightstop" },
+			{ "time": 0.7333, "name": "leftstep" },
+			{ "time": 0.9, "name": "leftstop" }
 		]
 	}
 }
