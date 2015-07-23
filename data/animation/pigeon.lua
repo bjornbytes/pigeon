@@ -9,7 +9,8 @@ Pigeon.states.idle = {
 }
 
 Pigeon.states.walk = {
-  loop = true
+  loop = true,
+  speed = .75
 }
 
 Pigeon.states.peck = {

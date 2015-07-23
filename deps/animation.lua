@@ -51,7 +51,7 @@ function Animation:draw(x, y, options)
 end
 
 function Animation:tick(delta)
-  self.spine.animationState:update(delta * (--[[self.state.speed]]1 or 1) * self.speed)
+  self.spine.animationState:update(delta * (self.state.speed or 1) * self.speed)
   self.spine.animationState:apply(self.spine.skeleton)
 end
 

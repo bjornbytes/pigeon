@@ -1,4 +1,4 @@
-Person = class()
+Person = extend(Enemy)
 
 ----------------
 -- Core
@@ -23,6 +23,8 @@ function Person:activate()
   self.phlerp = PhysicsInterpolator(self.body)
 
   ctx.event:emit('view.register', {object = self})
+
+  Enemy.activate(self)
 end
 
 function Person:update()
@@ -80,7 +82,7 @@ end
 function Person.dead:update()
   local x, y = self.body:getLinearVelocity()
   if (math.abs(x) < 1 and math.abs(y) < 1) or (math.abs(x) > 5000 and math.abs(y) > 5000) then
-    ctx.people:remove(self)
+    ctx.enemies:remove(self)
     self.body:destroy()
     ctx.event:emit('view.unregister', {object = self})
   end

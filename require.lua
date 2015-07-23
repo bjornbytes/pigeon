@@ -14,6 +14,7 @@ require 'deps/physicsinterpolator'
 
 require 'context'
 require 'game'
+require 'enemy'
 require 'person'
 require 'caveman'
 require 'building'
