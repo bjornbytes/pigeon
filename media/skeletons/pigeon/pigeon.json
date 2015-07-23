@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "KJNNzPMZGPElIm3/mPjHoCNuYok", "spine": "2.1.27", "width": 397.66, "height": 460.32 },
+"skeleton": { "hash": "LVjOdTkmPajdXu/Ud8Pc0KPvrnw", "spine": "2.1.27", "width": 397.66, "height": 460.32 },
 "bones": [
 	{ "name": "root" },
 	{ "name": "body1", "parent": "root", "length": 204.7, "x": 18.69, "y": 289.12, "rotation": 222.71 },
@@ -47,7 +47,7 @@
 	{ "name": "neck3", "bone": "neck3", "attachment": "neck3" },
 	{ "name": "neck2", "bone": "neck2", "attachment": "neck2" },
 	{ "name": "neck1", "bone": "neck1", "attachment": "neck1" },
-	{ "name": "beakbottom", "bone": "beakbottom", "attachment": "beakbottom2" },
+	{ "name": "beakbottom", "bone": "beakbottom", "attachment": "beakbottom" },
 	{ "name": "beaktop", "bone": "beaktop", "attachment": "beaktop" },
 	{ "name": "beaktop_bb", "bone": "beaktop", "attachment": "beaktop_bb" },
 	{ "name": "beakbottom_bb", "bone": "beakbottom", "attachment": "beakbottom_bb" },
@@ -66,12 +66,7 @@
 "skins": {
 	"default": {
 		"beakbottom": {
-			"beakbottom": { "x": 11.4, "y": 1.77, "scaleX": 0.305, "scaleY": 0.305, "rotation": 35.16, "width": 43, "height": 34 },
-			"beakbottom2": { "path": "beakbottom", "x": 11.79, "y": 1.69, "rotation": 35.16, "width": 43, "height": 34 },
-			"beakbottom_bb": {
-				"type": "boundingbox",
-				"vertices": [ -5.666, -11.64202, 36.26625, 0.48342, -6.8283, 5.66918 ]
-			}
+			"beakbottom": { "x": 11.4, "y": 1.77, "rotation": 35.16, "width": 43, "height": 34 }
 		},
 		"beakbottom_bb": {
 			"beakbottom_bb": {
