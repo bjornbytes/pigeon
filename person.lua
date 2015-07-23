@@ -5,7 +5,7 @@ Person = extend(Enemy)
 ----------------
 function Person:activate()
   local widthRatio = self.image:getWidth() / self.image:getHeight()
-  self.h = 60
+  self.h = 45
   self.w = self.h * widthRatio
   self.scale = self.h / self.image:getHeight()
 
@@ -51,7 +51,7 @@ end
 -- Helpers
 ----------------
 function Person:hop(direction)
-  self.body:applyLinearImpulse(120 * direction, -180)
+  self.body:applyLinearImpulse(60 * direction, -90)
 end
 
 function Person:directionTo(object)
