@@ -34,6 +34,8 @@ function Pigeon:init()
   self.animation:on('complete', function(event)
     if event.state.name == 'jump' then
       self.animation:set('idle')
+    elseif event.state.name == 'peck' then
+      self:changeState('idle')
     end
   end)
 
@@ -47,6 +49,8 @@ function Pigeon:init()
       self.slide = nil
     elseif name == 'jump' then
       self:jump()
+    elseif name == 'peck' and self.state == self.peck then
+      self.peck.impact(self)
     end
   end)
 
@@ -56,6 +60,25 @@ function Pigeon:init()
     right = 555
   }
 
+  self.beakBottom = {}
+  self.beakBottom.body = love.physics.newBody(ctx.world, 0, 0)
+
+  local spine = self.animation.spine
+  spine.skeleton.x = 0
+  spine.skeleton.y = 0
+  spine.skeleton.flipY = true
+  spine.skeleton:updateWorldTransform()
+  spine.skeletonBounds:update(spine.skeleton)
+  spine.skeleton.flipY = false
+
+  local polygon = spine.skeletonBounds:getPolygon(spine.skeleton:getAttachment('beakbottom_bb', 'beakbottom_bb'))
+
+  for i = 1, #polygon, 2 do
+    polygon[i] = polygon[i] * self.animation.scale-- - spine.skeleton:findBone('beakbottom').worldX
+    polygon[i + 1] = polygon[i + 1] * self.animation.scale-- - spine.skeleton:findBone('beakbottom').worldY
+  end
+  self.beakBottom.shape = love.physics.newPolygonShape(unpack(polygon))
+
   ctx.event:emit('view.register', {object = self})
 end
 
@@ -63,17 +86,22 @@ function Pigeon:update()
   self.phlerp:update()
 
   self.grounded = self:getGrounded()
-  self.state.update(self)
+  f.exe(self.state.update, self)
   self:contain()
+
+  self.beakBottom.body:setX(self.body:getX())
+  self.beakBottom.body:setY(self.body:getY())
+  self.beakBottom.body:setAngle(math.rad(-self.animation.spine.skeleton:findBone('beakbottom').worldRotation))
 end
 
 function Pigeon:draw()
   local g = love.graphics
   self.phlerp:lerp()
 
-  local points = {self.body:getWorldPoints(self.shape:getPoints())}
+  local points = {self.beakBottom.body:getWorldPoints(self.beakBottom.shape:getPoints())}
   g.setColor(255, 255, 255)
   --g.polygon('line', points)
+  --g.polygon('line', self.animation.spine.skeletonBounds:getPolygon(self.animation.spine.skeleton:getAttachment('beakbottom_bb', 'beakbottom_bb')))
 
   local x, y = self.body:getPosition()
   self.animation:draw(x, y + self.shapeSize / 2)
@@ -123,18 +151,16 @@ function Pigeon:move()
   local left, right = love.keyboard.isDown('left'), love.keyboard.isDown('right')
 
   if left then
-    --self.body:applyLinearImpulse(-self.walkForce, 0)
     self.animation.flipped = true
 
     if self.slide then
-      self.body:setX(self.body:getX() - self.slideSpeeds[self.slide] * ls.tickrate * self.animation.state.speed * self.animation.scale)
+      self.body:setX(self.body:getX() - self.slideSpeeds[self.slide] * ls.tickrate * (self.animation.state.speed or 1) * self.animation.scale)
     end
   elseif right then
-    --self.body:applyLinearImpulse(self.walkForce, 0)
     self.animation.flipped = false
 
     if self.slide then
-      self.body:setX(self.body:getX() + self.slideSpeeds[self.slide] * ls.tickrate * self.animation.state.speed * self.animation.scale)
+      self.body:setX(self.body:getX() + self.slideSpeeds[self.slide] * ls.tickrate * (self.animation.state.speed or 1) * self.animation.scale)
     end
   end
 
@@ -172,8 +198,9 @@ function Pigeon.idle:update()
   end
 
   if love.keyboard.isDown('up') then
-    self.animation:set('jump')
     self:changeState('air')
+  elseif love.keyboard.isDown('down') then
+    self:changeState('peck')
   else
     local vx, vy = self.body:getLinearVelocity()
     self.body:setLinearVelocity(vx / 1.2, vy)
@@ -188,8 +215,9 @@ function Pigeon.walk:update()
   self:recoverFuel()
 
   if love.keyboard.isDown('up') then
-    self.animation:set('jump')
     return self:changeState('air')
+  elseif love.keyboard.isDown('down') then
+    self:changeState('peck')
   end
 
   if left or right then
@@ -202,6 +230,7 @@ end
 Pigeon.air = {}
 function Pigeon.air:enter()
   self.jumped = false
+  self.animation:set('jump')
 end
 
 function Pigeon.air:update()
@@ -228,4 +257,27 @@ function Pigeon.air:update()
       end
     end
   end
+end
+
+Pigeon.peck = {}
+function Pigeon.peck:enter()
+  self.animation:set('peck')
+end
+
+function Pigeon.peck:impact()
+  local spine = self.animation.spine
+
+  table.each({'beaktop', 'beakbottom'}, function(part)
+    local slot = spine.skeleton:findSlot(part)
+    slot:setAttachment(spine.skeleton:getAttachment(slot.data.name, slot.data.name .. '_bb'))
+
+    spine.skeleton.flipY = true
+    spine.skeleton:updateWorldTransform()
+    spine.skeletonBounds:update(spine.skeleton)
+    spine.skeleton.flipY = false
+
+    -- Collision detection
+
+    slot:setAttachment(spine.skeleton:getAttachment(slot.data.name, slot.data.name))
+  end)
 end

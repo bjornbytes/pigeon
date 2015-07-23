@@ -14,7 +14,8 @@ Pigeon.states.walk = {
 }
 
 Pigeon.states.peck = {
-  loop = false
+  loop = false,
+  speed = 1.5
 }
 
 Pigeon.states.jump = {
