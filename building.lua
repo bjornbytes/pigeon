@@ -9,7 +9,7 @@ function Building:activate()
 
   -- Roof
   local piece = {}
-  piece.body = love.physics.newBody(ctx.world, self.x, self.y - self.height - self.wallWidth / 2, 'kinematic')
+  piece.body = love.physics.newBody(ctx.world, self.x, self.y - self.height - self.wallWidth / 2, 'dynamic')
   piece.body:setUserData(self)
   piece.shape = love.physics.newRectangleShape(self.width, self.wallWidth)
   piece.fixture = love.physics.newFixture(piece.body, piece.shape)
@@ -20,7 +20,7 @@ function Building:activate()
 
   -- Left wall
   piece = {}
-  piece.body = love.physics.newBody(ctx.world, self.x - self.width / 2 + self.wallWidth / 2, self.y - self.height / 2, 'kinematic')
+  piece.body = love.physics.newBody(ctx.world, self.x - self.width / 2 + self.wallWidth / 2, self.y - self.height / 2, 'dynamic')
   piece.body:setUserData(self)
   piece.shape = love.physics.newRectangleShape(self.wallWidth, self.height)
   piece.fixture = love.physics.newFixture(piece.body, piece.shape)
@@ -31,7 +31,7 @@ function Building:activate()
 
   -- Right wall
   piece = {}
-  piece.body = love.physics.newBody(ctx.world, self.x + self.width / 2 - self.wallWidth / 2, self.y - self.height / 2, 'kinematic')
+  piece.body = love.physics.newBody(ctx.world, self.x + self.width / 2 - self.wallWidth / 2, self.y - self.height / 2, 'dynamic')
   piece.body:setUserData(self)
   piece.shape = love.physics.newRectangleShape(self.wallWidth, self.height)
   piece.fixture = love.physics.newFixture(piece.body, piece.shape)
@@ -39,6 +39,8 @@ function Building:activate()
   piece.fixture:setMask(ctx.categories.debris)
   piece.phlerp = PhysicsInterpolator(piece.body)
   table.insert(self.pieces, piece)
+
+  self.destroyed = false
 
   ctx.event:emit('view.register', {object = self})
 end
@@ -49,9 +51,9 @@ function Building:update()
   end)
 
   if ctx.pigeon.body:getY() + ctx.pigeon.shapeSize / 2 > self.pieces[1].body:getY() - self.wallWidth / 2 then
-    self.pieces[1].fixture:setCategory(ctx.categories.oneWayPlatform)
+    --self.pieces[1].fixture:setCategory(ctx.categories.oneWayPlatform)
   else
-    self.pieces[1].fixture:setCategory(ctx.categories.building)
+    --self.pieces[1].fixture:setCategory(ctx.categories.building)
   end
 end
 
@@ -67,10 +69,19 @@ function Building:draw()
   end)
 end
 
+function Building:collideWith(other)
+  if isa(other, Building) then return true
+  elseif isa(other, Pigeon) then self:destroy() end
+end
+
 function Building:destroy()
+  if self.destroyed then return end
+
+  self.destroyed = true
+
   table.each(self.pieces, function(piece)
-    piece.body:setType('dynamic')
-    piece.body:applyTorque(lume.random(50000, 100000) * (love.math.random() > .5 and 1 or -1))
+    --piece.body:setType('dynamic')
+    piece.body:applyAngularImpulse(lume.random(1000, 2000) * (love.math.random() > .5 and 1 or -1))
     piece.fixture:setCategory(ctx.categories.debris)
   end)
 end

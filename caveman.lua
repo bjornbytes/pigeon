@@ -11,7 +11,7 @@ function Caveman:activate()
   self.image = data.media.graphics.dinoland[self.gender].normal
   self.direction = 1
 
-  self.state = self.attack
+  self.state = self.panic
   self.hasSpear = true
   self.walkTimer = 1
   self.reloadTimer = 0
@@ -44,9 +44,9 @@ end
 -- States
 ----------------
 Caveman.panic = {}
-Caveman.panic.walkRate = {.28, .30}
+Caveman.panic.walkRate = {.3, .4}
 function Caveman.panic:update()
-  self.direction = -self:directionTo(ctx.pigeon)
+  self.direction = 1 -- -self:directionTo(ctx.pigeon)
   self.image = data.media.graphics.dinoland[self.gender].panic
 
   if self.walkTimer == 0 then
@@ -57,7 +57,7 @@ function Caveman.panic:update()
   self:reloadSpear()
 
   if self.hasSpear then
-    self:changeState('attack')
+    --self:changeState('attack')
   end
 end
 

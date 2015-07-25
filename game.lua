@@ -21,14 +21,18 @@ function Game:load()
   self.hud = Hud()
   self.goal = Goal()
 
-  self.enemies:add(Caveman, {x = 500, y = 300})
-  self.buildings:add(Building, {x = 600, width = 200, height = 80})
+  for i = 1, 50 do
+    self.enemies:add(Caveman, {x = 300 + love.math.random() * 500, y = 300})
+  end
+
+  --self.buildings:add(Building, {x = 300, width = 200, height = 80})
 
   self.world:setContactFilter(function(fixtureA, fixtureB)
     local a, b = fixtureA:getBody():getUserData(), fixtureB:getBody():getUserData()
     if not a or not b then return true end
     f.exe(a.collideWith, a, b, fixtureA, fixtureB)
     f.exe(b.collideWith, b, a, fixtureB, fixtureA)
+    return true
   end)
 end
 
