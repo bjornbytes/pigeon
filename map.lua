@@ -20,10 +20,15 @@ end
 
 function Map:draw()
   local g = love.graphics
-  g.setColor(0, 50, 0)
-  g.rectangle('fill', 0, 0, self.width, self.height)
 
-  g.setColor(100, 80, 0)
+  g.setColor(255, 255, 255)
+  local image = data.media.graphics.dinoland.dinolandBackground
+  local scale = self.height / image:getHeight()
+  for x = 1, self.width, image:getWidth() * scale do
+    g.draw(image, x, 0, 0, scale, scale)
+  end
+
+  g.setColor(136, 87, 44)
   physics.draw('fill', self.ground)
 end
 

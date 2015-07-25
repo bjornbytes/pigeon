@@ -65,7 +65,10 @@ function Pigeon:init()
     right = 555
   }
 
+  self.drop = nil
+
   self:initBeak()
+  self:initFeet()
 
   ctx.event:emit('view.register', {object = self})
 end
@@ -78,6 +81,7 @@ function Pigeon:update()
   self:contain()
 
   self:updateBeak()
+  self:updateFeet()
 end
 
 function Pigeon:draw()
@@ -92,6 +96,10 @@ function Pigeon:draw()
   local x1, y1, x2, y2 = self:getGroundRaycastPoints()
   g.setColor(self.grounded and {0, 255, 0} or {255, 0, 0})
   g.line(x1, y1, x2, y2)
+
+  g.setColor(255, 255, 255)
+  local points = {self.feet.left.body:getWorldPoints(self.feet.left.shape:getPoints())}
+  g.polygon('line', points)
 
   if self.state == self.laser and self.laser.active then
     local x1, y1, x2, y2 = self:getLaserRaycastPoints()
@@ -190,6 +198,52 @@ function Pigeon:updateBeak()
     slot:setAttachment(skeleton:getAttachment(slot.data.name, slot.data.name .. '_bb'))
 
     local bone = skeleton:findBone('beak' .. name)
+    beak.body:setX(skeleton.x + bone.worldX)
+    beak.body:setY(skeleton.y + bone.worldY)
+    beak.body:setAngle(math.rad(bone.worldRotation * (self.animation.flipped and 1 or -1) + (self.animation.flipped and 180 or 0)))
+
+    slot:setAttachment(skeleton:getAttachment(slot.data.name, slot.data.name))
+  end)
+
+  skeleton.flipY = false
+end
+
+function Pigeon:initFeet()
+  local spine = self.animation.spine
+
+  self.feet = {}
+
+  table.each({'left', 'right'}, function(name)
+    local foot = {}
+
+    local attachment = spine.skeleton:getAttachment(name .. 'foot_bb', name .. 'foot_bb')
+    local polygon = table.copy(attachment.vertices)
+    for i = 1, #polygon, 2 do
+      polygon[i] = polygon[i] * self.animation.scale
+      polygon[i + 1] = polygon[i + 1] * self.animation.scale
+    end
+    foot.shape = love.physics.newPolygonShape(unpack(polygon))
+    foot.body = love.physics.newBody(ctx.world, 0, 0, 'kinematic')
+    foot.fixture = love.physics.newFixture(foot.body, foot.shape)
+    foot.fixture:setCategory(ctx.categories.pigeon)
+    foot.body:setUserData(self)
+
+    self.feet[name] = foot
+  end)
+end
+
+function Pigeon:updateFeet()
+  local skeleton = self.animation.spine.skeleton
+  local feet = self.drop == 'both' and {'left', 'right'} or {self.drop}
+
+  skeleton.flipY = true
+  skeleton:updateWorldTransform()
+
+  table.each(feet, function(name)
+    local slot = skeleton:findSlot(name .. 'foot')
+    slot:setAttachment(skeleton:getAttachment(slot.data.name, slot.data.name .. '_bb'))
+
+    local bone = skeleton:findBone(name .. 'foot')
     beak.body:setX(skeleton.x + bone.worldX)
     beak.body:setY(skeleton.y + bone.worldY)
     beak.body:setAngle(math.rad(bone.worldRotation * (self.animation.flipped and 1 or -1) + (self.animation.flipped and 180 or 0)))
@@ -300,8 +354,6 @@ end
 function Pigeon.air:update()
   local left, right = love.keyboard.isDown('left'), love.keyboard.isDown('right')
   local vx, vy = self.body:getLinearVelocity()
-
-  print(vy)
 
   if self.jumped and self.grounded and vy >= 0 then
     return self:changeState('idle').update(self)
