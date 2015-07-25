@@ -6,9 +6,13 @@ Pigeon = class()
 Pigeon.walkForce = 600
 Pigeon.maxSpeed = 350
 Pigeon.jumpForce = 3000
+Pigeon.flySpeed = 10000
 Pigeon.rocketForce = 500
 Pigeon.maxFlySpeed = 300
 Pigeon.maxFuel = 50
+Pigeon.laserTurnSpeed = 1
+Pigeon.laserChargeDuration = 2
+Pigeon.laserDuration = 2
 
 ----------------
 -- Core
@@ -43,9 +47,9 @@ function Pigeon:init()
   self.animation:on('event', function(event)
     local name = event.data.name
     if name == 'rightstep' then
-      self.slide = 'left'
-    elseif name == 'leftstep' then
       self.slide = 'right'
+    elseif name == 'leftstep' then
+      self.slide = 'left'
     elseif name == 'leftstop' or name == 'rightstop' then
       self.slide = nil
     elseif name == 'jump' then
@@ -89,11 +93,13 @@ function Pigeon:draw()
   g.setColor(self.grounded and {0, 255, 0} or {255, 0, 0})
   g.line(x1, y1, x2, y2)
 
-  local points = {self.beak.bottom.body:getWorldPoints(self.beak.bottom.shape:getPoints())}
-  g.setColor(255, 255, 255)
-  g.polygon('line', points)
-  local points = {self.beak.top.body:getWorldPoints(self.beak.top.shape:getPoints())}
-  g.polygon('line', points)
+  if self.state == self.laser and self.laser.active then
+    local x1, y1, x2, y2 = self:getLaserRaycastPoints()
+    g.setColor(255, 0, 0)
+    g.setLineWidth(10)
+    g.line(x1, y1, x2, y2)
+    g.setLineWidth(1)
+  end
 
   self.phlerp:delerp()
 end
@@ -102,6 +108,10 @@ function Pigeon:collideWith(other, myFixture)
   if isa(other, Person) then
     if self.state == self.peck and (myFixture == self.beak.top.fixture or myFixture == self.beak.bottom.fixture) and other.state ~= other.dead then
       other:changeState('dead')
+    end
+  elseif isa(other, Building) then
+    if self.state == self.peck and (myFixture == self.beak.top.fixture or myFixture == self.beak.bottom.fixture) then
+      --other:destroy()
     end
   end
 end
@@ -121,6 +131,13 @@ function Pigeon:getGroundRaycastPoints()
   local x, y = self.body:getPosition()
   local h = self.shapeSize / 2
   local x1, y1, x2, y2 = x, y + h, x, y + h + 1
+  return x1, y1, x2, y2
+end
+
+function Pigeon:getLaserRaycastPoints()
+  local x1, y1 = self.animation.spine.skeleton.x + self.animation.spine.skeleton:findBone('beakbottom').worldX, self.animation.spine.skeleton.y - self.animation.spine.skeleton:findBone('beakbottom').worldY
+  local dir = self.laser.direction
+  local x2, y2 = x1 + math.cos(dir) * 500, y1 + math.sin(dir) * 500
   return x1, y1, x2, y2
 end
 
@@ -153,9 +170,9 @@ function Pigeon:initBeak()
       polygon[i + 1] = polygon[i + 1] * self.animation.scale
     end
     beak.shape = love.physics.newPolygonShape(unpack(polygon))
-    beak.body = love.physics.newBody(ctx.world, 0, 0)
+    beak.body = love.physics.newBody(ctx.world, 0, 0, 'kinematic')
     beak.fixture = love.physics.newFixture(beak.body, beak.shape)
-    beak.fixture:setSensor(true)
+    beak.fixture:setCategory(ctx.categories.pigeon)
     beak.body:setUserData(self)
 
     self.beak[name] = beak
@@ -175,7 +192,7 @@ function Pigeon:updateBeak()
     local bone = skeleton:findBone('beak' .. name)
     beak.body:setX(skeleton.x + bone.worldX)
     beak.body:setY(skeleton.y + bone.worldY)
-    beak.body:setAngle(math.rad(-bone.worldRotation))
+    beak.body:setAngle(math.rad(bone.worldRotation * (self.animation.flipped and 1 or -1) + (self.animation.flipped and 180 or 0)))
 
     slot:setAttachment(skeleton:getAttachment(slot.data.name, slot.data.name))
   end)
@@ -194,12 +211,16 @@ function Pigeon:move()
 
     if self.slide then
       self.body:setX(self.body:getX() - self.slideSpeeds[self.slide] * ls.tickrate * (self.animation.state.speed or 1) * self.animation.scale)
+    elseif not self.grounded then
+      self.body:applyForce(self.body:getX() - self.flySpeed * ls.tickrate, 0)
     end
   elseif right then
     self.animation.flipped = false
 
     if self.slide then
       self.body:setX(self.body:getX() + self.slideSpeeds[self.slide] * ls.tickrate * (self.animation.state.speed or 1) * self.animation.scale)
+    elseif not self.grounded then
+      self.body:applyForce(self.body:getX() + self.flySpeed * ls.tickrate, 0)
     end
   end
 
@@ -240,6 +261,8 @@ function Pigeon.idle:update()
     self:changeState('air')
   elseif love.keyboard.isDown('down') then
     self:changeState('peck')
+  elseif love.keyboard.isDown(' ') then
+    self:changeState('laser')
   else
     local vx, vy = self.body:getLinearVelocity()
     self.body:setLinearVelocity(vx / 1.2, vy)
@@ -319,3 +342,46 @@ function Pigeon.peck:impact()
     --
   end)
 end
+
+Pigeon.laser = {}
+function Pigeon.laser:enter()
+  self.laser.active = false
+  self.laser.charge = 0
+  self.laser.direction = self.animation.flipped and 3 * math.pi / 4 or math.pi / 4
+end
+
+function Pigeon.laser:update()
+  if not self.laser.active then
+    if love.keyboard.isDown(' ') then
+      self.laser.charge = self.laser.charge + ls.tickrate
+    else
+      if self.laser.charge > self.laserChargeDuration then
+        self.laser.active = true
+        self.laser.charge = self.laserDuration
+      else
+        self:changeState('idle')
+      end
+    end
+  else
+    local x1, y1, x2, y2 = self:getLaserRaycastPoints()
+    ctx.world:rayCast(x1, y1, x2, y2, function(fixture)
+      local object = fixture:getBody():getUserData()
+      if object and isa(object, Person) and object.state ~= object.dead then
+        object:changeState('dead')
+      end
+
+      return 1
+    end)
+
+    if love.keyboard.isDown('up', 'right') then
+      self.laser.direction = self.laser.direction - self.laserTurnSpeed * ls.tickrate
+    elseif love.keyboard.isDown('down', 'left') then
+      self.laser.direction = self.laser.direction + self.laserTurnSpeed * ls.tickrate
+    end
+
+    self.laser.charge = timer.rot(self.laser.charge, function()
+      self:changeState('idle')
+    end)
+  end
+end
+
