@@ -46,11 +46,11 @@ function Pigeon:init()
 
   self.animation:on('event', function(event)
     local name = event.data.name
-    if name == 'rightstep' then
+    if name == 'rightStep' then
       self.slide = 'right'
-    elseif name == 'leftstep' then
+    elseif name == 'leftStep' then
       self.slide = 'left'
-    elseif name == 'leftstop' or name == 'rightstop' then
+    elseif name == 'leftStop' or name == 'rightStop' then
       self.slide = nil
     elseif name == 'jump' then
       self:jump()
