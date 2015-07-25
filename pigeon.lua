@@ -46,10 +46,16 @@ function Pigeon:init()
 
   self.animation:on('event', function(event)
     local name = event.data.name
-    if name == 'rightStep' then
+    if name == 'rightDrop' then
+      self.drop = 'right'
+    elseif name == 'leftDrop' then
+      self.drop = 'left'
+    elseif name == 'rightStep' then
       self.slide = 'right'
+      self.drop = nil
     elseif name == 'leftStep' then
       self.slide = 'left'
+      self.drop = nil
     elseif name == 'leftStop' or name == 'rightStop' then
       self.slide = nil
     elseif name == 'jump' then
@@ -100,6 +106,13 @@ function Pigeon:draw()
   g.setColor(255, 255, 255)
   local points = {self.feet.left.body:getWorldPoints(self.feet.left.shape:getPoints())}
   g.polygon('line', points)
+  local points = {self.feet.right.body:getWorldPoints(self.feet.right.shape:getPoints())}
+  g.polygon('line', points)
+  local points = {self.beak.top.body:getWorldPoints(self.beak.top.shape:getPoints())}
+  g.polygon('line', points)
+  local points = {self.beak.bottom.body:getWorldPoints(self.beak.bottom.shape:getPoints())}
+  g.polygon('line', points)
+
 
   if self.state == self.laser and self.laser.active then
     local x1, y1, x2, y2 = self:getLaserRaycastPoints()
@@ -113,8 +126,12 @@ function Pigeon:draw()
 end
 
 function Pigeon:collideWith(other, myFixture)
-  if isa(other, Person) then
-    if self.state == self.peck and (myFixture == self.beak.top.fixture or myFixture == self.beak.bottom.fixture) and other.state ~= other.dead then
+  if isa(other, Person) and other.state ~= other.dead then
+    if self.state == self.peck and (myFixture == self.beak.top.fixture or myFixture == self.beak.bottom.fixture) then
+      other:changeState('dead')
+    elseif self.state == self.walk and self.drop and myFixture == self.feet[self.drop].fixture then
+      other:changeState('dead')
+    elseif self.state == self.air and select(2, self.body:getLinearVelocity()) > 0 and (myFixture == self.feet.left.fixture or myFixture == self.feet.right.fixture) then
       other:changeState('dead')
     end
   elseif isa(other, Building) then
@@ -175,12 +192,13 @@ function Pigeon:initBeak()
     local polygon = table.copy(attachment.vertices)
     for i = 1, #polygon, 2 do
       polygon[i] = polygon[i] * self.animation.scale
-      polygon[i + 1] = polygon[i + 1] * self.animation.scale
+      polygon[i + 1] = polygon[i + 1] * self.animation.scale * -1
     end
     beak.shape = love.physics.newPolygonShape(unpack(polygon))
     beak.body = love.physics.newBody(ctx.world, 0, 0, 'kinematic')
     beak.fixture = love.physics.newFixture(beak.body, beak.shape)
     beak.fixture:setCategory(ctx.categories.pigeon)
+    beak.fixture:setSensor(true)
     beak.body:setUserData(self)
 
     self.beak[name] = beak
@@ -220,12 +238,13 @@ function Pigeon:initFeet()
     local polygon = table.copy(attachment.vertices)
     for i = 1, #polygon, 2 do
       polygon[i] = polygon[i] * self.animation.scale
-      polygon[i + 1] = polygon[i + 1] * self.animation.scale
+      polygon[i + 1] = polygon[i + 1] * self.animation.scale * -1
     end
     foot.shape = love.physics.newPolygonShape(unpack(polygon))
     foot.body = love.physics.newBody(ctx.world, 0, 0, 'kinematic')
     foot.fixture = love.physics.newFixture(foot.body, foot.shape)
     foot.fixture:setCategory(ctx.categories.pigeon)
+    foot.fixture:setSensor(true)
     foot.body:setUserData(self)
 
     self.feet[name] = foot
@@ -234,19 +253,18 @@ end
 
 function Pigeon:updateFeet()
   local skeleton = self.animation.spine.skeleton
-  local feet = self.drop == 'both' and {'left', 'right'} or {self.drop}
 
   skeleton.flipY = true
   skeleton:updateWorldTransform()
 
-  table.each(feet, function(name)
+  table.each(self.feet, function(foot, name)
     local slot = skeleton:findSlot(name .. 'foot')
     slot:setAttachment(skeleton:getAttachment(slot.data.name, slot.data.name .. '_bb'))
 
     local bone = skeleton:findBone(name .. 'foot')
-    beak.body:setX(skeleton.x + bone.worldX)
-    beak.body:setY(skeleton.y + bone.worldY)
-    beak.body:setAngle(math.rad(bone.worldRotation * (self.animation.flipped and 1 or -1) + (self.animation.flipped and 180 or 0)))
+    foot.body:setX(skeleton.x + bone.worldX)
+    foot.body:setY(skeleton.y + bone.worldY)
+    foot.body:setAngle(math.rad(bone.worldRotation * (self.animation.flipped and 1 or -1) + (self.animation.flipped and 180 or 0)))
 
     slot:setAttachment(skeleton:getAttachment(slot.data.name, slot.data.name))
   end)
