@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "SNDA3ifoFT7/CIhj29vHGilzEpU", "spine": "2.1.27", "width": 397.66, "height": 460.32 },
+"skeleton": { "hash": "Wo1e2FoZUkH9YNi6a3tR/dKR5ng", "spine": "2.1.27", "width": 397.66, "height": 460.32 },
 "bones": [
 	{ "name": "root" },
 	{ "name": "body1", "parent": "root", "length": 204.7, "x": 18.69, "y": 289.12, "rotation": 222.71 },
@@ -61,7 +61,9 @@
 	{ "name": "piston2", "bone": "piston2", "attachment": "piston2" },
 	{ "name": "piston1", "bone": "piston1", "attachment": "piston1" },
 	{ "name": "rightwing", "bone": "rightwing", "attachment": "rightwing" },
-	{ "name": "pupil", "bone": "pupil", "attachment": "pupil" }
+	{ "name": "pupil", "bone": "pupil", "attachment": "pupil" },
+	{ "name": "leftfoot_bb", "bone": "leftfoot", "attachment": "leftfoot_bb" },
+	{ "name": "rightfoot_bb", "bone": "rightfoot", "attachment": "rightfoot_bb" }
 ],
 "skins": {
 	"default": {
@@ -110,6 +112,12 @@
 		"leftfoot": {
 			"leftfoot": { "x": 5.72, "y": -0.32, "rotation": -17.34, "width": 67, "height": 31 }
 		},
+		"leftfoot_bb": {
+			"leftfoot_bb": {
+				"type": "boundingbox",
+				"vertices": [ 27.5081, 9.0079, -10.80356, 10.92735, -29.259, 1.83797, 46.49833, -9.25754 ]
+			}
+		},
 		"leftshin": {
 			"leftshin": { "x": 16.88, "y": 0.83, "rotation": -116.73, "width": 36, "height": 64 }
 		},
@@ -151,6 +159,12 @@
 		},
 		"rightfoot": {
 			"rightfoot": { "x": -0.52, "y": 5.56, "rotation": 1.26, "width": 64, "height": 37 }
+		},
+		"rightfoot_bb": {
+			"rightfoot_bb": {
+				"type": "boundingbox",
+				"vertices": [ -30.74948, -9.61975, 80.14193, -5.86331, 54.89305, 14.34053, -6.38008, 10.75713 ]
+			}
 		},
 		"rightshin": {
 			"rightshin": { "x": 27.79, "y": 1.1, "rotation": -115.69, "width": 39, "height": 59 }
