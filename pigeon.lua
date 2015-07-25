@@ -10,9 +10,9 @@ Pigeon.flySpeed = 10000
 Pigeon.rocketForce = 500
 Pigeon.maxFlySpeed = 300
 Pigeon.maxFuel = 50
-Pigeon.laserTurnSpeed = 1
+Pigeon.laserTurnSpeed = .35
 Pigeon.laserChargeDuration = 2
-Pigeon.laserDuration = 2
+Pigeon.laserDuration = 1
 
 ----------------
 -- Core
@@ -284,6 +284,8 @@ function Pigeon.walk:update()
 
   if left or right then
     self:move()
+  elseif love.keyboard.isDown(' ') then
+    self:changeState('laser')
   else
     return self:changeState('idle').update(self)
   end
@@ -298,6 +300,8 @@ end
 function Pigeon.air:update()
   local left, right = love.keyboard.isDown('left'), love.keyboard.isDown('right')
   local vx, vy = self.body:getLinearVelocity()
+
+  print(vy)
 
   if self.jumped and self.grounded and vy >= 0 then
     return self:changeState('idle').update(self)
@@ -317,6 +321,8 @@ function Pigeon.air:update()
         local bonusBoost = vy > 0 and vy / 2 or 0
         self.body:applyLinearImpulse(0, -(self.rocketForce + bonusBoost))
       end
+
+      self.animation:set('fly')
     end
   end
 end
