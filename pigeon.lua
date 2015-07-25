@@ -21,6 +21,7 @@ function Pigeon:init()
 
   self.body:setFixedRotation(true)
   self.body:setGravityScale(5)
+  self.body:setUserData(self)
   self.fixture:setCategory(ctx.categories.pigeon)
   self.fixture:setMask(ctx.categories.oneWayPlatform, ctx.categories.person, ctx.categories.debris)
 
@@ -60,24 +61,7 @@ function Pigeon:init()
     right = 555
   }
 
-  self.beakBottom = {}
-  self.beakBottom.body = love.physics.newBody(ctx.world, 0, 0)
-
-  local spine = self.animation.spine
-  spine.skeleton.x = 0
-  spine.skeleton.y = 0
-  spine.skeleton.flipY = true
-  spine.skeleton:updateWorldTransform()
-  spine.skeletonBounds:update(spine.skeleton)
-  spine.skeleton.flipY = false
-
-  local polygon = spine.skeletonBounds:getPolygon(spine.skeleton:getAttachment('beakbottom_bb', 'beakbottom_bb'))
-
-  for i = 1, #polygon, 2 do
-    polygon[i] = polygon[i] * self.animation.scale-- - spine.skeleton:findBone('beakbottom').worldX
-    polygon[i + 1] = polygon[i + 1] * self.animation.scale-- - spine.skeleton:findBone('beakbottom').worldY
-  end
-  self.beakBottom.shape = love.physics.newPolygonShape(unpack(polygon))
+  self:initBeak()
 
   ctx.event:emit('view.register', {object = self})
 end
@@ -89,19 +73,14 @@ function Pigeon:update()
   f.exe(self.state.update, self)
   self:contain()
 
-  self.beakBottom.body:setX(self.body:getX())
-  self.beakBottom.body:setY(self.body:getY())
-  self.beakBottom.body:setAngle(math.rad(-self.animation.spine.skeleton:findBone('beakbottom').worldRotation))
+  self:updateBeak()
 end
 
 function Pigeon:draw()
   local g = love.graphics
   self.phlerp:lerp()
 
-  local points = {self.beakBottom.body:getWorldPoints(self.beakBottom.shape:getPoints())}
   g.setColor(255, 255, 255)
-  --g.polygon('line', points)
-  --g.polygon('line', self.animation.spine.skeletonBounds:getPolygon(self.animation.spine.skeleton:getAttachment('beakbottom_bb', 'beakbottom_bb')))
 
   local x, y = self.body:getPosition()
   self.animation:draw(x, y + self.shapeSize / 2)
@@ -110,16 +89,31 @@ function Pigeon:draw()
   g.setColor(self.grounded and {0, 255, 0} or {255, 0, 0})
   g.line(x1, y1, x2, y2)
 
+  local points = {self.beak.bottom.body:getWorldPoints(self.beak.bottom.shape:getPoints())}
+  g.setColor(255, 255, 255)
+  g.polygon('line', points)
+  local points = {self.beak.top.body:getWorldPoints(self.beak.top.shape:getPoints())}
+  g.polygon('line', points)
+
   self.phlerp:delerp()
+end
+
+function Pigeon:collideWith(other, myFixture)
+  if isa(other, Person) then
+    if self.state == self.peck and (myFixture == self.beak.top.fixture or myFixture == self.beak.bottom.fixture) and other.state ~= other.dead then
+      other:changeState('dead')
+    end
+  end
 end
 
 ----------------
 -- Helpers
 ----------------
 function Pigeon:changeState(target)
-  lume.call(self.state.exit, self)
+  if self.state == target then return end
+  f.exe(self.state.exit, self)
   self.state = self[target]
-  lume.call(self.state.enter, self)
+  f.exe(self.state.enter, self)
   return self.state
 end
 
@@ -142,6 +136,51 @@ function Pigeon:getGrounded()
   end)
 
   return grounded
+end
+
+function Pigeon:initBeak()
+  local spine = self.animation.spine
+
+  self.beak = {}
+
+  table.each({'top', 'bottom'}, function(name)
+    local beak = {}
+
+    local attachment = spine.skeleton:getAttachment('beak' .. name .. '_bb', 'beak' .. name .. '_bb')
+    local polygon = table.copy(attachment.vertices)
+    for i = 1, #polygon, 2 do
+      polygon[i] = polygon[i] * self.animation.scale
+      polygon[i + 1] = polygon[i + 1] * self.animation.scale
+    end
+    beak.shape = love.physics.newPolygonShape(unpack(polygon))
+    beak.body = love.physics.newBody(ctx.world, 0, 0)
+    beak.fixture = love.physics.newFixture(beak.body, beak.shape)
+    beak.fixture:setSensor(true)
+    beak.body:setUserData(self)
+
+    self.beak[name] = beak
+  end)
+end
+
+function Pigeon:updateBeak()
+  local skeleton = self.animation.spine.skeleton
+
+  skeleton.flipY = true
+  skeleton:updateWorldTransform()
+
+  table.each(self.beak, function(beak, name)
+    local slot = skeleton:findSlot('beak' .. name)
+    slot:setAttachment(skeleton:getAttachment(slot.data.name, slot.data.name .. '_bb'))
+
+    local bone = skeleton:findBone('beak' .. name)
+    beak.body:setX(skeleton.x + bone.worldX)
+    beak.body:setY(skeleton.y + bone.worldY)
+    beak.body:setAngle(math.rad(-bone.worldRotation))
+
+    slot:setAttachment(skeleton:getAttachment(slot.data.name, slot.data.name))
+  end)
+
+  skeleton.flipY = false
 end
 
 ----------------
@@ -262,22 +301,21 @@ end
 Pigeon.peck = {}
 function Pigeon.peck:enter()
   self.animation:set('peck')
+  table.each(self.beak, function(beak)
+    beak.fixture:setSensor(false)
+  end)
+end
+
+function Pigeon.peck:exit()
+  table.each(self.beak, function(beak)
+    beak.fixture:setSensor(true)
+  end)
 end
 
 function Pigeon.peck:impact()
-  local spine = self.animation.spine
+  local skeleton = self.animation.spine.skeleton
 
-  table.each({'beaktop', 'beakbottom'}, function(part)
-    local slot = spine.skeleton:findSlot(part)
-    slot:setAttachment(spine.skeleton:getAttachment(slot.data.name, slot.data.name .. '_bb'))
-
-    spine.skeleton.flipY = true
-    spine.skeleton:updateWorldTransform()
-    spine.skeletonBounds:update(spine.skeleton)
-    spine.skeleton.flipY = false
-
-    -- Collision detection
-
-    slot:setAttachment(spine.skeleton:getAttachment(slot.data.name, slot.data.name))
+  table.each(self.beak, function(beak, name)
+    --
   end)
 end

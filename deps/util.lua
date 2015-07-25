@@ -1,6 +1,11 @@
-function table.each(t, ...)
-  if not t then return end
-  return lume.each(t, ...)
+function isa(object, thing)
+  repeat
+    local meta = getmetatable(object).__index
+    if meta == thing then return true end
+    object = meta
+  until not meta
+
+  return false
 end
 
 function table.with(t, k, ...)

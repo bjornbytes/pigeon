@@ -16,7 +16,7 @@ function Person:activate()
   self.body:setUserData(self)
   self.body:setFixedRotation(true)
 
-  self.fixture:setFriction(1)
+  self.fixture:setFriction(.75)
   self.fixture:setCategory(ctx.categories.person)
   self.fixture:setMask(ctx.categories.person, ctx.categories.building, ctx.categories.debris)
 
@@ -63,9 +63,10 @@ function Person:distanceTo(object)
 end
 
 function Person:changeState(target)
-  lume.call(self.state.exit, self)
+  if self.state == target then return end
+  f.exe(self.state.exit, self)
   self.state = self[target]
-  lume.call(self.state.enter, self)
+  f.exe(self.state.enter, self)
   return self.state
 end
 
@@ -74,9 +75,11 @@ end
 ----------------
 Person.dead = {}
 function Person.dead:enter()
-  self.body:applyLinearImpulse(-500 + love.math.random() * 1000, love.math.random() * -800)
-  self.body:applyTorque(-200 * love.math.random() * 400)
   self.body:setFixedRotation(false)
+  self.fixture:setCategory(ctx.categories.debris)
+  self.fixture:setFriction(0.25)
+  self.body:applyLinearImpulse(-200 + love.math.random() * 400, -300 + love.math.random() * -500)
+  self.body:setAngularVelocity(-20 + love.math.random() * 40)
 end
 
 function Person.dead:update()
