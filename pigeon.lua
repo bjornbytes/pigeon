@@ -29,7 +29,7 @@ function Pigeon:init()
   self.fixture:setCategory(ctx.categories.pigeon)
   self.fixture:setMask(ctx.categories.oneWayPlatform, ctx.categories.person, ctx.categories.debris)
 
-  self.phlerp = PhysicsInterpolator(self.body)
+  self.phlerp = PhysicsInterpolator(self)
 
   self.fuel = self.maxFuel
   self.state = self.idle
