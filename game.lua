@@ -37,6 +37,8 @@ function Game:load()
 end
 
 function Game:update()
+  self.debug = love.keyboard.isDown('`')
+
   self.pigeon:update()
   self.enemies:update()
   self.buildings:update()

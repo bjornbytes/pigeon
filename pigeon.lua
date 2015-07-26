@@ -118,7 +118,7 @@ function Pigeon:draw()
   g.setColor(self.grounded and {0, 255, 0} or {255, 0, 0})
   g.line(x1, y1, x2, y2)
 
-  if false and debug then
+  if ctx.debug then
     g.setColor(255, 255, 255)
     local points = {self.feet.left.body:getWorldPoints(self.feet.left.shape:getPoints())}
     g.polygon('line', points)
