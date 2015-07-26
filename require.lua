@@ -24,6 +24,7 @@ require 'map'
 require 'dinoland'
 require 'goal'
 require 'projectile'
+require 'spear'
 
 require 'hud'
 

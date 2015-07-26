@@ -9,6 +9,8 @@ function Map:init()
   self.ground.fixture = love.physics.newFixture(self.ground.body, self.ground.shape)
   self.ground.fixture:setCategory(ctx.categories.ground)
 
+  self.ground.body:setUserData(self)
+
   ctx.view.xmax = self.width
   ctx.view.ymax = self.height
   ctx.event:emit('view.register', {object = self})
