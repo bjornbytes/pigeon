@@ -55,13 +55,26 @@ function Pigeon:init()
     elseif name == 'rightStep' then
       self.slide = 'right'
       self.drop = nil
+      if self.walk.firstShake == false then
+        ctx.view:screenshake(6)
+      else
+        self.walk.firstShake = false
+      end
     elseif name == 'leftStep' then
       self.slide = 'left'
       self.drop = nil
+      if self.walk.firstShake == false then
+        ctx.view:screenshake(6)
+      else
+        self.walk.firstShake = false
+      end
     elseif name == 'leftStop' or name == 'rightStop' then
       self.slide = nil
     elseif name == 'jump' then
       self:jump()
+    elseif name == 'laser' then
+      self.laser.active = true
+      self.laser.charge = self.laserDuration
     elseif name == 'peck' and self.state == self.peck then
       self.peck.impact(self)
     end
@@ -148,6 +161,7 @@ end
 -- Helpers
 ----------------
 function Pigeon:changeState(target)
+  print('changing state to ' .. target)
   if self.state == target then return end
   f.exe(self.state.exit, self)
   self.state = self[target]
@@ -345,6 +359,10 @@ function Pigeon.idle:update()
 end
 
 Pigeon.walk = {}
+function Pigeon.walk:enter()
+  self.walk.firstShake = true
+end
+
 function Pigeon.walk:update()
   local left, right = love.keyboard.isDown('left'), love.keyboard.isDown('right')
   self.animation:set('walk')
@@ -370,6 +388,13 @@ Pigeon.air = {}
 function Pigeon.air:enter()
   self.jumped = false
   self.animation:set('jump')
+  self.air.lastVelocity = 0
+end
+
+function Pigeon.air:exit()
+  if self.air.lastVelocity > 800 then
+    ctx.view:screenshake(20 + (self.air.lastVelocity / 100))
+  end
 end
 
 function Pigeon.air:update()
@@ -387,7 +412,7 @@ function Pigeon.air:update()
   end
 
   if love.keyboard.isDown(' ') then
-    if self.fuel > 0 then
+    if self.fuel > 0 and not self.grounded then
       if (vy > 0 or math.abs(vy) < self.maxFlySpeed) then
         self.fuel = math.max(self.fuel - 33 * ls.tickrate, 0)
 
@@ -396,8 +421,11 @@ function Pigeon.air:update()
       end
 
       self.animation:set('fly')
+      self.jumped = true
     end
   end
+
+  self.air.lastVelocity = vy
 end
 
 Pigeon.peck = {}
@@ -415,35 +443,27 @@ function Pigeon.peck:exit()
 end
 
 function Pigeon.peck:impact()
-  local skeleton = self.animation.spine.skeleton
-
-  table.each(self.beak, function(beak, name)
-    --
-  end)
+  ctx.view:screenshake(20)
 end
 
 Pigeon.laser = {}
 function Pigeon.laser:enter()
   self.laser.active = false
-  self.laser.charge = 0
   self.laser.direction = self.animation.flipped and 3 * math.pi / 4 or math.pi / 4
   self.animation:set('laserStart')
 end
 
 function Pigeon.laser:update()
   if not self.laser.active then
-    if love.keyboard.isDown(' ') then
-      self.laser.charge = self.laser.charge + ls.tickrate
-    else
-      if self.laser.charge > self.laserChargeDuration then
-        self.laser.active = true
+    if not love.keyboard.isDown(' ') then
+      if self.animation.state.name == 'laserCharge' then
         self.laser.charge = self.laserDuration
+        --self.animation:set('laserEnd')
       else
         self:changeState('idle')
       end
     end
   else
-    self.animation:set('laserEnd')
     local x1, y1, x2, y2 = self:getLaserRaycastPoints()
     ctx.world:rayCast(x1, y1, x2, y2, function(fixture)
       local object = fixture:getBody():getUserData()

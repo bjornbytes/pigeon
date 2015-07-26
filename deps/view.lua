@@ -196,7 +196,7 @@ function View:follow()
   local margin = 0.5
 
   self.x = x - self.width * margin
-  self.y = y - self.height * margin
+  self.y = y - self.height * .75
 end
 
 function View:contain()

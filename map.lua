@@ -25,7 +25,7 @@ function Map:draw()
   local image = data.media.graphics.dinoland.dinolandBackground
   local scale = self.height / image:getHeight()
   for x = 1, self.width, image:getWidth() * scale do
-    g.draw(image, x, 0, 0, scale, scale)
+    g.draw(image, x, self.height, 0, scale, scale, 0, image:getHeight())
   end
 
   g.setColor(136, 87, 44)

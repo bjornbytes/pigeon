@@ -11,8 +11,8 @@ function Caveman:activate()
   self.image = data.media.graphics.dinoland[self.gender].normal
   self.direction = 1
 
-  self.state = self.panic
-  self.hasSpear = true
+  self.hasSpear = love.math.random() > .5
+  self.state = self.hasSpear and self.attack or self.panic
   self.walkTimer = 1
   self.reloadTimer = 0
 
@@ -55,10 +55,6 @@ function Caveman.panic:update()
   end
 
   self:reloadSpear()
-
-  if self.hasSpear then
-    --self:changeState('attack')
-  end
 end
 
 Caveman.attack = {}
@@ -68,10 +64,8 @@ function Caveman.attack:update()
   self.image = data.media.graphics.dinoland[self.gender].normal
 
   if self:inRange() then
-    if self.walkTimer == 0 then
-      self.hasSpear = false
+    if self.walkTimer == 0 and self.reloadTimer == 0 then
       self.reloadTimer = lume.random(unpack(self.reloadRange))
-      self:changeState('panic')
     end
   else
     if self.walkTimer == 0 then
