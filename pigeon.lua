@@ -393,7 +393,7 @@ end
 
 function Pigeon.air:exit()
   if self.air.lastVelocity > 800 then
-    ctx.view:screenshake(20 + (self.air.lastVelocity / 100))
+    ctx.view:screenshake(15 + (self.air.lastVelocity / 100))
   end
 end
 
