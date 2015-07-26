@@ -22,7 +22,7 @@ function Game:load()
   self.goal = Goal()
 
   for i = 1, 50 do
-    self.enemies:add(Caveman, {x = 300 + love.math.random() * 500, y = 300})
+    self.enemies:add(Caveman, {x = 300 + love.math.random() * 1500, y = 300})
   end
 
   --self.buildings:add(Building, {x = 300, width = 200, height = 80})

@@ -1,6 +1,6 @@
 local Pigeon = extend(Animation)
 
-Pigeon.scale = .75
+Pigeon.scale = .7
 Pigeon.default = 'idle'
 Pigeon.states = {}
 
@@ -10,7 +10,10 @@ Pigeon.states.idle = {
 
 Pigeon.states.walk = {
   loop = true,
-  speed = .85
+  speed = .85,
+  mix = {
+    walk = 1
+  }
 }
 
 Pigeon.states.peck = {
@@ -19,14 +22,25 @@ Pigeon.states.peck = {
 }
 
 Pigeon.states.jump = {
-  loop = false
+  loop = false,
+  speed = .85
 }
 
 Pigeon.states.fly = {
   loop = false
 }
 
-Pigeon.states.laser = {
+Pigeon.states.laserStart = {
+  loop = false,
+  speed = .5
+}
+
+Pigeon.states.laserCharge = {
+  loop = true,
+  speed = .5
+}
+
+Pigeon.states.laserEnd = {
   loop = false
 }
 

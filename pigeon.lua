@@ -6,7 +6,7 @@ Pigeon = class()
 Pigeon.walkForce = 600
 Pigeon.maxSpeed = 350
 Pigeon.jumpForce = 3000
-Pigeon.flySpeed = 10000
+Pigeon.flySpeed = 500
 Pigeon.rocketForce = 500
 Pigeon.maxFlySpeed = 300
 Pigeon.maxFuel = 50
@@ -19,7 +19,7 @@ Pigeon.laserDuration = 1
 ----------------
 function Pigeon:init()
   self.shapeSize = 50
-  self.body = love.physics.newBody(ctx.world, self.shapeSize / 2, ctx.map.height - ctx.map.ground.height - self.shapeSize / 2, 'dynamic')
+  self.body = love.physics.newBody(ctx.world, 300, ctx.map.height - ctx.map.ground.height - self.shapeSize / 2 - 300, 'dynamic')
   self.shape = love.physics.newRectangleShape(self.shapeSize, self.shapeSize)
   self.fixture = love.physics.newFixture(self.body, self.shape)
 
@@ -41,6 +41,8 @@ function Pigeon:init()
       self.animation:set('idle')
     elseif event.state.name == 'peck' then
       self:changeState('idle')
+    elseif event.state.name == 'laserStart' then
+      self.animation:set('laserCharge')
     end
   end)
 
@@ -103,16 +105,17 @@ function Pigeon:draw()
   g.setColor(self.grounded and {0, 255, 0} or {255, 0, 0})
   g.line(x1, y1, x2, y2)
 
-  g.setColor(255, 255, 255)
-  local points = {self.feet.left.body:getWorldPoints(self.feet.left.shape:getPoints())}
-  g.polygon('line', points)
-  local points = {self.feet.right.body:getWorldPoints(self.feet.right.shape:getPoints())}
-  g.polygon('line', points)
-  local points = {self.beak.top.body:getWorldPoints(self.beak.top.shape:getPoints())}
-  g.polygon('line', points)
-  local points = {self.beak.bottom.body:getWorldPoints(self.beak.bottom.shape:getPoints())}
-  g.polygon('line', points)
-
+  if false and debug then
+    g.setColor(255, 255, 255)
+    local points = {self.feet.left.body:getWorldPoints(self.feet.left.shape:getPoints())}
+    g.polygon('line', points)
+    local points = {self.feet.right.body:getWorldPoints(self.feet.right.shape:getPoints())}
+    g.polygon('line', points)
+    local points = {self.beak.top.body:getWorldPoints(self.beak.top.shape:getPoints())}
+    g.polygon('line', points)
+    local points = {self.beak.bottom.body:getWorldPoints(self.beak.bottom.shape:getPoints())}
+    g.polygon('line', points)
+  end
 
   if self.state == self.laser and self.laser.active then
     local x1, y1, x2, y2 = self:getLaserRaycastPoints()
@@ -281,18 +284,18 @@ function Pigeon:move()
   if left then
     self.animation.flipped = true
 
-    if self.slide then
+    if self.state == self.walk and self.slide then
       self.body:setX(self.body:getX() - self.slideSpeeds[self.slide] * ls.tickrate * (self.animation.state.speed or 1) * self.animation.scale)
     elseif not self.grounded then
-      self.body:applyForce(self.body:getX() - self.flySpeed * ls.tickrate, 0)
+      self.body:applyLinearImpulse(-self.flySpeed, 0)
     end
   elseif right then
     self.animation.flipped = false
 
-    if self.slide then
+    if self.state == self.walk and self.slide then
       self.body:setX(self.body:getX() + self.slideSpeeds[self.slide] * ls.tickrate * (self.animation.state.speed or 1) * self.animation.scale)
     elseif not self.grounded then
-      self.body:applyForce(self.body:getX() + self.flySpeed * ls.tickrate, 0)
+      self.body:applyLinearImpulse(self.flySpeed, 0)
     end
   end
 
@@ -424,6 +427,7 @@ function Pigeon.laser:enter()
   self.laser.active = false
   self.laser.charge = 0
   self.laser.direction = self.animation.flipped and 3 * math.pi / 4 or math.pi / 4
+  self.animation:set('laserStart')
 end
 
 function Pigeon.laser:update()
@@ -439,6 +443,7 @@ function Pigeon.laser:update()
       end
     end
   else
+    self.animation:set('laserEnd')
     local x1, y1, x2, y2 = self:getLaserRaycastPoints()
     ctx.world:rayCast(x1, y1, x2, y2, function(fixture)
       local object = fixture:getBody():getUserData()
