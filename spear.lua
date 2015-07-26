@@ -41,7 +41,6 @@ end
 
 function Spear:collideWith(other)
   if isa(other, Map) then
-    print('asdf')
     ctx.projectiles:remove(self)
   end
 end

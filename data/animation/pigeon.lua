@@ -12,7 +12,7 @@ Pigeon.states.walk = {
   loop = true,
   speed = .85,
   mix = {
-    walk = 1
+    walk = .2
   }
 }
 
