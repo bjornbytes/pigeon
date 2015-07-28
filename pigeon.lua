@@ -12,7 +12,6 @@ Pigeon.maxFlySpeed = 300
 Pigeon.maxFuel = 50
 Pigeon.laserTurnSpeed = .35
 Pigeon.laserChargeDuration = 2
-Pigeon.laserDuration = 1
 
 ----------------
 -- Core
@@ -43,6 +42,9 @@ function Pigeon:init()
       self:changeState('idle')
     elseif event.state.name == 'laserStart' then
       self.animation:set('laserCharge')
+    elseif event.state.name == 'laserEnd' then
+      self:changeState('idle')
+      self.laser.active = false
     end
   end)
 
@@ -74,7 +76,6 @@ function Pigeon:init()
       self:jump()
     elseif name == 'laser' then
       self.laser.active = true
-      self.laser.charge = self.laserDuration
     elseif name == 'peck' and self.state == self.peck then
       self.peck.impact(self)
     end
@@ -456,9 +457,8 @@ end
 function Pigeon.laser:update()
   if not self.laser.active then
     if not love.keyboard.isDown(' ') then
-      if self.animation.state.name == 'laserCharge' then
-        self.laser.charge = self.laserDuration
-        --self.animation:set('laserEnd')
+      if self.animation.state.name == 'laserCharge' or self.animation.state.name == 'laserEnd' then
+        self.animation:set('laserEnd')
       else
         self:changeState('idle')
       end
@@ -479,10 +479,6 @@ function Pigeon.laser:update()
     elseif love.keyboard.isDown('down', 'left') then
       self.laser.direction = self.laser.direction + self.laserTurnSpeed * ls.tickrate
     end
-
-    self.laser.charge = timer.rot(self.laser.charge, function()
-      self:changeState('idle')
-    end)
   end
 end
 
