@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "ei5hspnuxQ9GApOMb7A8LzslF9I", "spine": "2.1.27", "width": 397.66, "height": 464.51 },
+"skeleton": { "hash": "mB51pGCaReFmMoCpJEafT/URWGk", "spine": "2.1.27", "width": 397.66, "height": 464.51 },
 "bones": [
 	{ "name": "root" },
 	{ "name": "body1", "parent": "root", "length": 204.7, "x": 16.73, "y": 291.08, "rotation": 222.71 },
@@ -65,7 +65,7 @@
 	{ "name": "leftfoot_bb", "bone": "leftfoot", "attachment": "leftfoot_bb" },
 	{ "name": "rightfoot_bb", "bone": "rightfoot", "attachment": "rightfoot_bb" },
 	{ "name": "body_bb", "bone": "body1", "attachment": "body_bb" },
-	{ "name": "neck_bb", "bone": "neck1", "attachment": "neck_bb" },
+	{ "name": "neck_bb", "bone": "neck4", "attachment": "neck_bb" },
 	{ "name": "head_bb", "bone": "head", "attachment": "head_bb" },
 	{ "name": "leftshin_bb", "bone": "leftshin", "attachment": "leftshin_bb" },
 	{ "name": "leftthigh_bb", "bone": "leftthigh", "attachment": "leftthigh_bb" },
@@ -181,7 +181,7 @@
 		"neck_bb": {
 			"neck_bb": {
 				"type": "boundingbox",
-				"vertices": [ -51.74222, -71.7382, 23.48632, -26.02835, 11.59347, 29.85116, -62.44754, 27.91114 ]
+				"vertices": [ 11.23479, -60.13572, 81.40732, -6.98929, 63.87549, 47.38529, -9.58125, 37.90145 ]
 			}
 		},
 		"piston1": {
