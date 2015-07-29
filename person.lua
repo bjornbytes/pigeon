@@ -53,6 +53,14 @@ function Person:draw()
   self.phlerp:delerp()
 end
 
+function Person:collideWith(other)
+  if other.tag == 'platform' and self.body:getY() > other.body:getY() then
+    return false
+  end
+
+  return true
+end
+
 ----------------
 -- Helpers
 ----------------

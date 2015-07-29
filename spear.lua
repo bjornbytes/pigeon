@@ -40,7 +40,7 @@ function Spear:draw()
 end
 
 function Spear:collideWith(other)
-  if isa(other, Map) then
+  if isa(other, Map) or other.tag == 'platform' then
     ctx.projectiles:remove(self)
   end
 end

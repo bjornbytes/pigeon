@@ -65,17 +65,18 @@ function Map:draw()
   g.setColor(136, 87, 44)
   physics.draw('fill', self.ground)
 
+  love.math.setRandomSeed(1)
   drawGrass(self.ground)
 
-  local seed = love.math.getRandomSeed()
-  table.each(self.obstacles, function(obstacle)
+  for i = 1, #self.obstacles do
+    local obstacle = self.obstacles[i]
     love.math.setRandomSeed(obstacle.body:getX() + obstacle.width)
     g.setColor(136, 87, 44)
     physics.draw('fill', obstacle)
 
     drawGrass(obstacle)
-  end)
-  love.math.setRandomSeed(seed)
+  end
+  love.math.setRandomSeed(love.timer.getTime())
 
   table.each(self.decorations, function(d)
     local scale = d.height / d.image:getHeight()

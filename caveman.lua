@@ -65,7 +65,7 @@ function Caveman.attack:update()
   if self:inRange() then
     if self.walkTimer == 0 and self.reloadTimer == 0 then
       self.reloadTimer = lume.random(unpack(self.reloadRange))
-      --ctx.projectiles:add(Spear, {x = self.body:getX(), y = self.body:getY() - self.h, direction = self.direction})
+      ctx.projectiles:add(Spear, {x = self.body:getX(), y = self.body:getY() - self.h, direction = self.direction})
     end
   else
     if self.walkTimer == 0 then

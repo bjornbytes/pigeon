@@ -6,7 +6,7 @@ Pigeon = class()
 Pigeon.walkForce = 600
 Pigeon.maxSpeed = 350
 Pigeon.jumpForce = 3000
-Pigeon.flySpeed = 50
+Pigeon.flySpeed = 100
 Pigeon.rocketForce = 500
 Pigeon.maxFlySpeed = 300
 Pigeon.maxFuel = 25
@@ -160,11 +160,9 @@ function Pigeon:collideWith(other, myFixture)
     elseif self.state == self.air and select(2, self.body:getLinearVelocity()) > 0 and (myFixture == self.feet.left.fixture or myFixture == self.feet.right.fixture) then
       other:changeState('dead')
     end
-  elseif isa(other, Building) then
-    if self.state == self.peck and (myFixture == self.beak.top.fixture or myFixture == self.beak.bottom.fixture) then
-      --other:destroy()
-    end
   end
+
+  return true
 end
 
 ----------------
@@ -495,9 +493,9 @@ function Pigeon.laser:update()
     end)
 
     if love.keyboard.isDown('up', 'right') then
-      self.laser.direction = self.laser.direction - self.laserTurnSpeed * ls.tickrate * math.sign(math.pi / 2 - self.laser.direction) * .1
+      self.laser.direction = self.laser.direction - self.laserTurnSpeed * ls.tickrate * math.sign(math.pi / 2 - self.laser.direction) * .2
     elseif love.keyboard.isDown('down', 'left') then
-      self.laser.direction = self.laser.direction + self.laserTurnSpeed * ls.tickrate * math.sign(math.pi / 2 - self.laser.direction) * .1
+      self.laser.direction = self.laser.direction + self.laserTurnSpeed * ls.tickrate * math.sign(math.pi / 2 - self.laser.direction) * .2
     end
   end
 end
