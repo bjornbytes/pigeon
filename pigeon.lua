@@ -45,6 +45,8 @@ function Pigeon:init()
     elseif event.state.name == 'laserEnd' then
       self:changeState('idle')
       self.laser.active = false
+    elseif event.state.name == 'flyStart' then
+      self.animation:set('fly')
     end
   end)
 
@@ -428,12 +430,15 @@ function Pigeon.air:update()
         self.body:applyLinearImpulse(0, -(self.rocketForce + bonusBoost))
       end
 
-      self.animation:set('fly')
+      if self.animation.state.name ~= 'fly' and self.animation.state.name ~= 'flyStart' then
+        self.animation:set('flyStart')
+      end
+
       self.jumped = true
     end
   end
 
-  if self.animation.state.name == 'fly' and (not love.keyboard.isDown(' ') or self.fuel < 1) then
+  if (self.animation.state.name == 'fly' or self.animation.state.name == 'flyStart') and (not love.keyboard.isDown(' ') or self.fuel < 1) then
     self.animation:set('flyEnd')
   end
 

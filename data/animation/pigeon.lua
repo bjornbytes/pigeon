@@ -26,6 +26,10 @@ Pigeon.states.jump = {
   speed = .85
 }
 
+Pigeon.states.flyStart = {
+  loop = false
+}
+
 Pigeon.states.fly = {
   loop = true
 }
