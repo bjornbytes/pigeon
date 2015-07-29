@@ -433,6 +433,10 @@ function Pigeon.air:update()
     end
   end
 
+  if self.animation.state.name == 'fly' and (not love.keyboard.isDown(' ') or self.fuel < 1) then
+    self.animation:set('flyEnd')
+  end
+
   self.air.lastVelocity = vy
 end
 

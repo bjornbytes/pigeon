@@ -27,6 +27,10 @@ Pigeon.states.jump = {
 }
 
 Pigeon.states.fly = {
+  loop = true
+}
+
+Pigeon.states.flyEnd = {
   loop = false
 }
 
