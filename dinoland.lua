@@ -26,14 +26,17 @@ function Dinoland:init()
 
   table.insert(self.obstacles, obstacle)
 
-  obstacle = {}
-  obstacle.width, obstacle.height = 550, 300
-  obstacle.body = love.physics.newBody(ctx.world, 550 / 2, self.height - self.groundHeight - obstacle.height / 2)
-  obstacle.shape = love.physics.newRectangleShape(obstacle.width, obstacle.height)
-  obstacle.fixture = love.physics.newFixture(obstacle.body, obstacle.shape)
-  obstacle.fixture:setCategory(ctx.categories.oneWayPlatform)
+  Map.init(self)
 
-  table.insert(self.obstacles, obstacle)
+  self.decorations = {}
+  for i = 1, 10 do
+    local obstacle
+    if love.math.random() < .75 then
+      obstacle = self.ground
+    else
+      obstacle = self.obstacles[love.math.random(1, #self.obstacles)]
+    end
 
-  return Map.init(self)
+    table.insert(self.decorations, {image = data.media.graphics.dinoland['shrub' .. love.math.random(1, 4)], x = obstacle.body:getX() + love.math.random() * obstacle.width / 2, y = obstacle.body:getY() - obstacle.height / 2, height = 50 + love.math.random() * 60, direction = love.math.random() > .5 and -1 or 1})
+  end
 end

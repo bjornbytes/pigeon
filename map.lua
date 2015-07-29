@@ -2,6 +2,7 @@ Map = class()
 
 function Map:init()
   self.ground = {}
+  self.ground.width = self.width
   self.ground.height = self.groundHeight
   self.ground.body = love.physics.newBody(ctx.world, self.width / 2, self.height - self.ground.height / 2, 'static')
   self.ground.shape = love.physics.newRectangleShape(self.width, self.ground.height)
@@ -31,6 +32,26 @@ end
 function Map:draw()
   local g = love.graphics
 
+  local function drawGrass(obstacle)
+    local x, y = obstacle.body:getPosition()
+    local x1, x2 = x - obstacle.width / 2, x + obstacle.width / 2
+    local image = data.media.graphics.dinoland.grassLeft
+    local scale = 32 / image:getHeight()
+    local xx = x1 + image:getWidth() * scale
+    g.setColor(255, 255, 255)
+    while xx < x2 do
+      local image = data.media.graphics.dinoland['grassMid' .. love.math.random(1, 2)]
+      g.draw(image, math.min(xx, x2 - image:getWidth() * scale * 2), y - obstacle.height / 2, 0, scale, scale)
+      xx = xx + image:getWidth() * scale
+    end
+    local image = data.media.graphics.dinoland.grassLeft
+    local scale = 32 / image:getHeight()
+    g.setColor(255, 255, 255)
+    g.draw(image, x1, y - obstacle.height / 2, 0, scale, scale)
+    local image = data.media.graphics.dinoland.grassRight
+    g.draw(image, x2, y - obstacle.height / 2, 0, scale, scale, image:getWidth())
+  end
+
   g.setColor(255, 255, 255)
   local image = data.media.graphics.dinoland.dinolandBackground1
   local scale = self.height / image:getHeight()
@@ -44,8 +65,22 @@ function Map:draw()
   g.setColor(136, 87, 44)
   physics.draw('fill', self.ground)
 
+  drawGrass(self.ground)
+
+  local seed = love.math.getRandomSeed()
   table.each(self.obstacles, function(obstacle)
+    love.math.setRandomSeed(obstacle.body:getX() + obstacle.width)
+    g.setColor(136, 87, 44)
     physics.draw('fill', obstacle)
+
+    drawGrass(obstacle)
+  end)
+  love.math.setRandomSeed(seed)
+
+  table.each(self.decorations, function(d)
+    local scale = d.height / d.image:getHeight()
+    g.setColor(255, 255, 255)
+    g.draw(d.image, d.x, d.y, 0, scale * d.direction, scale, d.image:getWidth() / 2, d.image:getHeight())
   end)
 end
 

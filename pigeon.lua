@@ -18,7 +18,7 @@ Pigeon.laserChargeDuration = 2
 ----------------
 function Pigeon:init()
   self.shapeSize = 50
-  self.body = love.physics.newBody(ctx.world, 300, ctx.map.height - ctx.map.ground.height - self.shapeSize / 2 - 300, 'dynamic')
+  self.body = love.physics.newBody(ctx.world, 100, ctx.map.height - ctx.map.ground.height - self.shapeSize / 2, 'dynamic')
   self.shape = love.physics.newRectangleShape(self.shapeSize, self.shapeSize)
   self.fixture = love.physics.newFixture(self.body, self.shape)
 
@@ -493,7 +493,12 @@ function Pigeon.laser:update()
 
       return 1
     end)
-  end
 
+    if love.keyboard.isDown('up', 'right') then
+      self.laser.direction = self.laser.direction - self.laserTurnSpeed * ls.tickrate * math.sign(math.pi / 2 - self.laser.direction) * .1
+    elseif love.keyboard.isDown('down', 'left') then
+      self.laser.direction = self.laser.direction + self.laserTurnSpeed * ls.tickrate * math.sign(math.pi / 2 - self.laser.direction) * .1
+    end
+  end
 end
 
