@@ -2,7 +2,7 @@ Map = class()
 
 function Map:init()
   self.ground = {}
-  self.ground.height = 100
+  self.ground.height = self.groundHeight
   self.ground.body = love.physics.newBody(ctx.world, self.width / 2, self.height - self.ground.height / 2, 'static')
   self.ground.shape = love.physics.newRectangleShape(self.width, self.ground.height)
 
@@ -18,6 +18,14 @@ end
 
 function Map:update()
   ctx.view.xmax = self:getMaxX()
+
+  table.each(self.obstacles, function(obstacle)
+    if ctx.pigeon.body:getY() + ctx.pigeon.shapeSize / 2 > obstacle.body:getY() - obstacle.height / 2 then
+      obstacle.fixture:setCategory(ctx.categories.oneWayPlatform)
+    else
+      obstacle.fixture:setCategory(ctx.categories.ground)
+    end
+  end)
 end
 
 function Map:draw()
@@ -32,6 +40,10 @@ function Map:draw()
 
   g.setColor(136, 87, 44)
   physics.draw('fill', self.ground)
+
+  table.each(self.obstacles, function(obstacle)
+    physics.draw('fill', obstacle)
+  end)
 end
 
 function Map:getMaxX()

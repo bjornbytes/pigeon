@@ -9,7 +9,7 @@ Pigeon.jumpForce = 3000
 Pigeon.flySpeed = 500
 Pigeon.rocketForce = 500
 Pigeon.maxFlySpeed = 300
-Pigeon.maxFuel = 50
+Pigeon.maxFuel = 25
 Pigeon.laserTurnSpeed = .35
 Pigeon.laserChargeDuration = 2
 

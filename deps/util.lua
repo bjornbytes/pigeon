@@ -1,4 +1,5 @@
 function isa(object, thing)
+  if not getmetatable(object) then return false end
   repeat
     local meta = getmetatable(object).__index
     if meta == thing then return true end
