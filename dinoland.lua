@@ -37,6 +37,6 @@ function Dinoland:init()
       obstacle = self.obstacles[love.math.random(1, #self.obstacles)]
     end
 
-    table.insert(self.decorations, {image = data.media.graphics.dinoland['shrub' .. love.math.random(1, 4)], x = obstacle.body:getX() + love.math.random() * obstacle.width / 2, y = obstacle.body:getY() - obstacle.height / 2, height = 50 + love.math.random() * 60, direction = love.math.random() > .5 and -1 or 1})
+    table.insert(self.decorations, {image = data.media.graphics.dinoland['shrub' .. love.math.random(1, 4)], x = obstacle.body:getX() - obstacle.width / 2 + love.math.random() * obstacle.width, y = obstacle.body:getY() - obstacle.height / 2, height = 50 + love.math.random() * 60, direction = love.math.random() > .5 and -1 or 1})
   end
 end
