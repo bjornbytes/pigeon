@@ -32,10 +32,13 @@ function Map:draw()
   local g = love.graphics
 
   g.setColor(255, 255, 255)
-  local image = data.media.graphics.dinoland.dinolandBackground
+  local image = data.media.graphics.dinoland.dinolandBackground1
   local scale = self.height / image:getHeight()
-  for x = 1, self.width, image:getWidth() * scale do
+  for x = 1, self.width, image:getWidth() * scale * 2 do
+    image = data.media.graphics.dinoland.dinolandBackground1
     g.draw(image, x, self.height, 0, scale, scale, 0, image:getHeight())
+    image = data.media.graphics.dinoland.dinolandBackground2
+    g.draw(image, x + image:getWidth() * scale, self.height, 0, scale, scale, 0, image:getHeight())
   end
 
   g.setColor(136, 87, 44)

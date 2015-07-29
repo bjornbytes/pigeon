@@ -6,11 +6,11 @@ Pigeon = class()
 Pigeon.walkForce = 600
 Pigeon.maxSpeed = 350
 Pigeon.jumpForce = 3000
-Pigeon.flySpeed = 500
+Pigeon.flySpeed = 50
 Pigeon.rocketForce = 500
 Pigeon.maxFlySpeed = 300
 Pigeon.maxFuel = 25
-Pigeon.laserTurnSpeed = .35
+Pigeon.laserTurnSpeed = .75
 Pigeon.laserChargeDuration = 2
 
 ----------------
@@ -131,11 +131,20 @@ function Pigeon:draw()
     g.polygon('line', points)
   end
 
-  if self.state == self.laser and self.laser.active then
+  if self.state == self.laser then
     local x1, y1, x2, y2 = self:getLaserRaycastPoints()
+    local dis, dir = math.vector(x1, y1, x2, y2)
+    local len = dis
+    ctx.world:rayCast(x1, y1, x2, y2, function(fixture, x, y, xn, yn, f)
+      if lume.find({fixture:getCategory()}, ctx.categories.ground) then
+        len = math.min(len, dis * f)
+        return len
+      end
+      return 1
+    end)
     g.setColor(255, 0, 0)
-    g.setLineWidth(10)
-    g.line(x1, y1, x2, y2)
+    g.setLineWidth(self.laser.active and 10 or 1)
+    g.line(x1, y1, x1 + len * math.cos(dir), y1 + len * math.sin(dir))
     g.setLineWidth(1)
   end
 
@@ -180,7 +189,7 @@ end
 function Pigeon:getLaserRaycastPoints()
   local x1, y1 = self.animation.spine.skeleton.x + self.animation.spine.skeleton:findBone('beakbottom').worldX, self.animation.spine.skeleton.y - self.animation.spine.skeleton:findBone('beakbottom').worldY
   local dir = self.laser.direction
-  local x2, y2 = x1 + math.cos(dir) * 500, y1 + math.sin(dir) * 500
+  local x2, y2 = x1 + math.cos(dir) * 2000, y1 + math.sin(dir) * 2000
   return x1, y1, x2, y2
 end
 
@@ -456,7 +465,14 @@ end
 
 function Pigeon.laser:update()
   if not self.laser.active then
-    if not love.keyboard.isDown(' ') then
+
+    if love.keyboard.isDown('up', 'right') then
+      self.laser.direction = self.laser.direction - self.laserTurnSpeed * ls.tickrate * math.sign(math.pi / 2 - self.laser.direction)
+    elseif love.keyboard.isDown('down', 'left') then
+      self.laser.direction = self.laser.direction + self.laserTurnSpeed * ls.tickrate * math.sign(math.pi / 2 - self.laser.direction)
+    end
+
+    if not love.keyboard.isDown(' ') or self.animation.state.name == 'laserCharge' then
       if self.animation.state.name == 'laserCharge' or self.animation.state.name == 'laserEnd' then
         self.animation:set('laserEnd')
       else
@@ -465,20 +481,19 @@ function Pigeon.laser:update()
     end
   else
     local x1, y1, x2, y2 = self:getLaserRaycastPoints()
-    ctx.world:rayCast(x1, y1, x2, y2, function(fixture)
+    local dis = math.distance(x1, y1, x2, y2)
+    ctx.world:rayCast(x1, y1, x2, y2, function(fixture, x, y, xn, yn, fraction)
       local object = fixture:getBody():getUserData()
       if object and isa(object, Person) and object.state ~= object.dead then
         object:changeState('dead')
+        return -1
+      elseif lume.find({fixture:getCategory()}, ctx.categories.ground) then
+        return fraction * dis
       end
 
       return 1
     end)
-
-    if love.keyboard.isDown('up', 'right') then
-      self.laser.direction = self.laser.direction - self.laserTurnSpeed * ls.tickrate
-    elseif love.keyboard.isDown('down', 'left') then
-      self.laser.direction = self.laser.direction + self.laserTurnSpeed * ls.tickrate
-    end
   end
+
 end
 
