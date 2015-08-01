@@ -7,6 +7,7 @@ function Spear:activate()
   self.shape = love.physics.newCircleShape(10)
   self.fixture = love.physics.newFixture(self.body, self.shape)
   self.fixture:setCategory(6)
+  self.fixture:setFriction(10)
 
   self.body:setUserData(self)
 
@@ -14,6 +15,8 @@ function Spear:activate()
 
   self.prevx = self.x
   self.prevy = self.y
+
+  self.deathTimer = 0
 
   ctx.event:emit('view.register', {object = self})
 end
@@ -26,6 +29,10 @@ end
 function Spear:update()
   self.prevx = self.body:getX()
   self.prevy = self.body:getY()
+
+  self.deathTimer = timer.rot(self.deathTimer, function()
+    ctx.projectiles:remove(self)
+  end)
 end
 
 function Spear:draw()
@@ -40,7 +47,10 @@ function Spear:draw()
 end
 
 function Spear:collideWith(other)
-  if isa(other, Map) or other.tag == 'platform' then
-    ctx.projectiles:remove(self)
+  if isa(other, Map) then
+    self.deathTimer = .05
+    return true
   end
+
+  return false
 end
