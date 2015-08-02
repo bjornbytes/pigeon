@@ -90,6 +90,7 @@ function Pigeon:init()
   }
 
   self.drop = nil
+  self.downDirty = 0
 
   self:initBeak()
   self:initFeet()
@@ -105,6 +106,12 @@ function Pigeon:update()
   self:contain()
 
   self.animation.speed = love.keyboard.isDown('s') and 2 or 1
+
+  if love.keyboard.isDown('down') then
+    self.downDirty = timer.rot(self.downDirty)
+  else
+    self.downDirty = .1
+  end
 
   self:updateBeak()
   self:updateFeet()
@@ -407,16 +414,12 @@ function Pigeon.walk:update()
 
   if love.keyboard.isDown('up') then
     return self:changeState('air')
-  elseif love.keyboard.isDown('down') then
+  elseif love.keyboard.isDown(' ') then
     self:changeState('peck')
   end
 
   if left or right then
     self:move()
-  elseif love.keyboard.isDown(' ') then
-    self:changeState('laser')
-  else
-    return self:changeState('idle').update(self)
   end
 end
 

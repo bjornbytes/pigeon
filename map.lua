@@ -21,7 +21,7 @@ function Map:update()
   ctx.view.xmax = self:getMaxX()
 
   table.each(self.obstacles, function(obstacle)
-    if ctx.pigeon.body:getY() + ctx.pigeon.shapeSize / 2 > obstacle.body:getY() - obstacle.height / 2 then
+    if (love.keyboard.isDown('down') and ctx.pigeon.downDirty > 0) or ctx.pigeon.body:getY() + ctx.pigeon.shapeSize / 2 > obstacle.body:getY() - obstacle.height / 2 then
       obstacle.fixture:setCategory(ctx.categories.oneWayPlatform)
     else
       obstacle.fixture:setCategory(ctx.categories.ground)
