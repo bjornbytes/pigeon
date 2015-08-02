@@ -472,7 +472,7 @@ function Pigeon.air:update()
     self.body:setLinearVelocity(0, vy)
   end
 
-  if love.keyboard.isDown(' ') then
+  --[[if love.keyboard.isDown(' ') then
     if self.fuel > 0 and not self.grounded then
       if (vy > 0 or math.abs(vy) < self.maxFlySpeed) then
         self.fuel = math.max(self.fuel - 33 * ls.tickrate, 0)
@@ -487,7 +487,7 @@ function Pigeon.air:update()
 
       self.jumped = true
     end
-  end
+  end]]
 
   if (self.animation.state.name == 'fly' or self.animation.state.name == 'flyStart') and (not love.keyboard.isDown(' ') or self.fuel < 1) then
     self.animation:set('flyEnd')
