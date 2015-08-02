@@ -3,12 +3,12 @@ Building = class()
 Building.size = 60
 
 function Building:activate()
-  self.y = ctx.map.height - ctx.map.ground.height
   self.image = data.media.graphics.dinoland['hut' .. love.math.random(1, 2)]
   self.alpha = 1
 
   self.personTimer = 6 + love.math.random() * 3
   self.destroyed = false
+  self.justDestroyed = false
 
   self.body = love.physics.newBody(ctx.world, self.x, self.y - self.size / 2, 'dynamic')
   self.shape = love.physics.newRectangleShape(self.size, self.size)
@@ -18,7 +18,7 @@ function Building:activate()
   self.body:setFixedRotation(true)
 
   self.fixture:setCategory(ctx.categories.building)
-  self.fixture:setMask(ctx.categories.person, ctx.categories.building, ctx.categories.debris)
+  --self.fixture:setMask(ctx.categories.person, ctx.categories.building, ctx.categories.debris)
 
   self.phlerp = PhysicsInterpolator(self, 'alpha')
 
@@ -34,9 +34,17 @@ function Building:update()
   self.phlerp:update()
 
   self.personTimer = timer.rot(self.personTimer, function()
-    ctx.enemies:add(Caveman, {x = self.x, y = self.y - 20})
+    --ctx.enemies:add(Caveman, {x = self.x, y = self.y - 20})
     return 6 + love.math.random() * 3
   end)
+
+  if self.justDestroyed then
+    for i = 1, 6 do
+      ctx.enemies:add(Caveman, {x = self.x - self.size / 2 + self.size * love.math.random(), y = self.y, invincible = 1})
+    end
+
+    self.justDestroyed = false
+  end
 
   if self.destroyed then
     local x, y = self.body:getLinearVelocity()
@@ -63,12 +71,17 @@ function Building:draw()
 end
 
 function Building:collideWith(other)
+  if other.tag == 'platform' and self.body:getY() > other.body:getY() then
+    return true
+  end
+
   return true
 end
 
 function Building:destroy()
   if self.destroyed then return end
   self.destroyed = true
+  self.justDestroyed = true
   self.body:setFixedRotation(false)
   self.fixture:setCategory(ctx.categories.debris)
   self.fixture:setFriction(0.25)

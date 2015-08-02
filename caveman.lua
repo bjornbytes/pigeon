@@ -12,7 +12,7 @@ function Caveman:activate()
   self.direction = 1
 
   self.hasSpear = love.math.random() > .5
-  self.state = self.hasSpear and self.attack or self.panic
+  self.state = self.idle
   self.walkTimer = 1
   self.reloadTimer = 0
 
@@ -41,6 +41,20 @@ end
 ----------------
 -- States
 ----------------
+Caveman.idle = {}
+Caveman.idle.walkRate = {.4, .5}
+function Caveman.idle:update()
+  self.image = data.media.graphics.dinoland[self.gender].normal
+  if self:distanceTo(ctx.pigeon) < 300 then
+    self:changeState(love.math.random() < .5 and 'panic' or 'attack')
+  end
+
+  if self.walkTimer == 0 then
+    self:hop(0)
+    self.walkTimer = lume.random(unpack(self.state.walkRate))
+  end
+end
+
 Caveman.panic = {}
 Caveman.panic.walkRate = {.3, .4}
 function Caveman.panic:update()

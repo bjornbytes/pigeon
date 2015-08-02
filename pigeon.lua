@@ -162,7 +162,7 @@ function Pigeon:keypressed(key)
 end
 
 function Pigeon:collideWith(other, myFixture)
-  if isa(other, Person) and other.state ~= other.dead then
+  if isa(other, Person) and other.state ~= other.dead and other.invincible == 0 then
     if self.state == self.peck and (myFixture == self.beak.top.fixture or myFixture == self.beak.bottom.fixture) then
       other:changeState('dead')
     elseif self.state == self.walk and self.drop and myFixture == self.feet[self.drop].fixture then
@@ -326,6 +326,7 @@ end
 -- Actions
 ----------------
 function Pigeon:move()
+  if ctx.debug then return end
   local left, right = false, true
 
   if left then

@@ -36,6 +36,8 @@ end
 function Person:update()
   self.phlerp:update()
 
+  self.invincible = timer.rot(self.invincible or 0)
+
   if self.state then
     self.state.update(self)
   end
