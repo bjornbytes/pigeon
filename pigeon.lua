@@ -421,6 +421,10 @@ function Pigeon.walk:update()
     self:changeState('peck')
   end
 
+  if not self.grounded then
+    self.crushGrace = .1
+  end
+
   if left or right then
     self:move()
   end
@@ -429,7 +433,9 @@ end
 Pigeon.air = {}
 function Pigeon.air:enter()
   self.jumped = false
-  self.animation:set('jump')
+  if love.keyboard.isDown('up') then
+    self.animation:set('jump')
+  end
   self.air.lastVelocity = 0
 end
 

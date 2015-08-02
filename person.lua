@@ -1,4 +1,5 @@
 Person = extend(Enemy)
+Person.tag = 'person'
 
 ----------------
 -- Core
@@ -19,7 +20,6 @@ function Person:activate()
 
   self.fixture:setFriction(.75)
   self.fixture:setCategory(ctx.categories.person)
-  self.fixture:setMask(ctx.categories.person)
 
   self.phlerp = PhysicsInterpolator(self, 'alpha')
 
@@ -58,6 +58,15 @@ end
 function Person:collideWith(other)
   if other.tag == 'platform' and self.body:getY() > other.body:getY() then
     return false
+  elseif other.tag == 'person' then
+    if self.state == self.dead then
+      local vx, vy = self.body:getLinearVelocity()
+      if math.distance(0, 0, vx, vy) > 100 and vy > 0 and other.state ~= other.dead then
+        other:changeState('dead')
+      end
+    else
+      return false
+    end
   end
 
   return true
