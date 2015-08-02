@@ -94,8 +94,9 @@ function Person.dead:enter()
   self.body:setFixedRotation(false)
   self.fixture:setCategory(ctx.categories.debris)
   self.fixture:setFriction(0.25)
-  self.body:applyLinearImpulse(-200 + love.math.random() * 400, -300 + love.math.random() * -500)
+  self.body:applyLinearImpulse(-200 + love.math.random() * 400, -200 + love.math.random() * -500)
   self.body:setAngularVelocity(-20 + love.math.random() * 40)
+  ctx.hud:addScore(10)
 end
 
 function Person.dead:update()

@@ -11,6 +11,7 @@ require 'deps/event'
 require 'deps/view'
 require 'deps/manager'
 require 'deps/physicsinterpolator'
+require 'deps/typo'
 
 require 'context'
 require 'game'

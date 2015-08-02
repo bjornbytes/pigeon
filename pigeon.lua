@@ -94,7 +94,7 @@ function Pigeon:init()
   self:initBeak()
   self:initFeet()
 
-  ctx.event:emit('view.register', {object = self})
+  ctx.event:emit('view.register', {object = self, depth = -10})
 end
 
 function Pigeon:update()
@@ -171,6 +171,8 @@ function Pigeon:collideWith(other, myFixture)
       other:changeState('dead')
     end
   elseif isa(other, Building) and not other.destroyed and self.state == self.peck and (myFixture == self.beak.top.fixture or myFixture == self.beak.bottom.fixture) then
+    other:destroy()
+  elseif isa(other, Building) and not other.destroyed and self.state == self.air and select(2, self.body:getLinearVelocity()) > 0 and (myFixture == self.feet.left.fixture or myFixture == self.feet.right.fixture) then
     other:destroy()
   end
 

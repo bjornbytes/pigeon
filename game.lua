@@ -42,6 +42,7 @@ function Game:update()
   self.map:update()
   self.world:update(ls.tickrate)
   self.view:update()
+  self.hud:update()
 
   lurker.update()
 end
