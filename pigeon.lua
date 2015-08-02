@@ -91,6 +91,7 @@ function Pigeon:init()
 
   self.drop = nil
   self.downDirty = 0
+  self.crushGrace = 0
 
   self:initBeak()
   self:initFeet()
@@ -112,6 +113,8 @@ function Pigeon:update()
   else
     self.downDirty = .1
   end
+
+  self.crushGrace = timer.rot(self.crushGrace)
 
   self:updateBeak()
   self:updateFeet()
@@ -179,7 +182,7 @@ function Pigeon:collideWith(other, myFixture)
     end
   elseif isa(other, Building) and not other.destroyed and self.state == self.peck and (myFixture == self.beak.top.fixture or myFixture == self.beak.bottom.fixture) then
     other:destroy()
-  elseif isa(other, Building) and not other.destroyed and self.state == self.air and select(2, self.body:getLinearVelocity()) > 0 and (myFixture == self.feet.left.fixture or myFixture == self.feet.right.fixture) then
+  elseif isa(other, Building) and not other.destroyed and self.crushGrace > 0 and (myFixture == self.feet.left.fixture or myFixture == self.feet.right.fixture) then
     other:destroy()
   end
 
@@ -439,6 +442,10 @@ end
 function Pigeon.air:update()
   local left, right = false, true
   local vx, vy = self.body:getLinearVelocity()
+
+  if vy > 0 then
+    self.crushGrace = .1
+  end
 
   if self.jumped and self.grounded and vy >= 0 then
     return self:changeState('walk').update(self)
