@@ -12,6 +12,7 @@ Pigeon.maxFlySpeed = 300
 Pigeon.maxFuel = 25
 Pigeon.laserTurnSpeed = .75
 Pigeon.laserChargeDuration = 2
+Pigeon.rainbowShitThreshold = 50
 
 ----------------
 -- Core
@@ -123,6 +124,10 @@ function Pigeon:update()
 
   self:updateBeak()
   self:updateFeet()
+
+  if self.body:getX() > ctx.goal.x then
+    self:changeState('idle')
+  end
 end
 
 function Pigeon:draw()
