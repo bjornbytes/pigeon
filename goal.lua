@@ -2,7 +2,7 @@ Goal = class()
 Goal.size = 25
 
 function Goal:init()
-  self.x = ctx.map.width - self.size
+  self.x = ctx.map.width - ctx.view.width / 2
   self.y = ctx.map.height - ctx.map.ground.height - self.size
   ctx.event:emit('view.register', {object = self})
 end

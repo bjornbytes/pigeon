@@ -8,9 +8,15 @@ function Hud:init()
 
   self.bubble = {}
   self:resetBubble()
+
+  self.rainbowShitCounter = 0
+  self.rainbowShitDisplay = 0
+  self.prevRainbowShitDisplay = 0
 end
 
 function Hud:update()
+  self.prevRainbowShitDisplay = self.rainbowShitDisplay
+
   self.bubble.prevy = self.bubble.y
   self.bubble.prevScale = self.bubble.scale
   self.bubble.prevTimer = self.bubble.timer
@@ -26,6 +32,8 @@ function Hud:update()
       self:resetBubble()
     end)
   end
+
+  self.rainbowShitDisplay = math.lerp(self.rainbowShitDisplay, self.rainbowShitCounter, 8 * ls.tickrate)
 
   self.scoreDisplay = math.lerp(self.scoreDisplay, self.score, 5 * ls.tickrate)
 end
@@ -66,6 +74,25 @@ function Hud:gui()
     g.setColor(255, 255, 255, 255 * alpha)
     g.print(str, gw / 2 - textWidth / 2, y)
   end
+
+  local baseWidth = 20
+  local baseHeight = 100
+
+  if ctx.pigeon.rainbowShitTimer > 0 then
+    love.math.setRandomSeed(love.timer.getTime() * ctx.pigeon.rainbowShitTimer - self.scoreDisplay)
+    local prc = math.min(ctx.pigeon.rainbowShitTimer / 5, 1)
+    g.setColor(128 + love.math.random() * 127, 128 + love.math.random() * 127, 128 + love.math.random() * 127)
+    g.rectangle('fill', 2, 50 + baseHeight * (1 - prc), baseWidth, baseHeight * prc)
+  else
+    g.setColor(255, 0, 0)
+  end
+
+  local baseWidth = 20
+  local baseHeight = 100
+  g.rectangle('line', 2, 50, baseWidth, baseHeight)
+  local prc = math.lerp(self.prevRainbowShitDisplay, self.rainbowShitDisplay, ls.accum / ls.tickrate) / 100
+  g.setColor(255, 0, 0)
+  g.rectangle('fill', 2, 50 + baseHeight * (1 - prc), baseWidth, baseHeight * prc)
 end
 
 function Hud:resetBubble()
@@ -81,7 +108,7 @@ function Hud:resetBubble()
   self.bubble.prevScale = self.bubble.scale
 end
 
-function Hud:addScore(amount)
+function Hud:addScore(amount, kind)
   self.bubble.active = true
   self.bubble.timer = 3
   self.bubble.amount = self.bubble.amount + amount
@@ -91,4 +118,12 @@ function Hud:addScore(amount)
   self.bubble.targetScale = self.bubble.targetScale + .1
   self.bubble.targetY = math.lerp(self.bubble.targetY, 100, .2)
   self.bubble.prevTimer = self.bubble.timer
+
+  if kind == 'person' then
+    self.rainbowShitCounter = self.rainbowShitCounter + 1
+    if self.rainbowShitCounter >= 30 then
+      self.rainbowShitCounter = 0
+      ctx.pigeon:activateRainbowShit()
+    end
+  end
 end

@@ -56,12 +56,14 @@ function Person:draw()
 end
 
 function Person:collideWith(other)
-  if other.tag == 'platform' and self.body:getY() > other.body:getY() then
+  if other.tag == 'building' and not other.destroyed then
+    return false
+  elseif other.tag == 'platform' and self.body:getY() > other.body:getY() then
     return false
   elseif other.tag == 'person' then
     if self.state == self.dead then
       local vx, vy = self.body:getLinearVelocity()
-      if math.distance(0, 0, vx, vy) > 100 and vy > 0 and other.state ~= other.dead then
+      if math.distance(0, 0, vx, vy) > 820 and vy > 0 and other.state ~= other.dead then
         other:changeState('dead')
       end
     else
@@ -105,7 +107,7 @@ function Person.dead:enter()
   self.fixture:setFriction(0.25)
   self.body:applyLinearImpulse(-200 + love.math.random() * 400, -200 + love.math.random() * -500)
   self.body:setAngularVelocity(-20 + love.math.random() * 40)
-  ctx.hud:addScore(10)
+  ctx.hud:addScore(10, 'person')
 end
 
 function Person.dead:update()

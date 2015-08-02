@@ -1,4 +1,5 @@
 Building = class()
+Building.tag = 'building'
 
 Building.size = 60
 
@@ -48,7 +49,7 @@ function Building:update()
 
   if self.destroyed then
     local x, y = self.body:getLinearVelocity()
-    if (math.abs(x) < 1 and math.abs(y) < 1) or (math.abs(x) > 2000 and math.abs(y) > 2000) then
+    if (math.abs(x) < 4 and math.abs(y) < 4) or (math.abs(x) > 2000 and math.abs(y) > 2000) then
       self.alpha = timer.rot(self.alpha)
       if self.alpha < 0 then
         ctx.buildings:remove(self)
@@ -75,8 +76,15 @@ function Building:collideWith(other)
     return false
   end
 
-  if isa(other, Person) and other.state ~= other.dead and self.destroyed and select(2, self.body:getLinearVelocity()) > 30 then
+  if isa(other, Person) and other.state ~= other.dead and self.destroyed and select(2, self.body:getLinearVelocity()) > 250 then
     other:changeState('dead')
+    return false
+  elseif isa(other, Person) then
+    return false
+  end
+
+  if other == ctx.pigeon then
+    return false
   end
 
   return true
@@ -91,5 +99,5 @@ function Building:destroy()
   self.fixture:setFriction(0.25)
   self.body:applyLinearImpulse(-400 + love.math.random() * 600, -2000 + love.math.random() * -2000)
   self.body:setAngularVelocity(-20 + love.math.random() * 40)
-  ctx.hud:addScore(50)
+  ctx.hud:addScore(50, 'building')
 end

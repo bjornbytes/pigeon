@@ -96,6 +96,8 @@ function Pigeon:init()
   self:initBeak()
   self:initFeet()
 
+  self.rainbowShitTimer = 0
+
   ctx.event:emit('view.register', {object = self, depth = -10})
 end
 
@@ -106,7 +108,8 @@ function Pigeon:update()
   f.exe(self.state.update, self)
   self:contain()
 
-  self.animation.speed = love.keyboard.isDown('s') and 2 or 1
+  self.animation.speed = self.rainbowShitTimer > 0 and 2 or 1
+  self.rainbowShitTimer = timer.rot(self.rainbowShitTimer)
 
   if love.keyboard.isDown('down') then
     self.downDirty = timer.rot(self.downDirty)
@@ -185,6 +188,8 @@ function Pigeon:collideWith(other, myFixture)
   elseif isa(other, Building) and not other.destroyed and self.crushGrace > 0 and (myFixture == self.feet.left.fixture or myFixture == self.feet.right.fixture) then
     other:destroy()
   end
+
+  if isa(other, Building) then return false end
 
   return true
 end
@@ -332,6 +337,10 @@ function Pigeon:updateFeet()
   end)
 
   skeleton.flipY = false
+end
+
+function Pigeon:activateRainbowShit()
+  self.rainbowShitTimer = self.rainbowShitTimer + 5
 end
 
 ----------------
@@ -555,4 +564,3 @@ function Pigeon.laser:update()
     end
   end
 end
-

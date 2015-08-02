@@ -75,7 +75,7 @@ function Map:draw()
   for i = 1, #self.obstacles do
     local obstacle = self.obstacles[i]
     love.math.setRandomSeed(obstacle.body:getX() + obstacle.width)
-    g.setColor(136, 87, 44)
+    g.setColor(obstacle.color or {136, 87, 44})
     physics.draw('fill', obstacle)
 
     drawGrass(obstacle)
