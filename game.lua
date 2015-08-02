@@ -56,4 +56,6 @@ function Game:keypressed(key)
   if key == 'escape' then
     love.event.quit()
   end
+
+  self.pigeon:keypressed(key)
 end

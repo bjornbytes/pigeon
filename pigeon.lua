@@ -37,9 +37,9 @@ function Pigeon:init()
 
   self.animation:on('complete', function(event)
     if event.state.name == 'jump' then
-      self.animation:set('idle')
+      self.animation:set('walk')
     elseif event.state.name == 'peck' then
-      self:changeState('idle')
+      self:changeState('walk')
     elseif event.state.name == 'laserStart' then
       self.animation:set('laserCharge')
     elseif event.state.name == 'laserEnd' then
@@ -60,7 +60,7 @@ function Pigeon:init()
       self.slide = 'right'
       self.drop = nil
       if self.walk.firstShake == false then
-        ctx.view:screenshake(6)
+        ctx.view:screenshake(10)
       else
         self.walk.firstShake = false
       end
@@ -68,7 +68,7 @@ function Pigeon:init()
       self.slide = 'left'
       self.drop = nil
       if self.walk.firstShake == false then
-        ctx.view:screenshake(6)
+        ctx.view:screenshake(10)
       else
         self.walk.firstShake = false
       end
@@ -155,6 +155,12 @@ function Pigeon:draw()
   self.phlerp:delerp()
 end
 
+function Pigeon:keypressed(key)
+  if key == 'return' and self.state == self.idle then
+    self:changeState('walk')
+  end
+end
+
 function Pigeon:collideWith(other, myFixture)
   if isa(other, Person) and other.state ~= other.dead then
     if self.state == self.peck and (myFixture == self.beak.top.fixture or myFixture == self.beak.bottom.fixture) then
@@ -164,6 +170,8 @@ function Pigeon:collideWith(other, myFixture)
     elseif self.state == self.air and select(2, self.body:getLinearVelocity()) > 0 and (myFixture == self.feet.left.fixture or myFixture == self.feet.right.fixture) then
       other:changeState('dead')
     end
+  elseif isa(other, Building) and not other.destroyed and self.state == self.peck and (myFixture == self.beak.top.fixture or myFixture == self.beak.bottom.fixture) then
+    other:destroy()
   end
 
   return true
@@ -318,8 +326,7 @@ end
 -- Actions
 ----------------
 function Pigeon:move()
-  local left, right = love.keyboard.isDown('left'), love.keyboard.isDown('right')
-  right = true
+  local left, right = false, true
 
   if left then
     self.animation.flipped = true
@@ -368,7 +375,7 @@ function Pigeon.idle:update()
   self:recoverFuel()
   self.animation:set('idle')
 
-  if love.keyboard.isDown('left', 'right') or true then
+  if love.keyboard.isDown('left', 'right') then
     return self:changeState('walk').update(self)
   end
 
@@ -390,8 +397,7 @@ function Pigeon.walk:enter()
 end
 
 function Pigeon.walk:update()
-  local left, right = love.keyboard.isDown('left'), love.keyboard.isDown('right')
-  right = true
+  local left, right = false, true
   self.animation:set('walk')
 
   self:recoverFuel()
@@ -425,12 +431,11 @@ function Pigeon.air:exit()
 end
 
 function Pigeon.air:update()
-  local left, right = love.keyboard.isDown('left'), love.keyboard.isDown('right')
-  right = true
+  local left, right = false, true
   local vx, vy = self.body:getLinearVelocity()
 
   if self.jumped and self.grounded and vy >= 0 then
-    return self:changeState('idle').update(self)
+    return self:changeState('walk').update(self)
   end
 
   if left or right then

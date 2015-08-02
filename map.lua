@@ -59,7 +59,7 @@ function Map:draw()
   g.setColor(255, 255, 255)
   local image = data.media.graphics.dinoland.dinolandBackground1
   local scale = (600) / image:getHeight()
-  for x = 1, self.width, image:getWidth() * scale * 2 do
+  for x = 0, self.width, image:getWidth() * scale * 2 do
     image = data.media.graphics.dinoland.dinolandBackground1
     g.draw(image, x, self.height, 0, scale, scale, 0, image:getHeight())
     image = data.media.graphics.dinoland.dinolandBackground2

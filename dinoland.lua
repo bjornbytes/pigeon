@@ -46,7 +46,7 @@ function Dinoland:init()
 end
 
 function Dinoland:spawnHuts()
-  for i = 1, 4 do
+  --[[for i = 1, 4 do
     local obstacle
     if love.math.random() < .75 then
       obstacle = self.ground
@@ -55,5 +55,7 @@ function Dinoland:spawnHuts()
     end
 
     ctx.buildings:add(Building, {x = obstacle.body:getX() - obstacle.width / 2 + 40 + love.math.random() * (obstacle.width - 80), y = obstacle.body:getX() - obstacle.height / 2})
-  end
+  end]]
+
+  ctx.buildings:add(Building, {x = 950, y = self.height - self.ground.height})
 end
