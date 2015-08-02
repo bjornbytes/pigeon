@@ -18,7 +18,7 @@ Pigeon.laserChargeDuration = 2
 ----------------
 function Pigeon:init()
   self.shapeSize = 50
-  self.body = love.physics.newBody(ctx.world, 100, ctx.map.height - ctx.map.ground.height - self.shapeSize / 2, 'dynamic')
+  self.body = love.physics.newBody(ctx.world, ctx.view.width / 2, ctx.map.height - ctx.map.ground.height - self.shapeSize / 2, 'dynamic')
   self.shape = love.physics.newRectangleShape(self.shapeSize, self.shapeSize)
   self.fixture = love.physics.newFixture(self.body, self.shape)
 
@@ -103,6 +103,8 @@ function Pigeon:update()
   self.grounded = self:getGrounded()
   f.exe(self.state.update, self)
   self:contain()
+
+  self.animation.speed = love.keyboard.isDown('s') and 2 or 1
 
   self:updateBeak()
   self:updateFeet()
@@ -317,12 +319,13 @@ end
 ----------------
 function Pigeon:move()
   local left, right = love.keyboard.isDown('left'), love.keyboard.isDown('right')
+  right = true
 
   if left then
     self.animation.flipped = true
 
     if self.state == self.walk and self.slide then
-      self.body:setX(self.body:getX() - self.slideSpeeds[self.slide] * ls.tickrate * (self.animation.state.speed or 1) * self.animation.scale)
+      self.body:setX(self.body:getX() - self.slideSpeeds[self.slide] * ls.tickrate * (self.animation.state.speed or 1) * self.animation.scale * self.animation.speed)
     elseif not self.grounded then
       self.body:applyLinearImpulse(-self.flySpeed, 0)
     end
@@ -330,7 +333,7 @@ function Pigeon:move()
     self.animation.flipped = false
 
     if self.state == self.walk and self.slide then
-      self.body:setX(self.body:getX() + self.slideSpeeds[self.slide] * ls.tickrate * (self.animation.state.speed or 1) * self.animation.scale)
+      self.body:setX(self.body:getX() + self.slideSpeeds[self.slide] * ls.tickrate * (self.animation.state.speed or 1) * self.animation.scale * self.animation.speed)
     elseif not self.grounded then
       self.body:applyLinearImpulse(self.flySpeed, 0)
     end
@@ -365,7 +368,7 @@ function Pigeon.idle:update()
   self:recoverFuel()
   self.animation:set('idle')
 
-  if love.keyboard.isDown('left', 'right') then
+  if love.keyboard.isDown('left', 'right') or true then
     return self:changeState('walk').update(self)
   end
 
@@ -388,6 +391,7 @@ end
 
 function Pigeon.walk:update()
   local left, right = love.keyboard.isDown('left'), love.keyboard.isDown('right')
+  right = true
   self.animation:set('walk')
 
   self:recoverFuel()
@@ -422,6 +426,7 @@ end
 
 function Pigeon.air:update()
   local left, right = love.keyboard.isDown('left'), love.keyboard.isDown('right')
+  right = true
   local vx, vy = self.body:getLinearVelocity()
 
   if self.jumped and self.grounded and vy >= 0 then

@@ -52,9 +52,13 @@ function Map:draw()
     g.draw(image, x2, y - obstacle.height / 2, 0, scale, scale, image:getWidth())
   end
 
+  -- Fake yellow sky
+  g.setColor(254, 255, 113)
+  g.rectangle('fill', 0, 0, self.width, self.height)
+
   g.setColor(255, 255, 255)
   local image = data.media.graphics.dinoland.dinolandBackground1
-  local scale = self.height / image:getHeight()
+  local scale = (600) / image:getHeight()
   for x = 1, self.width, image:getWidth() * scale * 2 do
     image = data.media.graphics.dinoland.dinolandBackground1
     g.draw(image, x, self.height, 0, scale, scale, 0, image:getHeight())

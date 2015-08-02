@@ -1,6 +1,6 @@
 local Pigeon = extend(Animation)
 
-Pigeon.scale = .4
+Pigeon.scale = .7
 Pigeon.default = 'idle'
 Pigeon.states = {}
 
@@ -10,7 +10,7 @@ Pigeon.states.idle = {
 
 Pigeon.states.walk = {
   loop = true,
-  speed = .85,
+  speed = .65,
   mix = {
     walk = .2
   }
@@ -18,7 +18,7 @@ Pigeon.states.walk = {
 
 Pigeon.states.peck = {
   loop = false,
-  speed = 1
+  speed = .75
 }
 
 Pigeon.states.jump = {

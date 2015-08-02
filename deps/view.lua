@@ -32,6 +32,7 @@ function View:init()
 
   self.prevx = 0
   self.prevy = 0
+  self.prevwidth = self.width
   self.prevscale = self.scale
 
   self.shake = 0
@@ -48,6 +49,7 @@ end
 function View:update()
   self.prevx = self.x
   self.prevy = self.y
+  self.prevwidth = self.width
   self.prevscale = self.scale
 
   self.x = self.x + self.vx * ls.tickrate
@@ -195,8 +197,12 @@ function View:follow()
   local x, y = ctx.pigeon.body:getPosition()
   local margin = 0.5
 
+  self.height = math.lerp(self.height, math.clamp(1350 - y, 600, ctx.map.height), 10 * ls.tickrate)
+  self.width = self.height * (16 / 9)
+
   self.x = x - self.width * margin
-  self.y = y - self.height * .75
+  self.y = ctx.map.height - self.height
+  self.scale = self.frame.height / self.height
 end
 
 function View:contain()
