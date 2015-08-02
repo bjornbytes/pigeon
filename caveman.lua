@@ -12,7 +12,7 @@ function Caveman:activate()
   self.direction = 1
 
   self.hasSpear = love.math.random() > .5
-  self.state = self.idle
+  self.state = self.state or self.idle
   self.walkTimer = 1
   self.reloadTimer = 0
 

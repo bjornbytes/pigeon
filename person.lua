@@ -19,7 +19,7 @@ function Person:activate()
 
   self.fixture:setFriction(.75)
   self.fixture:setCategory(ctx.categories.person)
-  self.fixture:setMask(ctx.categories.person, ctx.categories.building, ctx.categories.debris)
+  self.fixture:setMask(ctx.categories.person)
 
   self.phlerp = PhysicsInterpolator(self, 'alpha')
 

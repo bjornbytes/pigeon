@@ -40,7 +40,7 @@ function Building:update()
 
   if self.justDestroyed then
     for i = 1, 6 do
-      ctx.enemies:add(Caveman, {x = self.x - self.size / 2 + self.size * love.math.random(), y = self.y, invincible = 1})
+      ctx.enemies:add(Caveman, {x = self.x - self.size / 2 + self.size * love.math.random(), y = self.y, invincible = 1, state = Caveman.panic})
     end
 
     self.justDestroyed = false
@@ -72,7 +72,11 @@ end
 
 function Building:collideWith(other)
   if other.tag == 'platform' and self.body:getY() > other.body:getY() then
-    return true
+    return false
+  end
+
+  if isa(other, Person) and other.state ~= other.dead and self.destroyed and select(2, self.body:getLinearVelocity()) > 30 then
+    other:changeState('dead')
   end
 
   return true
@@ -85,6 +89,6 @@ function Building:destroy()
   self.body:setFixedRotation(false)
   self.fixture:setCategory(ctx.categories.debris)
   self.fixture:setFriction(0.25)
-  self.body:applyLinearImpulse(-400 + love.math.random() * 800, -800 + love.math.random() * -500)
+  self.body:applyLinearImpulse(-400 + love.math.random() * 600, -2000 + love.math.random() * -2000)
   self.body:setAngularVelocity(-20 + love.math.random() * 40)
 end
