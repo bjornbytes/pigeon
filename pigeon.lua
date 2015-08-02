@@ -193,6 +193,19 @@ function Pigeon:getLaserRaycastPoints()
   return x1, y1, x2, y2
 end
 
+function Pigeon:getLaserLength()
+  local x1, y1, x2, y2 = self:getLaserRaycastPoints()
+  local minLen = 1
+  ctx.world:rayCast(x1, y1, x2, y2, function(fixture, len)
+    local categories = {fixture:getCategory()}
+    if lume.find(categories, ctx.categories.ground) or lume.find(categories, ctx.categories.building) then
+      minLen = math.min(minLen, len)
+    end
+    return 1
+  end)
+  return minLen * math.distance(x1, y1, x2, y2)
+end
+
 function Pigeon:getGrounded()
   local grounded = false
   local x1, y1, x2, y2 = self:getGroundRaycastPoints()
@@ -488,16 +501,21 @@ function Pigeon.laser:update()
     end
   else
     local x1, y1, x2, y2 = self:getLaserRaycastPoints()
-    local dis = math.distance(x1, y1, x2, y2)
-    ctx.world:rayCast(x1, y1, x2, y2, function(fixture, x, y, xn, yn, fraction)
+    local dis, dir = math.vector(x1, y1, x2, y2)
+    local len = dis
+    ctx.world:rayCast(x1, y1, x2, y2, function(fixture, x, y, xn, yn, f)
+      if lume.find({fixture:getCategory()}, ctx.categories.ground) then
+        len = math.min(len, dis * f)
+        return len
+      end
+      return 1
+    end)
+
+    ctx.world:rayCast(x1, y1, x1 + math.cos(dir) * len, y1 + math.sin(dir) * len, function(fixture)
       local object = fixture:getBody():getUserData()
       if object and isa(object, Person) and object.state ~= object.dead then
         object:changeState('dead')
-        return -1
-      elseif lume.find({fixture:getCategory()}, ctx.categories.ground) then
-        return fraction * dis
       end
-
       return 1
     end)
 
