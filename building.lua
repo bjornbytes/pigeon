@@ -91,4 +91,5 @@ function Building:destroy()
   self.fixture:setFriction(0.25)
   self.body:applyLinearImpulse(-400 + love.math.random() * 600, -2000 + love.math.random() * -2000)
   self.body:setAngularVelocity(-20 + love.math.random() * 40)
+  ctx.hud:addScore(50)
 end
