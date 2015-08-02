@@ -90,7 +90,7 @@ function Hud:gui()
   local baseWidth = 20
   local baseHeight = 100
   g.rectangle('line', 2, 50, baseWidth, baseHeight)
-  local prc = math.lerp(self.prevRainbowShitDisplay, self.rainbowShitDisplay, ls.accum / ls.tickrate) / 100
+  local prc = math.lerp(self.prevRainbowShitDisplay, self.rainbowShitDisplay, ls.accum / ls.tickrate) / 30
   g.setColor(255, 0, 0)
   g.rectangle('fill', 2, 50 + baseHeight * (1 - prc), baseWidth, baseHeight * prc)
 end

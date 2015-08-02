@@ -108,8 +108,10 @@ function Pigeon:update()
   f.exe(self.state.update, self)
   self:contain()
 
-  self.animation.speed = self.rainbowShitTimer > 0 and 2 or 1
-  self.rainbowShitTimer = timer.rot(self.rainbowShitTimer)
+  --self.animation.scale = self.rainbowShitTimer > 0 and 1 or .7
+  self.rainbowShitTimer = timer.rot(self.rainbowShitTimer, function()
+    flux.to(self.animation, .2, {scale = .7}, 'elasticout')
+  end)
 
   if love.keyboard.isDown('down') then
     self.downDirty = timer.rot(self.downDirty)
@@ -341,6 +343,7 @@ end
 
 function Pigeon:activateRainbowShit()
   self.rainbowShitTimer = self.rainbowShitTimer + 5
+  flux.to(self.animation, .2, {scale = 1}, 'elasticout')
 end
 
 ----------------
