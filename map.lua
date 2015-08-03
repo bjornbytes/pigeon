@@ -60,7 +60,7 @@ function Map:draw()
   local image = data.media.graphics.dinoland.background.leftBg1
   local scale = (600) / image:getHeight()
   local inc = image:getWidth() * scale
-  for n = 6, 1, -1 do
+  for n = 4, 1, -1 do
     for x = 0, self.width, image:getWidth() * scale * 2 do
       image = data.media.graphics.dinoland.background['leftBg' .. n]
       local xx
