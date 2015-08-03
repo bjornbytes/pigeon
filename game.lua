@@ -20,6 +20,7 @@ function Game:load()
   self.projectiles = Manager()
   self.hud = Hud()
   self.goal = Goal()
+  self.particles = Particles()
 
   self.map:spawnHuts()
 

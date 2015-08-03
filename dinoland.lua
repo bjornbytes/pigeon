@@ -1,5 +1,5 @@
 Dinoland = extend(Map)
-Dinoland.width = 6400
+Dinoland.width = 6600
 Dinoland.height = 900
 Dinoland.groundHeight = 100
 

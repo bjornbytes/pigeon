@@ -37,6 +37,8 @@ function View:init()
 
   self.shake = 0
 
+  self.effect = shine.scanlines()
+
   ctx.event:on('view.register', function(data)
     self:register(data.object, data.mode)
   end)
@@ -116,7 +118,10 @@ function View:draw()
 
   g.setCanvas()
   g.setColor(255, 255, 255)
-  g.draw(source)
+  love.math.setRandomSeed(ls.tick * 100)
+  self.effect(function()
+    g.draw(source)
+  end)
 
   g.push()
 

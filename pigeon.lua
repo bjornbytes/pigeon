@@ -6,7 +6,7 @@ Pigeon = class()
 Pigeon.walkForce = 600
 Pigeon.maxSpeed = 350
 Pigeon.jumpForce = 3000
-Pigeon.flySpeed = 100
+Pigeon.flySpeed = 75
 Pigeon.rocketForce = 500
 Pigeon.maxFlySpeed = 300
 Pigeon.maxFuel = 25
@@ -62,6 +62,12 @@ function Pigeon:init()
       self.drop = nil
       if self.walk.firstShake == false then
         ctx.view:screenshake(10)
+
+        local skeleton = self.animation.spine.skeleton
+        local bone = skeleton:findBone('rightfoot')
+        local x = skeleton.x + bone.worldX
+        local y = skeleton.y + bone.worldY
+        ctx.particles:emit('dust', x, y, 15)
       else
         self.walk.firstShake = false
       end
@@ -70,6 +76,12 @@ function Pigeon:init()
       self.drop = nil
       if self.walk.firstShake == false then
         ctx.view:screenshake(10)
+
+        local skeleton = self.animation.spine.skeleton
+        local bone = skeleton:findBone('leftfoot')
+        local x = skeleton.x + bone.worldX
+        local y = skeleton.y + bone.worldY
+        ctx.particles:emit('dust', x, y, 15)
       else
         self.walk.firstShake = false
       end
@@ -120,6 +132,17 @@ function Pigeon:update()
     self.downDirty = .1
   end
 
+  local skeleton = self.animation.spine.skeleton
+  skeleton.flipY = true
+  skeleton:updateWorldTransform()
+  local bone = skeleton:findBone('leftwing')
+  local x, y = skeleton.x + bone.worldX, skeleton.y + bone.worldY
+  local dir = (-bone.worldRotation * math.pi / 180) - .2
+  x = x + math.cos(dir) * (bone.data.length + 100) * self.animation.scale
+  y = y + math.sin(dir) * (bone.data.length + 100) * self.animation.scale
+  ctx.particles:emit('smoke', x, y, 3, {direction = -bone.worldRotation * math.pi / 180})
+  skeleton.flipY = false
+
   self.crushGrace = timer.rot(self.crushGrace)
 
   self:updateBeak()
@@ -127,6 +150,10 @@ function Pigeon:update()
 
   if self.body:getX() > ctx.goal.x then
     self:changeState('idle')
+    self.animation:set('flyLoop')
+    if not ctx.hud.win.active then
+      ctx.hud:activateWin()
+    end
   end
 end
 
@@ -187,7 +214,7 @@ function Pigeon:collideWith(other, myFixture)
       other:changeState('dead')
     elseif self.state == self.walk and self.drop and myFixture == self.feet[self.drop].fixture then
       other:changeState('dead')
-    elseif self.state == self.air and select(2, self.body:getLinearVelocity()) > 0 and (myFixture == self.feet.left.fixture or myFixture == self.feet.right.fixture) then
+    elseif self.crushGrace > 0 and (myFixture == self.feet.left.fixture or myFixture == self.feet.right.fixture) then
       other:changeState('dead')
     end
   elseif isa(other, Building) and not other.destroyed and self.state == self.peck and (myFixture == self.beak.top.fixture or myFixture == self.beak.bottom.fixture) then
@@ -459,6 +486,10 @@ end
 function Pigeon.air:exit()
   if self.air.lastVelocity > 800 then
     ctx.view:screenshake(15 + (self.air.lastVelocity / 100))
+    local skeleton = self.animation.spine.skeleton
+    local x = skeleton.x
+    local y = skeleton.y
+    ctx.particles:emit('dust', x, y, 15 + (self.air.lastVelocity / 100))
   end
 end
 

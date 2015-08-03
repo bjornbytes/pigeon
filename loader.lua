@@ -112,5 +112,7 @@ data.load = function()
 
     return animation
   end)
+
+  load('data/particle', 'particle')
 end
 
