@@ -57,13 +57,18 @@ function Map:draw()
   g.rectangle('fill', 0, 0, self.width, self.height)
 
   g.setColor(255, 255, 255)
-  local image = data.media.graphics.dinoland.dinolandBackground1
+  local image = data.media.graphics.dinoland.background.leftBg1
   local scale = (600) / image:getHeight()
-  for x = 0, self.width, image:getWidth() * scale * 2 do
-    image = data.media.graphics.dinoland.dinolandBackground1
-    g.draw(image, x, self.height, 0, scale, scale, 0, image:getHeight())
-    image = data.media.graphics.dinoland.dinolandBackground2
-    g.draw(image, x + image:getWidth() * scale, self.height, 0, scale, scale, 0, image:getHeight())
+  local inc = image:getWidth() * scale
+  for n = 6, 1, -1 do
+    for x = 0, self.width, image:getWidth() * scale * 2 do
+      image = data.media.graphics.dinoland.background['leftBg' .. n]
+      local xx
+      xx = (ctx.pigeon.body:getX() - 800) / (2 * math.min(n - 1, 3)) / 2
+      g.draw(image, xx, self.height, 0, scale, scale, 0, image:getHeight())
+      image = data.media.graphics.dinoland.background['rightBg' .. n]
+      g.draw(image, xx + inc, self.height, 0, scale, scale, 0, image:getHeight())
+    end
   end
 
   g.setColor(136, 87, 44)
