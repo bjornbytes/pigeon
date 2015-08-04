@@ -114,7 +114,7 @@ function Pigeon:init()
       self.slide = nil
     elseif name == 'jump' then
       ctx.sound:play('jump', function(sound)
-        sound:setVolume(.5)
+        sound:setVolume(.35)
       end)
       self:jump()
     elseif name == 'laser' then
