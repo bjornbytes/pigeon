@@ -125,6 +125,7 @@ function Person.dead:enter()
   if self.gender == 'male' and love.math.random() < .75 then
     self.screamSound = ctx.sound:play('scream2', function(sound)
       sound:setVolume(.75)
+      sound:setPitch(.8 + love.math.random() * .4)
     end)
     self.screamed = true
   end
