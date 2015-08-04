@@ -577,6 +577,7 @@ function Pigeon.peck:enter()
     self.leftWhirr:stop()
     self.rightWhirr:stop()
   end
+  ctx.sound:play('charge')
   self.animation:set('peck')
   table.each(self.beak, function(beak)
     beak.fixture:setSensor(false)
