@@ -75,10 +75,9 @@ function Pigeon:init()
         self.rightWhirr:stop()
       end
 
-      love.math.setRandomSeed(love.timer.getTime())
       self.leftWhirr = ctx.sound:play('whirr', function(sound)
         sound:setVolume(.35)
-        sound:setPitch(.9 + love.math.random() * .2)
+        sound:setPitch(lume.random(.95, 1.05))
       end)
 
       ctx.sound:play('impact', function(sound)
@@ -103,10 +102,9 @@ function Pigeon:init()
         self.leftWhirr:stop()
       end
 
-      love.math.setRandomSeed(love.timer.getTime())
       self.rightWhirr = ctx.sound:play('whirr', function(sound)
         sound:setVolume(.35)
-        sound:setPitch(.9 + love.math.random() * .2)
+        sound:setPitch(lume.random(.95, 1.05))
       end)
 
       ctx.sound:play('impact', function(sound)
