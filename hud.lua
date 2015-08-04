@@ -37,6 +37,8 @@ function Hud:init()
   self.win.height = 500
   self.win.x = -400
   self.win.prevx = self.win.x
+
+  self.deathBulge = 0
 end
 
 function Hud:update()
@@ -66,6 +68,8 @@ function Hud:update()
   self.rainbowShitDisplay = math.lerp(self.rainbowShitDisplay, self.rainbowShitCounter, 8 * ls.tickrate)
 
   self.scoreDisplay = math.lerp(self.scoreDisplay, self.score, 5 * ls.tickrate)
+
+  self.deathBulge = math.lerp(self.deathBulge, 0, 4 * ls.tickrate)
 end
 
 function Hud:gui()

@@ -115,6 +115,7 @@ end
 ----------------
 Person.dead = {}
 function Person.dead:enter()
+  ctx.hud.deathBulge = ctx.hud.deathBulge + 1
   self.body:setFixedRotation(false)
   self.fixture:setCategory(ctx.categories.debris)
   self.fixture:setFriction(0.25)

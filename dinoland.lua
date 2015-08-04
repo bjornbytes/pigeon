@@ -121,7 +121,7 @@ function Dinoland:spawnHuts()
     ctx.enemies:add(Caveman, {x = 3500 + love.math.random() * 900, y = self.height - self.ground.height - 150})
   end
 
-  for i = 1, 20 do
+  for i = 1, 25 do
     ctx.enemies:add(Caveman, {x = 5100 + love.math.random() * 400, y = self.height - self.ground.height})
   end
 end
