@@ -216,8 +216,8 @@ function View:follow()
   self.y = ctx.map.height - self.height
   self.scale = self.frame.height / self.height
 
-  local extra = ctx.hud.deathBulge > 5 and (ctx.hud.deathBulge * -.1) or 0
-  self.scale = math.lerp(self.scale, self.scale + extra, 8 * ls.tickrate)
+  local extra = ctx.hud.deathBulge > 5 and (ctx.hud.deathBulge * -.04) or 0
+  self.scale = math.lerp(self.scale, self.scale + extra, 4 * ls.tickrate)
 end
 
 function View:contain()
