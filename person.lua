@@ -93,7 +93,7 @@ end
 function Person:hop(direction)
   self.body:applyLinearImpulse(30 * direction, -45)
 
-  if ctx.map.name == 'dinoland' and self.gender == 'male' and love.math.random() < .01 and self:distanceTo(ctx.pigeon) < 500 then
+  if ctx.map.name == 'dinoland' and self.gender == 'male' and love.math.random() < .005 and self:distanceTo(ctx.pigeon) < 500 then
     ctx.sound:play('grunt')
   end
 end
