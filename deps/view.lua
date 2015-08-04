@@ -37,7 +37,7 @@ function View:init()
 
   self.shake = 0
 
-  self.effect = shine.scanlines()
+  self.effect = shine.separate_chroma()
 
   ctx.event:on('view.register', function(data)
     self:register(data.object, data.mode)
@@ -119,6 +119,13 @@ function View:draw()
   g.setCanvas()
   g.setColor(255, 255, 255)
   love.math.setRandomSeed(ls.tick * 100)
+  if ctx.pigeon.rainbowShitTimer > 0 then
+    self.effect:set('radius', math.abs(math.sin(ls.tick)) * 10)
+    self.effect:set('angle', ls.tick / 10)
+  else
+    self.effect:set('radius', 0)
+  end
+
   self.effect(function()
     g.draw(source)
   end)
