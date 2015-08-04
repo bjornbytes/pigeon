@@ -26,7 +26,7 @@ function Game:load()
   self.map:spawnHuts()
 
   ctx.sound:loop('background', function(sound)
-    sound:setVolume(.5)
+    sound:setVolume(.25)
   end)
 
   self.world:setContactFilter(function(fixtureA, fixtureB)
