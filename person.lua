@@ -74,7 +74,7 @@ function Person:collideWith(other)
     end
   end
 
-  if select(2, self.body:getLinearVelocity()) > 1000 then
+  if select(2, self.body:getLinearVelocity()) > 500 then
     if not self.splatted then
       ctx.sound:play('splat')
       self.splatted = true
@@ -133,7 +133,7 @@ function Person.dead:update()
     end
   end
 
-  if y > 1000 and not self.screamed then
+  if y > 900 and not self.screamed then
     self.screamed = true
     self.screamSound = ctx.sound:play('scream1')
   end
