@@ -210,7 +210,7 @@ function View:follow()
   local margin = 0.5
 
   self.height = math.lerp(self.height, math.clamp(1350 - y, 600, ctx.map.height), 10 * ls.tickrate)
-  self.height = self.height + math.max(ctx.hud.deathBulge - 5, 0) * 10
+  self.height = self.height + math.max(ctx.hud.deathBulge - 5, 0) * 15
   self.width = self.height * (16 / 9)
 
   self.x = x - self.width * margin
