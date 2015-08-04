@@ -210,14 +210,12 @@ function View:follow()
   local margin = 0.5
 
   self.height = math.lerp(self.height, math.clamp(1350 - y, 600, ctx.map.height), 10 * ls.tickrate)
+  self.height = self.height + math.max(ctx.hud.deathBulge - 5, 0) * 10
   self.width = self.height * (16 / 9)
 
   self.x = x - self.width * margin
   self.y = ctx.map.height - self.height
   self.scale = self.frame.height / self.height
-
-  local extra = ctx.hud.deathBulge > 5 and (ctx.hud.deathBulge * -.04) or 0
-  self.scale = math.lerp(self.scale, self.scale + extra, 4 * ls.tickrate)
 end
 
 function View:contain()

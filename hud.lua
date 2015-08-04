@@ -69,7 +69,7 @@ function Hud:update()
 
   self.scoreDisplay = math.lerp(self.scoreDisplay, self.score, 5 * ls.tickrate)
 
-  self.deathBulge = math.lerp(self.deathBulge, 0, 2 * ls.tickrate)
+  self.deathBulge = math.lerp(self.deathBulge, 0, 8 * ls.tickrate)
 end
 
 function Hud:gui()
