@@ -25,7 +25,7 @@ function Game:load()
 
   self.map:spawnHuts()
 
-  ctx.sound:loop('background', function(sound)
+  self.backgroundSound = ctx.sound:loop('background', function(sound)
     sound:setVolume(.25)
   end)
 
