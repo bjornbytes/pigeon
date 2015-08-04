@@ -8,7 +8,8 @@ Caveman.reloadRange = {1, 1.5}
 ----------------
 function Caveman:activate()
   self.gender = love.math.random() < .5 and 'female' or 'male'
-  self.image = data.media.graphics.dinoland[self.gender].normal
+  self.index = love.math.random(1, self.gender == 'male' and 1 or 2)
+  self.image = data.media.graphics.dinoland[self.gender]['normal' .. self.index]
   self.direction = 1
 
   self.hasSpear = love.math.random() > .5
@@ -44,7 +45,7 @@ end
 Caveman.idle = {}
 Caveman.idle.walkRate = {.4, .5}
 function Caveman.idle:update()
-  self.image = data.media.graphics.dinoland[self.gender].normal
+  self.image = data.media.graphics.dinoland[self.gender]['normal' .. self.index]
   if self:distanceTo(ctx.pigeon) < 300 then
     self:changeState(love.math.random() < .5 and 'panic' or 'attack')
   end
@@ -59,7 +60,7 @@ Caveman.panic = {}
 Caveman.panic.walkRate = {.3, .4}
 function Caveman.panic:update()
   self.direction = 1 -- -self:directionTo(ctx.pigeon)
-  self.image = data.media.graphics.dinoland[self.gender].panic
+  self.image = data.media.graphics.dinoland[self.gender]['panic' .. self.index]
 
   if self.walkTimer == 0 then
     self:hop(self.direction)
@@ -73,7 +74,7 @@ Caveman.attack = {}
 Caveman.attack.walkRate = {.4, .6}
 function Caveman.attack:update()
   self.direction = self:directionTo(ctx.pigeon)
-  self.image = data.media.graphics.dinoland[self.gender].normal
+  self.image = data.media.graphics.dinoland[self.gender]['normal' .. self.index]
   self:reloadSpear()
 
   if self:inRange() then
