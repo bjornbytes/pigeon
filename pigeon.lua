@@ -113,6 +113,9 @@ function Pigeon:init()
     elseif name == 'leftStop' or name == 'rightStop' then
       self.slide = nil
     elseif name == 'jump' then
+      ctx.sound:play('jump', function(sound)
+        sound:setVolume(.5)
+      end)
       self:jump()
     elseif name == 'laser' then
       self.laser.active = true
@@ -490,9 +493,6 @@ function Pigeon.walk:update()
   self:recoverFuel()
 
   if love.keyboard.isDown('up') then
-    ctx.sound:play('jump', function(sound)
-      sound:setVolume(.5)
-    end)
     return self:changeState('air')
   elseif love.keyboard.isDown(' ') then
     self:changeState('peck')
