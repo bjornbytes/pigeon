@@ -160,6 +160,7 @@ function Hud:resetBubble()
   self.bubble.targetScale = 1
   self.bubble.scale = self.bubble.targetScale
   self.bubble.prevScale = self.bubble.scale
+  self.rainbowShitCounter = 0
 end
 
 function Hud:addScore(amount, kind)
@@ -174,9 +175,9 @@ function Hud:addScore(amount, kind)
   self.bubble.prevTimer = self.bubble.timer
 
   if kind == 'person' then
-    self.rainbowShitCounter = self.rainbowShitCounter + 1
-    if self.rainbowShitCounter >= Pigeon.rainbowShitThreshold then
-      self.rainbowShitCounter = 0
+    self.rainbowShitCounter = self.bubble.multiplier --self.rainbowShitCounter + 1
+    if self.rainbowShitCounter == Pigeon.rainbowShitThreshold then
+      --self.rainbowShitCounter = 0
       ctx.pigeon:activateRainbowShit()
     end
   end
