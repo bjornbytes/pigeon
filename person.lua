@@ -134,6 +134,18 @@ function Person.dead:enter()
       sound:setPitch(.8 + love.math.random() * .4)
     end)
     self.screamed = true
+  elseif love.math.random() < .1 then
+    self.screamSound = ctx.sound:play('scream3', function(sound)
+      sound:setVolume(.75)
+      sound:setPitch(.8 + love.math.random() * .4)
+    end)
+    self.screamed = true
+  elseif love.math.random() < .1 and self.gender == 'male' then
+    self.screamSound = ctx.sound:play('scream4', function(sound)
+      sound:setVolume(.75)
+      sound:setPitch(.8 + love.math.random() * .4)
+    end)
+    self.screamed = true
   end
 end
 
