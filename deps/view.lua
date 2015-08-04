@@ -120,8 +120,8 @@ function View:draw()
   g.setColor(255, 255, 255)
   love.math.setRandomSeed(ls.tick * 100)
   if ctx.pigeon.rainbowShitTimer > 0 then
-    self.effect:set('radius', math.abs(math.sin(ls.tick / 10)) * 20)
-    self.effect:set('angle', ls.tick / 10)
+    self.effect:set('radius', math.abs(math.sin(ls.tick / 20)) * 20)
+    self.effect:set('angle', ls.tick / 15)
   else
     self.effect:set('radius', 0)
   end
