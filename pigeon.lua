@@ -136,6 +136,7 @@ function Pigeon:init()
   self.drop = nil
   self.downDirty = 0
   self.crushGrace = 0
+  self.rainbowShitSound = nil
 
   self:initBeak()
   self:initFeet()
@@ -154,6 +155,8 @@ function Pigeon:update()
 
   --self.animation.scale = self.rainbowShitTimer > 0 and 1 or .7
   self.rainbowShitTimer = timer.rot(self.rainbowShitTimer, function()
+    ctx.backgroundSound:resume()
+    self.rainbowShitSound:stop()
     flux.to(self.animation, .2, {scale = .7}, 'elasticout')
   end)
 
@@ -408,6 +411,10 @@ end
 
 function Pigeon:activateRainbowShit()
   self.rainbowShitTimer = self.rainbowShitTimer + 5
+  ctx.backgroundSound:pause()
+  self.rainbowShitSound = ctx.sound:loop('disco', function(sound)
+    sound:setVolume(.5)
+  end)
   flux.to(self.animation, .2, {scale = 1}, 'elasticout')
 end
 
