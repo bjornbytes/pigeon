@@ -21,6 +21,7 @@ function Game:load()
   self.hud = Hud()
   self.goal = Goal()
   self.particles = Particles()
+  self.sound = Sound()
 
   self.map:spawnHuts()
 

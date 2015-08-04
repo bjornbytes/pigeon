@@ -23,6 +23,9 @@ function Person:activate()
 
   self.phlerp = PhysicsInterpolator(self, 'alpha')
 
+  self.screamed = false
+  self.splatted = false
+
   ctx.event:emit('view.register', {object = self})
 
   Enemy.activate(self)
@@ -71,6 +74,16 @@ function Person:collideWith(other)
     end
   end
 
+  if select(2, self.body:getLinearVelocity()) > 1000 then
+    if not self.splatted then
+      ctx.sound:play('splat')
+      self.splatted = true
+      if self.screamSound then
+        self.screamSound:stop()
+      end
+    end
+  end
+
   return true
 end
 
@@ -108,6 +121,7 @@ function Person.dead:enter()
   self.body:applyLinearImpulse(-200 + love.math.random() * 400, -200 + love.math.random() * -500)
   self.body:setAngularVelocity(-20 + love.math.random() * 40)
   ctx.hud:addScore(10, 'person')
+  ctx.sound:play('pop')
 end
 
 function Person.dead:update()
@@ -117,5 +131,10 @@ function Person.dead:update()
     if self.alpha <= 0 then
       ctx.enemies:remove(self)
     end
+  end
+
+  if y > 1000 and not self.screamed then
+    self.screamed = true
+    self.screamSound = ctx.sound:play('scream1')
   end
 end
