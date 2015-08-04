@@ -491,7 +491,7 @@ function Pigeon.walk:update()
 
   if love.keyboard.isDown('up') then
     ctx.sound:play('jump', function(sound)
-      sound:setVolume(.85)
+      sound:setVolume(.5)
     end)
     return self:changeState('air')
   elseif love.keyboard.isDown(' ') then
