@@ -181,6 +181,7 @@ function Pigeon:update()
     self.animation:set('flyLoop')
     if not ctx.hud.win.active then
       ctx.hud:activateWin()
+      ctx.sound:play('win')
     end
   end
 end
