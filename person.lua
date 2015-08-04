@@ -135,7 +135,7 @@ function Person.dead:enter()
     self.screamed = true
   elseif love.math.random() < .1 then
     self.screamSound = ctx.sound:play('scream3', function(sound)
-      sound:setVolume(.75)
+      sound:setVolume(.5)
       sound:setPitch(.8 + love.math.random() * .4)
     end)
     self.screamed = true

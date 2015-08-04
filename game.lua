@@ -25,6 +25,8 @@ function Game:load()
 
   self.map:spawnHuts()
 
+  ctx.sound:loop('background')
+
   self.world:setContactFilter(function(fixtureA, fixtureB)
     local a, b = fixtureA:getBody():getUserData(), fixtureB:getBody():getUserData()
     if not a or not b then return true end
