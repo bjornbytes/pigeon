@@ -413,7 +413,7 @@ function Pigeon:activateRainbowShit()
   self.rainbowShitTimer = self.rainbowShitTimer + 5
   ctx.backgroundSound:pause()
   self.rainbowShitSound = ctx.sound:loop('disco', function(sound)
-    sound:setVolume(.5)
+    sound:setVolume(1)
   end)
   flux.to(self.animation, .2, {scale = 1}, 'elasticout')
 end
