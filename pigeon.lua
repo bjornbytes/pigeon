@@ -591,8 +591,9 @@ end
 
 function Pigeon.peck:impact()
   ctx.view:screenshake(20)
+  ctx.sound:play('impact')
   ctx.sound:play('crash', function(sound)
-    sound:setVolume(.25)
+    sound:setVolume(.2)
   end)
 end
 
