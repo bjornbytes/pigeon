@@ -122,6 +122,12 @@ function Person.dead:enter()
   self.body:setAngularVelocity(-20 + love.math.random() * 40)
   ctx.hud:addScore(10, 'person')
   ctx.sound:play('pop')
+  if self.gender == 'male' and love.math.random() < .75 then
+    self.screamSound = ctx.sound:play('scream2', function(sound)
+      sound:setVolume(.75)
+    end)
+    self.screamed = true
+  end
 end
 
 function Person.dead:update()
