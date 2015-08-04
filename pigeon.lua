@@ -1,5 +1,4 @@
 Pigeon = class()
-
 ----------------
 -- Constants
 ----------------
@@ -71,6 +70,15 @@ function Pigeon:init()
       else
         self.walk.firstShake = false
       end
+
+      if self.rightWhirr then
+        self.rightWhirr:stop()
+      end
+
+      self.leftWhirr = ctx.sound:play('whirr')
+      ctx.sound:play('impact', function(sound)
+        sound:setVolume(.5)
+      end)
     elseif name == 'leftStep' then
       self.slide = 'left'
       self.drop = nil
@@ -85,6 +93,15 @@ function Pigeon:init()
       else
         self.walk.firstShake = false
       end
+
+      if self.leftWhirr then
+        self.leftWhirr:stop()
+      end
+
+      self.rightWhirr = ctx.sound:play('whirr')
+      ctx.sound:play('impact', function(sound)
+        sound:setVolume(.5)
+      end)
     elseif name == 'leftStop' or name == 'rightStop' then
       self.slide = nil
     elseif name == 'jump' then
@@ -102,6 +119,9 @@ function Pigeon:init()
     left = 693,
     right = 555
   }
+
+  self.leftWhirr = nil
+  self.rightWhirr = nil
 
   self.drop = nil
   self.downDirty = 0
@@ -477,6 +497,10 @@ end
 
 Pigeon.air = {}
 function Pigeon.air:enter()
+  if self.leftWhirr then
+    self.leftWhirr:stop()
+    self.rightWhirr:stop()
+  end
   self.jumped = false
   if love.keyboard.isDown('up') then
     self.animation:set('jump')
@@ -492,6 +516,9 @@ function Pigeon.air:exit()
     local y = skeleton.y
     ctx.particles:emit('dust', x, y, 15 + (self.air.lastVelocity / 100))
   end
+  ctx.sound:play('impact', function(sound)
+    sound:setVolume(1)
+  end)
 end
 
 function Pigeon.air:update()
@@ -538,6 +565,10 @@ end
 
 Pigeon.peck = {}
 function Pigeon.peck:enter()
+  if self.leftWhirr then
+    self.leftWhirr:stop()
+    self.rightWhirr:stop()
+  end
   self.animation:set('peck')
   table.each(self.beak, function(beak)
     beak.fixture:setSensor(false)
