@@ -25,7 +25,9 @@ function Game:load()
 
   self.map:spawnHuts()
 
-  ctx.sound:loop('background')
+  ctx.sound:loop('background', function(sound)
+    sound:setVolume(.5)
+  end)
 
   self.world:setContactFilter(function(fixtureA, fixtureB)
     local a, b = fixtureA:getBody():getUserData(), fixtureB:getBody():getUserData()
