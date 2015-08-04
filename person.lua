@@ -92,6 +92,10 @@ end
 ----------------
 function Person:hop(direction)
   self.body:applyLinearImpulse(30 * direction, -45)
+
+  if ctx.map.name == 'dinoland' and self.gender == 'male' then
+    ctx.sound:play('grunt')
+  end
 end
 
 function Person:directionTo(object)
@@ -121,7 +125,6 @@ function Person.dead:enter()
   self.body:applyLinearImpulse(-200 + love.math.random() * 400, -200 + love.math.random() * -500)
   self.body:setAngularVelocity(-20 + love.math.random() * 40)
   ctx.hud:addScore(10, 'person')
-  ctx.sound:play('pop')
   if self.gender == 'male' and love.math.random() < .75 then
     self.screamSound = ctx.sound:play('scream2', function(sound)
       sound:setVolume(.75)

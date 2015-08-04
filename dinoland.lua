@@ -5,6 +5,7 @@ Dinoland.groundHeight = 100
 
 function Dinoland:init()
   self.zones = {}
+  self.name = 'dinoland'
 
   self.obstacles = {}
 
