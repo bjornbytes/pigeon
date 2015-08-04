@@ -117,7 +117,6 @@ function Pigeon:init()
     elseif name == 'laser' then
       self.laser.active = true
     elseif name == 'peck' and self.state == self.peck then
-      ctx.sound:play(data.media.sounds.impact)
       self.peck.impact(self)
     end
   end)
@@ -592,6 +591,9 @@ end
 
 function Pigeon.peck:impact()
   ctx.view:screenshake(20)
+  ctx.sound:play('crash', function(sound)
+    sound:setVolume(.5)
+  end)
 end
 
 Pigeon.laser = {}
