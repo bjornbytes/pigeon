@@ -101,6 +101,6 @@ function Building:destroy()
   self.body:setAngularVelocity(-20 + love.math.random() * 40)
   ctx.hud:addScore(50, 'building')
   ctx.sound:play('wood', function(sound)
-    sound:setVolume(.5)
+    sound:setVolume(1)
   end)
 end
