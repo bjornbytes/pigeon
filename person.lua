@@ -81,6 +81,7 @@ function Person:collideWith(other)
   if select(2, self.body:getLinearVelocity()) > 500 then
     if not self.splatted then
       ctx.sound:play('splat')
+      ctx.particles:emit('blood', self.body:getX(), self.body:getY(), 8)
       self.splatted = true
       if self.screamSound then
         self.screamSound:stop()
@@ -174,7 +175,27 @@ function Person.dead:enter()
       sound:setPitch(.9 + love.math.random() * .2)
     end)
     self.screamed = true
+  elseif love.math.random() < .3 and self.gender == 'male' then
+    self.screamSound = ctx.sound:play('scream9', function(sound)
+      sound:setVolume(.75)
+      sound:setPitch(.9 + love.math.random() * .2)
+    end)
+    self.screamed = true
+  elseif love.math.random() < .01 and self.gender == 'male' then
+    self.screamSound = ctx.sound:play('scream10', function(sound)
+      sound:setVolume(1)
+      sound:setPitch(.9 + love.math.random() * .2)
+    end)
+    self.screamed = true
+  elseif love.math.random() < .3 and self.gender == 'male' then
+    self.screamSound = ctx.sound:play('scream11', function(sound)
+      sound:setVolume(.75)
+      sound:setPitch(.9 + love.math.random() * .2)
+    end)
+    self.screamed = true
   end
+
+  ctx.particles:emit('blood', self.body:getX(), self.body:getY(), 4)
 end
 
 function Person.dead:update()
