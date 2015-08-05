@@ -168,6 +168,7 @@ end
 function Hud:resetBubble()
   self.bubble.active = false
   self.bubble.amount = 0
+  self.bubble.amountDisplay = self.bubble.amount
   self.bubble.timer = 0
   self.bubble.multiplier = 0
   self.bubble.targetY = 200
@@ -179,11 +180,10 @@ function Hud:resetBubble()
   self.rainbowShitCounter = 0
 end
 
-function Hud:addScore(amount, kind)
+function Hud:addScore(amount, kind, cause)
   self.bubble.active = true
   self.bubble.timer = 3
   self.bubble.amount = self.bubble.amount + amount
-  self.bubble.amountDisplay = self.bubble.amount
   self.bubble.multiplier = self.bubble.multiplier + 1
   self.bubble.scale = self.bubble.scale + .2
   self.bubble.targetScale = self.bubble.targetScale + .1
@@ -195,6 +195,10 @@ function Hud:addScore(amount, kind)
     if self.rainbowShitCounter == Pigeon.rainbowShitThreshold then
       --self.rainbowShitCounter = 0
       ctx.pigeon:activateRainbowShit()
+    end
+
+    if cause == 'peck' then
+      self.bubble.amount = self.bubble.amount + 5
     end
   end
 end

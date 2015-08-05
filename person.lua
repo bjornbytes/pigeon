@@ -107,11 +107,11 @@ function Person:distanceTo(object)
   return math.abs(object.body:getX() - self.body:getX())
 end
 
-function Person:changeState(target)
+function Person:changeState(target, ...)
   if self.state == target then return end
   f.exe(self.state.exit, self)
   self.state = self[target]
-  f.exe(self.state.enter, self)
+  f.exe(self.state.enter, self, ...)
   return self.state
 end
 
@@ -119,14 +119,14 @@ end
 -- Base States
 ----------------
 Person.dead = {}
-function Person.dead:enter()
+function Person.dead:enter(cause)
   ctx.hud.deathBulge = ctx.hud.deathBulge + 1
   self.body:setFixedRotation(false)
   self.fixture:setCategory(ctx.categories.debris)
   self.fixture:setFriction(0.25)
   self.body:applyLinearImpulse(-200 + love.math.random() * 400, -200 + love.math.random() * -500)
   self.body:setAngularVelocity(-20 + love.math.random() * 40)
-  ctx.hud:addScore(10, 'person')
+  ctx.hud:addScore(10, 'person', cause)
   if self.gender == 'male' and love.math.random() < .75 then
     self.screamSound = ctx.sound:play('scream2', function(sound)
       sound:setVolume(.75)
