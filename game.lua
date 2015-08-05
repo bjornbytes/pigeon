@@ -10,6 +10,12 @@ Game.categories = {
 }
 
 function Game:load()
+  self.stats = {
+    buildingsDestroyed = 0,
+    peopleKilled = 0,
+    maxCombo = 0
+  }
+
   self.event = Event()
   self.world = love.physics.newWorld(0, 1000)
   self.view = View()
@@ -25,6 +31,8 @@ function Game:load()
   self.paused = false
 
   self.map:spawnHuts()
+
+  ctx.stats.maxMaxCombo = table.count(ctx.enemies.objects) + table.count(ctx.buildings.objects) + (table.count(ctx.buildings.objects) * 6)
 
   self.backgroundSound = ctx.sound:loop('background', function(sound)
     sound:setVolume(.25)

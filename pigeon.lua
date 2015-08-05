@@ -61,6 +61,7 @@ function Pigeon:init()
       self.drop = nil
       if self.walk.firstShake == false then
         ctx.view:screenshake(10)
+        self.stepsTaken = self.stepsTaken + 1
 
         local skeleton = self.animation.spine.skeleton
         local bone = skeleton:findBone('rightfoot')
@@ -83,11 +84,13 @@ function Pigeon:init()
       ctx.sound:play('impact', function(sound)
         sound:setVolume(.5)
       end)
+
     elseif name == 'leftStep' then
       self.slide = 'left'
       self.drop = nil
       if self.walk.firstShake == false then
         ctx.view:screenshake(10)
+        self.stepsTaken = self.stepsTaken + 1
 
         local skeleton = self.animation.spine.skeleton
         local bone = skeleton:findBone('leftfoot')
@@ -137,6 +140,10 @@ function Pigeon:init()
   self.downDirty = 0
   self.crushGrace = 0
   self.rainbowShitSound = nil
+
+  self.stepsTaken = 0
+  self.jumps = 0
+  self.pecks = 0
 
   self:initBeak()
   self:initFeet()
@@ -528,6 +535,7 @@ function Pigeon.air:enter()
   if love.keyboard.isDown('up') then
     self.animation:set('jump')
   end
+  self.jumps = self.jumps + 1
   self.air.lastVelocity = 0
 end
 
@@ -592,6 +600,7 @@ function Pigeon.peck:enter()
     self.leftWhirr:stop()
     self.rightWhirr:stop()
   end
+  self.pecks = self.pecks + 1
   ctx.sound:play('charge')
   self.animation:set('peck')
   table.each(self.beak, function(beak)

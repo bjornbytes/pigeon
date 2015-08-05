@@ -15,6 +15,100 @@ Hud.bonuses = {
 
       return not aliveBuilding
     end
+  },
+  bigBadPigeon = {
+    name = 'Big Bad Pigeon',
+    description = 'Kill no buildings',
+    score = 50000,
+    check = function()
+      return ctx.stats.buildingsDestroyed == 0
+    end
+  },
+  genocide = {
+    name = 'Genocide',
+    description = 'Kill all people',
+    score = 250000,
+    check = function()
+      local aliveBuilding = false
+      table.each(ctx.buildings.objects, function(building)
+        if not building.destroyed then
+          aliveBuilding = true
+        end
+      end)
+
+      local alivePerson = false
+      table.each(ctx.enemies.objects, function(person)
+        if person.state ~= 'dead' then
+          alivePerson = true
+        end
+      end)
+
+      return not aliveBuilding and not alivePerson
+    end
+  },
+  hopper = {
+    name = 'Hopper',
+    description = 'Don\'t stop jumping',
+    score = 100000,
+    check = function()
+      return ctx.pigeon.stepsTaken == 0
+    end
+  },
+  woodpecker = {
+    name = 'Woodpecker',
+    description = 'Kill everything by pecking',
+    score = 250000,
+    check = function()
+      return ctx.nonPeckKill == true and ctx.pigeon.pecks > 0
+    end
+  },
+  verticallyChallenged = {
+    name = 'Vertically Challenged',
+    description = 'Don\'t jump',
+    score = 25000,
+    check = function()
+      return ctx.pigeon.jumps == 0
+    end
+  },
+  stiff = {
+    name = 'Stiff Neck',
+    description = 'Don\'t peck',
+    score = 25000,
+    check = function()
+      return ctx.pigeon.pecks == 0
+    end
+  },
+  pacifist = {
+    name = 'Pacifist',
+    description = 'Don\'t kill anything',
+    score = 500000,
+    check = function()
+      return ctx.pigeon.stats.buildingsDestroyed == 0 and ctx.pigeon.stats.peopleKilled == 0
+    end
+  },
+  scrub = {
+    name = 'Scrub',
+    description = 'Get a max combo of 25 or less',
+    score = 50000,
+    check = function()
+      return ctx.stats.maxCombo <= 25
+    end
+  },
+  badass = {
+    name = 'Badass',
+    description = 'Get a max combo of 100 or higher',
+    score = 100000,
+    check = function()
+      return ctx.stats.maxCombo >= 100
+    end
+  },
+  korean = {
+    name = 'Korean',
+    description = 'Get the highest possible max combo',
+    score = 500000,
+    check = function()
+      return ctx.stats.maxCombo >= ctx.stats.maxMaxCombo
+    end
   }
 }
 
@@ -56,6 +150,7 @@ function Hud:update()
 
     self.bubble.timer = timer.rot(self.bubble.timer, function()
       self.score = self.score + self.bubble.amount * self.bubble.multiplier
+      ctx.stats.maxCombo = math.max(ctx.stats.maxCombo, self.bubble.multiplier)
       self:resetBubble()
     end)
   end

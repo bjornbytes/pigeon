@@ -103,6 +103,7 @@ function Building:destroy()
   ctx.sound:play('wood', function(sound)
     sound:setVolume(1)
   end)
+  ctx.stats.buildingsDestroyed = ctx.stats.buildingsDestroyed + 1
 end
 
 function Building:paused()
