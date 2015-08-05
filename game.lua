@@ -62,6 +62,8 @@ end
 function Game:keypressed(key)
   if key == 'escape' then
     love.event.quit()
+  elseif key == 'm' then
+    ctx.sound:mute()
   end
 
   self.pigeon:keypressed(key)
