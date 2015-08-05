@@ -34,22 +34,23 @@ function Map:draw()
 
   local function drawGrass(obstacle)
     local x, y = obstacle.body:getPosition()
-    local x1, x2 = x - obstacle.width / 2, x + obstacle.width / 2
+    local padding = 5
+    local x1, x2 = x - obstacle.width / 2 - padding, x + obstacle.width / 2 + padding
     local image = data.media.graphics.dinoland.grassLeft
     local scale = 32 / image:getHeight()
     local xx = x1 + image:getWidth() * scale
     g.setColor(255, 255, 255)
     while xx < x2 do
       local image = data.media.graphics.dinoland['grassMid' .. love.math.random(1, 2)]
-      g.draw(image, math.min(xx, x2 - image:getWidth() * scale * 2), y - obstacle.height / 2, 0, scale, scale)
+      g.draw(image, math.min(xx, x2 - image:getWidth() * scale * 2), y - obstacle.height / 1.98, 0, scale, scale)
       xx = xx + image:getWidth() * scale
     end
     local image = data.media.graphics.dinoland.grassLeft
     local scale = 32 / image:getHeight()
     g.setColor(255, 255, 255)
-    g.draw(image, x1, y - obstacle.height / 2, 0, scale, scale)
+    g.draw(image, x1, y - obstacle.height / 1.98, 0, scale, scale)
     local image = data.media.graphics.dinoland.grassRight
-    g.draw(image, x2, y - obstacle.height / 2, 0, scale, scale, image:getWidth())
+    g.draw(image, x2, y - obstacle.height / 1.98, 0, scale, scale, image:getWidth())
   end
 
   -- Fake yellow sky

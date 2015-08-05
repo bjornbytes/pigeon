@@ -83,7 +83,7 @@ Hud.bonuses = {
     description = 'Don\'t kill anything',
     score = 500000,
     check = function()
-      return ctx.pigeon.stats.buildingsDestroyed == 0 and ctx.pigeon.stats.peopleKilled == 0
+      return ctx.stats.buildingsDestroyed == 0 and ctx.stats.peopleKilled == 0
     end
   },
   scrub = {
