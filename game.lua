@@ -22,6 +22,7 @@ function Game:load()
   self.goal = Goal()
   self.particles = Particles()
   self.sound = Sound()
+  self.paused = false
 
   self.map:spawnHuts()
 
@@ -40,6 +41,16 @@ end
 
 function Game:update()
   self.debug = love.keyboard.isDown('`')
+
+  if self.paused then
+    self.pigeon:paused()
+    self.view:update()
+    self.buildings:paused()
+    self.enemies:paused()
+    self.projectiles:paused()
+    self.hud:paused()
+    return
+  end
 
   self.pigeon:update()
   self.enemies:update()
@@ -64,6 +75,8 @@ function Game:keypressed(key)
     love.event.quit()
   elseif key == 'm' then
     ctx.sound:mute()
+  elseif key == 'p' then
+    self.paused = not self.paused
   end
 
   self.pigeon:keypressed(key)

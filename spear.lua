@@ -46,6 +46,11 @@ function Spear:draw()
   g.draw(image, x, y, angle, self.scale / 2, self.scale, image:getWidth(), image:getHeight() / 2)
 end
 
+function Spear:paused()
+  self.prevx = self.body:getX()
+  self.prevy = self.body:getY()
+end
+
 function Spear:collideWith(other)
   if isa(other, Map) then
     self.deathTimer = .05
@@ -54,3 +59,4 @@ function Spear:collideWith(other)
 
   return false
 end
+

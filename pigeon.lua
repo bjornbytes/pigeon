@@ -200,7 +200,7 @@ function Pigeon:draw()
   g.setColor(255, 255, 255)
 
   local x, y = self.body:getPosition()
-  self.animation:draw(x, y + self.shapeSize / 2)
+  self.animation:draw(x, y + self.shapeSize / 2, {noupdate = ctx.paused})
 
   local x1, y1, x2, y2 = self:getGroundRaycastPoints()
   g.setColor(self.grounded and {0, 255, 0} or {255, 0, 0})
@@ -242,6 +242,10 @@ function Pigeon:keypressed(key)
   if key == 'return' and self.state == self.idle then
     self:changeState('walk')
   end
+end
+
+function Pigeon:paused()
+  self.phlerp:update()
 end
 
 function Pigeon:collideWith(other, myFixture)

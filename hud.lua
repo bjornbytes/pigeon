@@ -153,6 +153,18 @@ function Hud:gui()
   end
 end
 
+function Hud:paused()
+  self.prevRainbowShitDisplay = self.rainbowShitDisplay
+
+  self.bubble.prevy = self.bubble.y
+  self.bubble.prevScale = self.bubble.scale
+  self.bubble.prevTimer = self.bubble.timer
+
+  if self.win.active then
+    self.win.prevx = self.win.x
+  end
+end
+
 function Hud:resetBubble()
   self.bubble.active = false
   self.bubble.amount = 0

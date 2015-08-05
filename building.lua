@@ -104,3 +104,7 @@ function Building:destroy()
     sound:setVolume(1)
   end)
 end
+
+function Building:paused()
+  self.phlerp:update()
+end

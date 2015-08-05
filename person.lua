@@ -58,6 +58,10 @@ function Person:draw()
   self.phlerp:delerp()
 end
 
+function Person:paused()
+  self.phlerp:update()
+end
+
 function Person:collideWith(other)
   if other.tag == 'building' and not other.destroyed then
     return false
