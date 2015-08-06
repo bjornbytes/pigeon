@@ -141,6 +141,58 @@ function Dinoland:init(index)
       self.decorations[#self.decorations].image = data.media.graphics.dinoland.ufo
     end
   end
+
+  self.dactyls = {}
+  for i = 1, 3 do
+    table.insert(self.dactyls, {
+      x = love.math.random(100, self.width),
+      y = love.math.random(0, 450),
+      height = love.math.random(40, 55),
+      speed = love.math.random(30, 50),
+      rate = love.math.random(2, 4)
+    })
+  end
+  self.dactylTimer = 30
+end
+
+function Dinoland:update()
+  Map.update(self)
+
+  self.dactylTimer = timer.rot(self.dactylTimer, function()
+    table.insert(self.dactyls, {
+      x = self.width + 100,
+      y = love.math.random(0, 450),
+      height = love.math.random(40, 55),
+      speed = love.math.random(30, 50),
+      rate = love.math.random(2, 4)
+    })
+    return love.math.random(20, 40)
+  end)
+
+  local i = #self.dactyls
+  while i >= 1 do
+    local dactyl = self.dactyls[i]
+    dactyl.x = dactyl.x - dactyl.speed * ls.tickrate
+    if dactyl.x < -100 then
+      table.remove(self.dactyl, i)
+    else
+      i = i - 1
+    end
+  end
+
+end
+
+function Dinoland:draw()
+  Map.draw(self)
+
+  local g = love.graphics
+  g.setColor(255, 255, 255)
+  table.each(self.dactyls, function(dactyl)
+    local image = data.media.graphics.dinoland['pterodactyl' .. (((math.floor(ls.tick * ls.tickrate * dactyl.rate) % 2) == 0) and 1 or 2)]
+    local w, h = image:getDimensions()
+    local scale = dactyl.height / h
+    g.draw(image, dactyl.x, dactyl.y, 0, scale, scale, w / 2, h / 2)
+  end)
 end
 
 function Dinoland:spawnHuts()
