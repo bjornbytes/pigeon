@@ -2,5 +2,5 @@ require 'require'
 
 function love.load()
   data.load()
-  Context:bind(Game, 'Kingdumb', 3)
+  Context:bind(Game, 'Dinoland', 1)
 end

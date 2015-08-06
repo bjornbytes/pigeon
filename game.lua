@@ -86,6 +86,21 @@ function Game:keypressed(key)
     ctx.sound:mute()
   elseif key == 'p' then
     self.paused = not self.paused
+  elseif key == 'return' and ctx.hud.win.active then
+    Context:remove(ctx)
+    local world
+    local index
+    if ctx.map.name == 'kingdumb' and ctx.map.index == 3 then
+      -- Menu
+      return
+    elseif ctx.map.name == 'dinoland' and ctx.map.index == 3 then
+      world = 'Kingdumb'
+      index = 1
+    else
+      world = (ctx.map.name == 'dinoland') and 'Dinoland' or 'Kingdumb'
+      index = ctx.map.index + 1
+    end
+    Context:add(Game, world, index)
   end
 
   self.pigeon:keypressed(key)
