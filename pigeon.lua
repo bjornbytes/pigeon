@@ -1,5 +1,4 @@
-Pigeon = class()
-----------------
+Pigeon = class()----------------
 -- Constants
 ----------------
 Pigeon.walkForce = 600
@@ -144,6 +143,7 @@ function Pigeon:init()
   self.stepsTaken = 0
   self.jumps = 0
   self.pecks = 0
+  self.rainbowShits = 0
 
   self.peckDirty = false
 
@@ -434,6 +434,7 @@ end
 
 function Pigeon:activateRainbowShit()
   self.rainbowShitTimer = self.rainbowShitTimer + 5
+  self.rainbowShits = self.rainbowShits + 1
   ctx.backgroundSound:pause()
   self.rainbowShitSound = ctx.sound:loop('disco', function(sound)
     sound:setVolume(1)

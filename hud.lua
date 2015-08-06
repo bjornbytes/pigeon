@@ -109,6 +109,22 @@ Hud.bonuses = {
     check = function()
       return ctx.stats.maxCombo >= ctx.stats.maxMaxCombo
     end
+  },
+  fabulous = {
+    name = 'Fabulous',
+    description = 'End the game in turbo mode',
+    score = 100000,
+    check = function()
+      return ctx.pigeon.rainbowShitTimer > 0
+    end
+  },
+  youTried = {
+    name = 'You Tried',
+    description = 'Get no medals',
+    score = 250000,
+    postCheck = function()
+      return #ctx.hud.win.bonuses == 0
+    end
   }
 }
 
@@ -303,11 +319,21 @@ function Hud:activateWin()
   ctx.stats.maxCombo = math.max(ctx.stats.maxCombo, self.bubble.multiplier)
   self:resetBubble()
 
+  ctx.stats.peoplePercentage = ctx.stats.peopleKilled / ctx.stats.originalPeople
+  ctx.stats.buildingPercentage = ctx.stats.buildingsDestroyed / ctx.stats.originalBuildings
+  ctx.stats.time = (ls.tick - ctx.startTick) * ls.tickrate
+
   self.win.active = true
   self.win.bonuses = {}
   collectgarbage()
   table.each(self.bonuses, function(bonus, name)
-    if bonus.check() then
+    if bonus.check and bonus.check() then
+      table.insert(self.win.bonuses, name)
+      self.score = self.score + bonus.score
+    end
+  end)
+  table.each(self.bonuses, function(bonus, name)
+    if bonus.postCheck and bonus.postCheck() then
       table.insert(self.win.bonuses, name)
       self.score = self.score + bonus.score
     end

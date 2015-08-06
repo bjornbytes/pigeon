@@ -15,6 +15,8 @@ function Game:load(level, levelIndex)
     maxCombo = 0
   }
 
+  self.startTick = ls.tick
+
   self.event = Event()
   self.world = love.physics.newWorld(0, 1000)
   self.view = View()
@@ -32,6 +34,8 @@ function Game:load(level, levelIndex)
   self.map:spawnHuts()
 
   ctx.stats.maxMaxCombo = table.count(ctx.enemies.objects) + table.count(ctx.buildings.objects) + (table.count(ctx.buildings.objects) * 6)
+  ctx.stats.originalBuildings = table.count(ctx.buildings.objects)
+  ctx.stats.originalPeople = table.count(ctx.buildings.objects) * 6 + table.count(ctx.enemies.objects)
 
   self.backgroundSound = ctx.sound:loop('background', function(sound)
     sound:setVolume(.5)
