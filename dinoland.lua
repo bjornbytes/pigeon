@@ -172,6 +172,7 @@ function Dinoland:update()
   local i = #self.dactyls
   while i >= 1 do
     local dactyl = self.dactyls[i]
+    if not dactyl then break end
     dactyl.x = dactyl.x - dactyl.speed * ls.tickrate
     if dactyl.x < -100 then
       table.remove(self.dactyl, i)

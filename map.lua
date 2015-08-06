@@ -45,6 +45,7 @@ function Map:update()
   local i = #self.clouds
   while i >= 1 do
     local cloud = self.clouds[i]
+    if not cloud then break end
     cloud.x = cloud.x - cloud.speed * ls.tickrate
     if cloud.x < -100 then
       table.remove(self.clouds, i)

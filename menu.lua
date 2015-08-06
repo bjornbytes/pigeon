@@ -44,7 +44,7 @@ function Menu:draw()
   g.rectangle('fill', 0, 0, g.getDimensions())
 
   g.setColor(255, 255, 255)
-  g.print('PIGEON', g.getWidth() / 2 - g.getFont():getWidth('PIGEON') / 2, 200)
+  g.print('FOWL PLAY\npress space', g.getWidth() / 2 - g.getFont():getWidth('PIGEON') / 2, 200)
 end
 
 function Menu:keypressed(key)
