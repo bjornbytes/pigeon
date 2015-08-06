@@ -78,7 +78,7 @@ function Person:collideWith(other)
     end
   end
 
-  if select(2, self.body:getLinearVelocity()) > 500 then
+  if select(2, self.body:getLinearVelocity()) > 500 and self.state == self.dead then
     if not self.splatted then
       ctx.sound:play('splat')
       ctx.particles:emit('blood', self.body:getX(), self.body:getY(), 8)

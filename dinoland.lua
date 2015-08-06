@@ -104,6 +104,17 @@ function Dinoland:init(index)
     makeObstacle(4400, 0, 600, 200)
     makeObstacle(4800, 0, 200, 100)
     makeObstacle(4000, 0, 200, 100)
+  elseif self.index == 3 then
+    self.width = 6000
+    self.height = 900
+
+    makeObstacle(2900, 0, 200, 300)
+    makeObstacle(3000, 0, 800, 200)
+    makeObstacle(2800, 0, 800, 100)
+
+    makeObstacle(4200, 0, 100, 400)
+    makeObstacle(4200, 0, 300, 200)
+    makeObstacle(4200, 0, 600, 100)
   end
 
   Map.init(self)
@@ -186,6 +197,45 @@ function Dinoland:spawnHuts()
 
     for i = 1, 20 do
       ctx.enemies:add(Caveman, {x = 4100 + love.math.random() * 600, y = self.height - self.ground.height - 200})
+    end
+  elseif self.index == 3 then
+    makeBuilding(900, 0)
+    makeBuilding(1500, 0)
+    makeBuilding(2100, 0)
+
+    for i = 1, 15 do
+      ctx.enemies:add(Caveman, {x = 1000 + love.math.random() * 400, y = self.height - self.ground.height})
+    end
+
+    for i = 1, 15 do
+      ctx.enemies:add(Caveman, {x = 1600 + love.math.random() * 400, y = self.height - self.ground.height})
+    end
+
+    makeBuilding(2500, 100)
+    makeBuilding(2900, 300)
+    makeBuilding(3000, 0)
+    makeBuilding(3150, 100)
+    makeBuilding(3300, 200)
+
+    for i = 1, 20 do
+      ctx.enemies:add(Caveman, {x = 2600 + love.math.random() * 800, y = self.height - self.ground.height - 200})
+    end
+
+    for i = 1, 8 do
+      ctx.enemies:add(Caveman, {x = 3000 + love.math.random() * 300, y = self.height - self.ground.height})
+    end
+
+    makeBuilding(3950, 100)
+    makeBuilding(4450, 100)
+
+    for i = 1, 10 do
+      ctx.enemies:add(Caveman, {x = 4175 + love.math.random() * 50, y = self.height - self.ground.height - 400})
+    end
+
+    makeBuilding(5000, 200)
+
+    for i = 1, 35 do
+      ctx.enemies:add(Caveman, {x = 4500 + love.math.random() * 600, y = self.height - self.ground.height})
     end
   end
 end
