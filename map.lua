@@ -12,6 +12,19 @@ function Map:init()
 
   self.ground.body:setUserData(self)
 
+  self.clouds = {}
+  for i = 1, 8 do
+    table.insert(self.clouds, {
+      x = love.math.random(100, self.width),
+      y = love.math.random(0, 500),
+      height = love.math.random(80, 150),
+      speed = love.math.random(10, 20),
+      image = data.media.graphics['cloud' .. love.math.random(1, 3)],
+      alpha = love.math.random(180, 230)
+    })
+  end
+  self.cloudTimer = 15
+
   ctx.view.xmax = self.width
   ctx.view.ymax = self.height
   ctx.event:emit('view.register', {object = self})
@@ -19,6 +32,22 @@ end
 
 function Map:update()
   ctx.view.xmax = self:getMaxX()
+
+  self.cloudTimer = timer.rot(self.cloudTimer, function()
+    self:createCloud()
+    return love.math.random(10, 25)
+  end)
+
+  local i = #self.clouds
+  while i >= 1 do
+    local cloud = self.clouds[i]
+    cloud.x = cloud.x - cloud.speed * ls.tickrate
+    if cloud.x < -100 then
+      table.remove(self.clouds, i)
+    else
+      i = i - 1
+    end
+  end
 
   table.each(self.obstacles, function(obstacle)
     if (love.keyboard.isDown('down') and ctx.pigeon.downDirty > 0) or ctx.pigeon.body:getY() + ctx.pigeon.shapeSize / 2 > obstacle.body:getY() - obstacle.height / 2 then
@@ -95,10 +124,17 @@ function Map:draw()
   end
   love.math.setRandomSeed(love.timer.getTime())
 
+  g.setColor(255, 255, 255)
   table.each(self.decorations, function(d)
     local scale = d.height / d.image:getHeight()
-    g.setColor(255, 255, 255)
     g.draw(d.image, d.x, d.y, 0, scale * d.direction, scale, d.image:getWidth() / 2, d.image:getHeight())
+  end)
+
+  table.each(self.clouds, function(cloud)
+    g.setColor(255, 255, 255, cloud.alpha)
+    local w, h = cloud.image:getDimensions()
+    local scale = cloud.height / h
+    g.draw(cloud.image, cloud.x + ctx.pigeon.body:getX() / 4, cloud.y, 0, scale, scale, w / 2, h / 2)
   end)
 end
 
@@ -110,4 +146,15 @@ function Map:getMaxX()
   end
 
   return self.width
+end
+
+function Map:createCloud()
+  table.insert(self.clouds, {
+    x = self.width + 100,
+    y = love.math.random(0, 500),
+    height = love.math.random(80, 150),
+    speed = love.math.random(10, 20),
+    image = data.media.graphics['cloud' .. love.math.random(1, 3)],
+    alpha = love.math.random(180, 230)
+  })
 end
