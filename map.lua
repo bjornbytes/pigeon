@@ -36,20 +36,20 @@ function Map:draw()
     local x, y = obstacle.body:getPosition()
     local padding = 5
     local x1, x2 = x - obstacle.width / 2 - padding, x + obstacle.width / 2 + padding
-    local image = data.media.graphics.dinoland.grassLeft
+    local image = data.media.graphics[ctx.map.name].grassLeft
     local scale = 32 / image:getHeight()
     local xx = x1 + image:getWidth() * scale
     g.setColor(255, 255, 255)
     while xx < x2 do
-      local image = data.media.graphics.dinoland['grassMid' .. love.math.random(1, 2)]
+      local image = data.media.graphics[ctx.map.name]['grassMid' .. love.math.random(1, 2)]
       g.draw(image, math.min(xx, x2 - image:getWidth() * scale * 2), y - obstacle.height / 2 - padding, 0, scale, scale)
       xx = xx + image:getWidth() * scale
     end
-    local image = data.media.graphics.dinoland.grassLeft
+    local image = data.media.graphics[ctx.map.name].grassLeft
     local scale = 32 / image:getHeight()
     g.setColor(255, 255, 255)
     g.draw(image, x1, y - obstacle.height / 2 - padding, 0, scale, scale)
-    local image = data.media.graphics.dinoland.grassRight
+    local image = data.media.graphics[ctx.map.name].grassRight
     g.draw(image, x2, y - obstacle.height / 2 - padding, 0, scale, scale, image:getWidth())
   end
 
@@ -65,14 +65,21 @@ function Map:draw()
   local inc = image:getWidth() * scale
   for n = 4, 1, -1 do
     for x = -500, self.width, inc * 2 do
-      image = data.media.graphics.dinoland.background['leftBg' .. n]
+      image = data.media.graphics[ctx.map.name].background.left
       g.draw(image, x + ctx.pigeon.body:getX() / 2, self.height, 0, scale, scale, 0, image:getHeight())
-      image = data.media.graphics.dinoland.background['rightBg' .. n]
+      image = data.media.graphics[ctx.map.name].background.right
       g.draw(image, x + inc + ctx.pigeon.body:getX() / 2, self.height, 0, scale, scale, 0, image:getHeight())
     end
   end
 
-  g.setColor(136, 87, 44)
+  local groundColor
+  if ctx.map.name == 'dinoland' then
+    groundColor = {136, 87, 44}
+  else
+    groundColor = {136, 87, 44}
+  end
+
+  g.setColor(groundColor)
   physics.draw('fill', self.ground)
 
   love.math.setRandomSeed(1)
@@ -81,7 +88,7 @@ function Map:draw()
   for i = 1, #self.obstacles do
     local obstacle = self.obstacles[i]
     love.math.setRandomSeed(obstacle.body:getX() + obstacle.width)
-    g.setColor(obstacle.color or {136, 87, 44})
+    g.setColor(groundColor)
     physics.draw('fill', obstacle)
 
     drawGrass(obstacle)
