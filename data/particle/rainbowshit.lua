@@ -11,6 +11,7 @@ RainbowShit.options.sizeVariation = .4
 RainbowShit.options.areaSpread = {'normal', 10, 10}
 RainbowShit.options.rotation = {0, 2 * math.pi}
 RainbowShit.options.spin = {-10, 10}
-RainbowShit.options.speed = {100, 200}
+RainbowShit.options.speed = {200, 300}
+RainbowShit.options.spread = math.pi / 6
 
 return RainbowShit
