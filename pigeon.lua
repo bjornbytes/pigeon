@@ -181,7 +181,7 @@ function Pigeon:update()
   local dir = (-bone.worldRotation * math.pi / 180) - .2
   x = x + math.cos(dir) * (bone.data.length + 100) * self.animation.scale
   y = y + math.sin(dir) * (bone.data.length + 100) * self.animation.scale
-  ctx.particles:emit('smoke', x, y, 3, {direction = -bone.worldRotation * math.pi / 180})
+  ctx.particles:emit(self.rainbowShitTimer > 0 and 'rainbowshit' or 'smoke', x, y, 3, {direction = -bone.worldRotation * math.pi / 180})
   skeleton.flipY = false
 
   self.crushGrace = timer.rot(self.crushGrace)
