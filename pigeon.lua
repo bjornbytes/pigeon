@@ -213,9 +213,11 @@ function Pigeon:draw()
   local x, y = self.body:getPosition()
   self.animation:draw(x, y + self.shapeSize / 2, {noupdate = ctx.paused})
 
-  local x1, y1, x2, y2 = self:getGroundRaycastPoints()
-  g.setColor(self.grounded and {0, 255, 0} or {255, 0, 0})
-  g.line(x1, y1, x2, y2)
+  if ctx.debug then
+    local x1, y1, x2, y2 = self:getGroundRaycastPoints()
+    g.setColor(self.grounded and {0, 255, 0} or {255, 0, 0})
+    g.line(x1, y1, x2, y2)
+  end
 
   if ctx.debug then
     g.setColor(255, 255, 255)
