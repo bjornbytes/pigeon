@@ -38,17 +38,31 @@ function Kingdumb:init(index)
     makeObstacle(4300, 0, 200, 100)
     makeObstacle(4100, 0, 200, 200)
   elseif self.index == 2 then
-    self.width = 5800
+    self.width = 5600
     self.height = 900
 
     makeObstacle(1700, 0, 400, 300)
     makeObstacle(1500, 0, 100, 200)
     makeObstacle(1500, 0, 600, 100)
+
+    makeObstacle(3200, 0, 300, 200)
+    makeObstacle(3200, 0, 600, 100)
+
+    makeObstacle(4000, 0, 100, 300)
+    makeObstacle(4000, 0, 300, 100)
   elseif self.index == 3 then
-    self.width = 6000
+    self.width = 6400
     self.height = 900
 
-    makeObstacle(4200, 0, 600, 100)
+    makeObstacle(1400, 200, 400, 100)
+    makeObstacle(1400, 100, 400, 100)
+    makeObstacle(1400, 0, 400, 100)
+
+    makeObstacle(3300, 0, 200, 200)
+    makeObstacle(3000, 0, 800, 100)
+
+    makeObstacle(4200, 0, 200, 350)
+    makeObstacle(4500, 0, 600, 100)
   end
 
   Map.init(self)
@@ -95,81 +109,88 @@ function Kingdumb:spawnHuts()
       ctx.enemies:add(Peasant, {x = 3900 + love.math.random() * 600, y = self.height - self.ground.height})
     end
   elseif self.index == 2 then
-    makeBuilding(1050, 100)
-    makeBuilding(1350, 0)
-    makeBuilding(1200, 100)
+    makeBuilding(900, 0)
+    makeBuilding(1100, 0)
+    makeBuilding(1300, 100)
+    makeBuilding(1400, 100)
+    makeBuilding(1500, 0)
+    makeBuilding(1800, 200)
+    makeBuilding(1950, 0)
+    makeBuilding(2100, 0)
+    makeBuilding(2250, 0)
 
-    makeBuilding(2000, 300)
+    makeBuilding(3200, 0)
+    makeBuilding(3200, 200)
 
-    makeBuilding(2650, 0)
+    makeBuilding(4000, 300)
+    makeBuilding(4400, 300)
+    makeBuilding(4600, 300)
 
-    makeBuilding(3250, 100)
-    makeBuilding(3350, 0)
-    makeBuilding(3450, 100)
-    makeBuilding(3550, 0)
-    makeBuilding(3650, 100)
-
-    makeBuilding(4000, 100)
-    makeBuilding(4400, 200)
-    makeBuilding(4800, 100)
-
-    for i = 1, 20 do
-      ctx.enemies:add(Peasant, {x = 1500 + love.math.random() * 300, y = self.height - self.ground.height})
+    for i = 1, 5 do
+      ctx.enemies:add(Peasant, {x = 3150 + love.math.random() * 100, y = self.height - self.ground.height - 100})
     end
 
-    for i = 1, 10 do
-      ctx.enemies:add(Peasant, {x = 1900 + love.math.random() * 200, y = self.height - self.ground.height - 100})
+    for i = 1, 15 do
+      ctx.enemies:add(Peasant, {x = 1600 + love.math.random() * 300, y = self.height - self.ground.height - 200})
     end
 
-    for i = 1, 20 do
-      ctx.enemies:add(Peasant, {x = 2650 + love.math.random() * 400, y = self.height - self.ground.height})
+    for i = 1, 35 do
+      ctx.enemies:add(Peasant, {x = 2300 + love.math.random() * 600, y = self.height - self.ground.height - 200})
     end
 
-    for i = 1, 20 do
-      ctx.enemies:add(Peasant, {x = 4100 + love.math.random() * 600, y = self.height - self.ground.height})
-    end
-
-    for i = 1, 20 do
-      ctx.enemies:add(Peasant, {x = 4100 + love.math.random() * 600, y = self.height - self.ground.height - 200})
+    for i = 1, 35 do
+      ctx.enemies:add(Peasant, {x = 4000 + love.math.random() * 800, y = self.height - self.ground.height})
     end
   elseif self.index == 3 then
-    makeBuilding(900, 0)
+    for i = 1, 25 do
+      ctx.enemies:add(Peasant, {x = 700 + love.math.random() * 400, y = self.height - self.ground.height})
+    end
+
+    makeBuilding(1300, 0)
+    makeBuilding(1400, 0)
     makeBuilding(1500, 0)
-    makeBuilding(2100, 0)
 
-    for i = 1, 15 do
-      ctx.enemies:add(Peasant, {x = 1000 + love.math.random() * 400, y = self.height - self.ground.height})
+    makeBuilding(1400, 100)
+
+    makeBuilding(1350, 200)
+    makeBuilding(1450, 200)
+
+    makeBuilding(1400, 300)
+
+    makeBuilding(1700, 0)
+    makeBuilding(1850, 0)
+
+    for i = 1, 25 do
+      ctx.enemies:add(Peasant, {x = 2000 + love.math.random() * 500, y = self.height - self.ground.height})
     end
 
-    for i = 1, 15 do
-      ctx.enemies:add(Peasant, {x = 1600 + love.math.random() * 400, y = self.height - self.ground.height})
+    for i = 1, 25 do
+      ctx.enemies:add(Peasant, {x = 2700 + love.math.random() * 400, y = self.height - self.ground.height - 100})
     end
 
-    makeBuilding(2500, 100)
-    makeBuilding(2900, 300)
-    makeBuilding(3000, 0)
-    makeBuilding(3150, 100)
+    makeBuilding(2900, 0)
     makeBuilding(3300, 200)
 
     for i = 1, 20 do
-      ctx.enemies:add(Peasant, {x = 2600 + love.math.random() * 800, y = self.height - self.ground.height - 200})
+      ctx.enemies:add(Peasant, {x = 3700 + love.math.random() * 400, y = self.height - self.ground.height - 350})
     end
 
-    for i = 1, 8 do
-      ctx.enemies:add(Peasant, {x = 3000 + love.math.random() * 300, y = self.height - self.ground.height})
+    makeBuilding(3600, 0)
+    makeBuilding(3800, 0)
+
+    for i = 1, 5 do
+      ctx.enemies:add(Peasant, {x = 4100 + love.math.random() * 100, y = self.height - self.ground.height - 350})
     end
 
-    makeBuilding(3950, 100)
-    makeBuilding(4450, 100)
-
-    for i = 1, 10 do
-      ctx.enemies:add(Peasant, {x = 4175 + love.math.random() * 50, y = self.height - self.ground.height - 400})
-    end
-
-    makeBuilding(5000, 200)
+    makeBuilding(4400, 100)
+    makeBuilding(4600, 100)
 
     for i = 1, 35 do
-      ctx.enemies:add(Peasant, {x = 4500 + love.math.random() * 600, y = self.height - self.ground.height})
+      ctx.enemies:add(Peasant, {x = 4900 + love.math.random() * 600, y = self.height - self.ground.height - 350})
     end
+
+    makeBuilding(5100, 0)
+    makeBuilding(5300, 0)
+    makeBuilding(5500, 0)
   end
 end
