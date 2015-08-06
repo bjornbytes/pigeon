@@ -66,6 +66,29 @@ function Kingdumb:init(index)
   end
 
   Map.init(self)
+
+  self.decorations = {}
+  for i = 1, 30 do
+    local obstacle
+    if love.math.random() < .75 then
+      obstacle = self.ground
+    else
+      obstacle = self.obstacles[love.math.random(1, #self.obstacles)]
+    end
+
+    table.insert(self.decorations, {
+      image = data.media.graphics.kingdumb['shrub' .. love.math.random(1, 2)],
+      x = obstacle.body:getX() - obstacle.width / 2 + love.math.random() * obstacle.width,
+      y = obstacle.body:getY() - obstacle.height / 2,
+      height = 30 + love.math.random() * 30,
+      direction = love.math.random() > .5 and -1 or 1
+    })
+
+    if love.math.random() < .5 then
+      self.decorations[#self.decorations].image = data.media.graphics.kingdumb['fence' .. love.math.random(1, 2)]
+      self.decorations[#self.decorations].height = 25
+    end
+  end
 end
 
 function Kingdumb:spawnHuts()
