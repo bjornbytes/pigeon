@@ -59,7 +59,7 @@ Hud.bonuses = {
     description = 'Kill everything by pecking',
     score = 250000,
     check = function()
-      return ctx.nonPeckKill == true and ctx.pigeon.pecks > 0
+      return ctx.nonPeckKill == false and ctx.pigeon.pecks > 0
     end
   },
   verticallyChallenged = {
