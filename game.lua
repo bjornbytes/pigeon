@@ -34,7 +34,7 @@ function Game:load(level, levelIndex)
   ctx.stats.maxMaxCombo = table.count(ctx.enemies.objects) + table.count(ctx.buildings.objects) + (table.count(ctx.buildings.objects) * 6)
 
   self.backgroundSound = ctx.sound:loop('background', function(sound)
-    sound:setVolume(.25)
+    sound:setVolume(.5)
   end)
 
   self.world:setContactFilter(function(fixtureA, fixtureB)
