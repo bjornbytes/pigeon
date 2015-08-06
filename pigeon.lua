@@ -190,7 +190,9 @@ function Pigeon:update()
   self:updateFeet()
 
   if self.body:getX() > ctx.goal.x then
-    self:changeState('idle')
+    if self.state ~= self.idle then
+      self:changeState('idle')
+    end
     self.animation:set('flyLoop')
     if not ctx.hud.win.active then
       ctx.hud:activateWin()
@@ -483,19 +485,8 @@ function Pigeon.idle:update()
   self:recoverFuel()
   self.animation:set('idle')
 
-  if love.keyboard.isDown('left', 'right') then
+  if love.keyboard.isDown('return') then
     return self:changeState('walk').update(self)
-  end
-
-  if love.keyboard.isDown('up') then
-    self:changeState('air')
-  elseif love.keyboard.isDown('down') then
-    self:changeState('peck')
-  elseif love.keyboard.isDown(' ') then
-    self:changeState('laser')
-  else
-    local vx, vy = self.body:getLinearVelocity()
-    self.body:setLinearVelocity(vx / 1.2, vy)
   end
 end
 
