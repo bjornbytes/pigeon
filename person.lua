@@ -129,7 +129,7 @@ function Person.dead:enter(cause)
   self.body:applyLinearImpulse(-200 + love.math.random() * 400, -200 + love.math.random() * -500)
   self.body:setAngularVelocity(-20 + love.math.random() * 40)
   ctx.hud:addScore(10, 'person', cause)
-  ctx.nonPeckKill = ctx.nonPeckKill or (cause ~= 'peck')
+  ctx.nonPeckKill = ctx.nonPeckKill or cause == 'step' or cause == 'jump'
   ctx.stats.peopleKilled = ctx.stats.peopleKilled + 1
   if self:isMale() and love.math.random() < .75 then
     self.screamSound = ctx.sound:play('scream2', function(sound)
