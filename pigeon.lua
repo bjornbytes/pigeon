@@ -197,7 +197,9 @@ function Pigeon:update()
     if not ctx.hud.win.active then
       ctx.hud:activateWin()
       ctx.sound:play('win')
-      ctx.backgroundSound:setVolume(.1)
+      if not ctx.sound.muted then
+        ctx.backgroundSound:setVolume(.1)
+      end
     end
   end
 end
