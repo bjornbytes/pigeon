@@ -1,5 +1,4 @@
 Game = class()
-
 Game.categories = {
   ground = 1,
   building = 2,
@@ -9,7 +8,7 @@ Game.categories = {
   debris = 6
 }
 
-function Game:load()
+function Game:load(level, levelIndex)
   self.stats = {
     buildingsDestroyed = 0,
     peopleKilled = 0,
@@ -19,7 +18,7 @@ function Game:load()
   self.event = Event()
   self.world = love.physics.newWorld(0, 1000)
   self.view = View()
-  self.map = Dinoland()
+  self.map = _G[level](levelIndex)
   self.pigeon = Pigeon()
   self.enemies = Manager()
   self.buildings = Manager()
@@ -68,6 +67,8 @@ function Game:update()
   self.world:update(ls.tickrate)
   self.view:update()
   self.hud:update()
+
+  ls.timescale = love.keyboard.isDown('r') and 5 or 1
 
   lurker.update()
 end
