@@ -299,6 +299,10 @@ function Hud:addScore(amount, kind, cause)
 end
 
 function Hud:activateWin()
+  self.score = self.score + self.bubble.amount * self.bubble.multiplier
+  ctx.stats.maxCombo = math.max(ctx.stats.maxCombo, self.bubble.multiplier)
+  self:resetBubble()
+
   self.win.active = true
   self.win.bonuses = {}
   collectgarbage()

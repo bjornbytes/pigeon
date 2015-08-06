@@ -67,7 +67,7 @@ function Pigeon:init()
         local bone = skeleton:findBone('rightfoot')
         local x = skeleton.x + bone.worldX
         local y = skeleton.y + bone.worldY
-        ctx.particles:emit('dust', x, y, 15)
+        ctx.particles:emit('feetdust', x, y, 20)
       else
         self.walk.firstShake = false
       end
@@ -96,7 +96,7 @@ function Pigeon:init()
         local bone = skeleton:findBone('leftfoot')
         local x = skeleton.x + bone.worldX
         local y = skeleton.y + bone.worldY
-        ctx.particles:emit('dust', x, y, 15)
+        ctx.particles:emit('feetdust', x, y, 20)
       else
         self.walk.firstShake = false
       end

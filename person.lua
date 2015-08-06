@@ -129,7 +129,7 @@ function Person.dead:enter(cause)
   ctx.hud:addScore(10, 'person', cause)
   ctx.nonPeckKill = ctx.nonPeckKill or (cause ~= 'peck')
   ctx.stats.peopleKilled = ctx.stats.peopleKilled + 1
-  if self.gender == 'male' and love.math.random() < .75 then
+  if self:isMale() and love.math.random() < .75 then
     self.screamSound = ctx.sound:play('scream2', function(sound)
       sound:setVolume(.75)
       sound:setPitch(.8 + love.math.random() * .4)
@@ -147,7 +147,7 @@ function Person.dead:enter(cause)
       sound:setPitch(.8 + love.math.random() * .4)
     end)
     self.screamed = true
-  elseif love.math.random() < .1 and self.gender == 'male' then
+  elseif love.math.random() < .1 and self:isMale() then
     self.screamSound = ctx.sound:play('scream4', function(sound)
       sound:setVolume(.75)
       sound:setPitch(.8 + love.math.random() * .4)
@@ -165,7 +165,7 @@ function Person.dead:enter(cause)
       sound:setPitch(.9 + love.math.random() * .2)
     end)
     self.screamed = true
-  elseif love.math.random() < .3 and self.gender == 'male' then
+  elseif love.math.random() < .3 and self:isMale() then
     self.screamSound = ctx.sound:play('scream7', function(sound)
       sound:setVolume(.75)
       sound:setPitch(.9 + love.math.random() * .2)
@@ -177,19 +177,19 @@ function Person.dead:enter(cause)
       sound:setPitch(.9 + love.math.random() * .2)
     end)
     self.screamed = true
-  elseif love.math.random() < .3 and self.gender == 'male' then
+  elseif love.math.random() < .3 and self:isMale() then
     self.screamSound = ctx.sound:play('scream9', function(sound)
       sound:setVolume(.75)
       sound:setPitch(.9 + love.math.random() * .2)
     end)
     self.screamed = true
-  elseif love.math.random() < .01 and self.gender == 'male' then
+  elseif love.math.random() < .01 and self:isMale()  then
     self.screamSound = ctx.sound:play('scream10', function(sound)
       sound:setVolume(1)
       sound:setPitch(.9 + love.math.random() * .2)
     end)
     self.screamed = true
-  elseif love.math.random() < .3 and self.gender == 'male' then
+  elseif love.math.random() < .3 and self:isMale() then
     self.screamSound = ctx.sound:play('scream11', function(sound)
       sound:setVolume(.75)
       sound:setPitch(.9 + love.math.random() * .2)
@@ -213,4 +213,8 @@ function Person.dead:update()
     self.screamed = true
     self.screamSound = ctx.sound:play('scream1')
   end
+end
+
+function Person:isMale()
+  return self.gender == 'male' or self.gender == 'wizard' or self.gender == 'knight'
 end

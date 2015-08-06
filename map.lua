@@ -64,11 +64,11 @@ function Map:draw()
 
   local inc = image:getWidth() * scale
   for n = 4, 1, -1 do
-    for x = 0, self.width, image:getWidth() * scale * 2 do
+    for x = -500, self.width, inc * 2 do
       image = data.media.graphics.dinoland.background['leftBg' .. n]
-      g.draw(image, x, self.height, 0, scale, scale, 0, image:getHeight())
+      g.draw(image, x + ctx.pigeon.body:getX() / 2, self.height, 0, scale, scale, 0, image:getHeight())
       image = data.media.graphics.dinoland.background['rightBg' .. n]
-      g.draw(image, x + inc, self.height, 0, scale, scale, 0, image:getHeight())
+      g.draw(image, x + inc + ctx.pigeon.body:getX() / 2, self.height, 0, scale, scale, 0, image:getHeight())
     end
   end
 

@@ -4,7 +4,11 @@ Building.tag = 'building'
 Building.size = 60
 
 function Building:activate()
-  self.image = data.media.graphics.dinoland['hut' .. love.math.random(1, 2)]
+  if ctx.map.name == 'dinoland' then
+    self.image = data.media.graphics.dinoland['hut' .. love.math.random(1, 2)]
+  else
+    self.image = data.media.graphics.kingdumb[love.math.random() < .5 and 'castle' or 'house']
+  end
   self.alpha = 1
 
   self.personTimer = 6 + love.math.random() * 3
@@ -40,8 +44,9 @@ function Building:update()
   end)
 
   if self.justDestroyed then
+    local personType = ctx.map.defaultPersonType
     for i = 1, 6 do
-      ctx.enemies:add(Caveman, {x = self.x - self.size / 2 + self.size * love.math.random(), y = self.y, invincible = 1, state = Caveman.panic})
+      ctx.enemies:add(personType, {x = self.x - self.size / 2 + self.size * love.math.random(), y = self.y, invincible = 1, state = personType.idle})
     end
 
     self.justDestroyed = false
@@ -66,7 +71,7 @@ function Building:draw()
   local x, y = self.body:getPosition()
   local angle = self.body:getAngle()
   g.setColor(255, 255, 255, 255 * math.clamp(lerpd.alpha, 0, 1))
-  g.draw(self.image, x, y, angle, scale, scale, self.image:getWidth() / 2, self.image:getHeight() / 2)
+  g.draw(self.image, x, y + self.size / 2 - (self.image:getHeight() * scale * .5), angle, scale, scale, self.image:getWidth() / 2, self.image:getHeight() / 2)
 
   self.phlerp:delerp()
 end
@@ -87,6 +92,10 @@ function Building:collideWith(other)
     return false
   end
 
+  if other.tag == 'platform' and select(2, self.body:getLinearVelocity()) > 300 then
+    ctx.particles:emit('dust', self.body:getX(), self.body:getY(), 10)
+  end
+
   return true
 end
 
@@ -104,6 +113,7 @@ function Building:destroy()
     sound:setVolume(1)
   end)
   ctx.stats.buildingsDestroyed = ctx.stats.buildingsDestroyed + 1
+  ctx.particles:emit('dust', self.body:getX(), self.body:getY(), 25)
 end
 
 function Building:paused()
