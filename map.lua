@@ -1,9 +1,12 @@
 Map = class()
 
 function Map:init()
+  self.width = self.width or love.graphics.getWidth()
+  self.height = self.height or 900
+  self.obstacles = self.obstacles or {}
   self.ground = {}
   self.ground.width = self.width
-  self.ground.height = self.groundHeight
+  self.ground.height = self.groundHeight or 100
   self.ground.body = love.physics.newBody(ctx.world, self.width / 2, self.height - self.ground.height / 2, 'static')
   self.ground.shape = love.physics.newRectangleShape(self.width, self.ground.height)
 
@@ -13,7 +16,8 @@ function Map:init()
   self.ground.body:setUserData(self)
 
   self.clouds = {}
-  for i = 1, 8 do
+  local cloudCount = isa(ctx, Game) and 8 or 2
+  for i = 1, cloudCount do
     table.insert(self.clouds, {
       x = love.math.random(100, self.width),
       y = love.math.random(0, 450),
@@ -25,14 +29,14 @@ function Map:init()
   end
   self.cloudTimer = 15
 
-  ctx.view.xmax = self.width
-  ctx.view.ymax = self.height
-  ctx.event:emit('view.register', {object = self})
+  if ctx.view then
+    ctx.view.xmax = self.width
+    ctx.view.ymax = self.height
+    ctx.event:emit('view.register', {object = self})
+  end
 end
 
 function Map:update()
-  ctx.view.xmax = self:getMaxX()
-
   self.cloudTimer = timer.rot(self.cloudTimer, function()
     self:createCloud()
     return love.math.random(10, 25)
@@ -60,6 +64,8 @@ end
 
 function Map:draw()
   local g = love.graphics
+  local viewx = ctx.view and ctx.view.x or 0
+  local pigeonx = ctx.pigeon and ctx.pigeon.body:getX() or 0
 
   local function drawGrass(obstacle)
     local x, y = obstacle.body:getPosition()
@@ -89,15 +95,15 @@ function Map:draw()
   g.setColor(255, 255, 255)
   local image = data.media.graphics.dinoland.background.sky
   local scale = (600) / image:getHeight()
-  g.draw(image, ctx.view.x, self.height, 0, scale, scale, 0, image:getHeight())
+  g.draw(image, viewx, self.height, 0, scale, scale, 0, image:getHeight())
 
   local inc = image:getWidth() * scale
   for n = 4, 1, -1 do
     for x = -500, self.width, inc * 2 do
       image = data.media.graphics[ctx.map.name].background.left
-      g.draw(image, x + ctx.pigeon.body:getX() / 2, self.height, 0, scale, scale, 0, image:getHeight())
+      g.draw(image, x + pigeonx / 2, self.height, 0, scale, scale, 0, image:getHeight())
       image = data.media.graphics[ctx.map.name].background.right
-      g.draw(image, x + inc + ctx.pigeon.body:getX() / 2, self.height, 0, scale, scale, 0, image:getHeight())
+      g.draw(image, x + inc + pigeonx / 2, self.height, 0, scale, scale, 0, image:getHeight())
     end
   end
 
@@ -134,7 +140,7 @@ function Map:draw()
     g.setColor(255, 255, 255, cloud.alpha)
     local w, h = cloud.image:getDimensions()
     local scale = cloud.height / h
-    g.draw(cloud.image, cloud.x + ctx.pigeon.body:getX() / 4, cloud.y, 0, scale, scale, w / 2, h / 2)
+    g.draw(cloud.image, cloud.x + pigeonx / 4, cloud.y, 0, scale, scale, w / 2, h / 2)
   end)
 end
 

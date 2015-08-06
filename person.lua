@@ -26,7 +26,7 @@ function Person:activate()
   self.screamed = false
   self.splatted = false
 
-  ctx.event:emit('view.register', {object = self})
+  if ctx.view then ctx.event:emit('view.register', {object = self}) end
 
   Enemy.activate(self)
 end

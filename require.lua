@@ -32,6 +32,7 @@ require 'kingdumb'
 require 'goal'
 require 'projectile'
 require 'spear'
+require 'menu'
 
 require 'hud'
 

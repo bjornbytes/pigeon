@@ -46,7 +46,7 @@ Caveman.idle = {}
 Caveman.idle.walkRate = {.4, .5}
 function Caveman.idle:update()
   self.image = data.media.graphics.dinoland[self.gender]['normal' .. self.index]
-  if self:distanceTo(ctx.pigeon) < 300 then
+  if ctx.pigeon and self:distanceTo(ctx.pigeon) < 300 then
     self:changeState(love.math.random() < .5 and 'panic' or 'attack')
   end
 
