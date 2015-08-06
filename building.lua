@@ -71,7 +71,7 @@ function Building:draw()
   local x, y = self.body:getPosition()
   local angle = self.body:getAngle()
   g.setColor(255, 255, 255, 255 * math.clamp(lerpd.alpha, 0, 1))
-  g.draw(self.image, x, y + self.size / 2 - (self.image:getHeight() * scale * .5), angle, scale, scale, self.image:getWidth() / 2, self.image:getHeight() / 2)
+  g.draw(self.image, x, y + self.size / 2 - (self.image:getHeight() * scale * .5) + 4, angle, scale, scale, self.image:getWidth() / 2, self.image:getHeight() / 2)
 
   self.phlerp:delerp()
 end

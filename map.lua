@@ -16,7 +16,7 @@ function Map:init()
   for i = 1, 8 do
     table.insert(self.clouds, {
       x = love.math.random(100, self.width),
-      y = love.math.random(0, 500),
+      y = love.math.random(0, 450),
       height = love.math.random(80, 150),
       speed = love.math.random(10, 20),
       image = data.media.graphics['cloud' .. love.math.random(1, 3)],
@@ -127,7 +127,7 @@ function Map:draw()
   g.setColor(255, 255, 255)
   table.each(self.decorations, function(d)
     local scale = d.height / d.image:getHeight()
-    g.draw(d.image, d.x, d.y, 0, scale * d.direction, scale, d.image:getWidth() / 2, d.image:getHeight())
+    g.draw(d.image, d.x, d.y + 8, 0, scale * d.direction, scale, d.image:getWidth() / 2, d.image:getHeight())
   end)
 
   table.each(self.clouds, function(cloud)
@@ -151,7 +151,7 @@ end
 function Map:createCloud()
   table.insert(self.clouds, {
     x = self.width + 100,
-    y = love.math.random(0, 500),
+    y = love.math.random(0, 450),
     height = love.math.random(80, 150),
     speed = love.math.random(10, 20),
     image = data.media.graphics['cloud' .. love.math.random(1, 3)],

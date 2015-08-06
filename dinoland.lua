@@ -119,6 +119,28 @@ function Dinoland:init(index)
   end
 
   Map.init(self)
+
+  self.decorations = {}
+  for i = 1, 20 do
+    local obstacle
+    if love.math.random() < .75 then
+      obstacle = self.ground
+    else
+      obstacle = self.obstacles[love.math.random(1, #self.obstacles)]
+    end
+
+    table.insert(self.decorations, {
+      image = data.media.graphics.dinoland['shrub' .. love.math.random(1, 4)],
+      x = obstacle.body:getX() - obstacle.width / 2 + love.math.random() * obstacle.width,
+      y = obstacle.body:getY() - obstacle.height / 2,
+      height = 30 + love.math.random() * 50,
+      direction = love.math.random() > .5 and -1 or 1
+    })
+
+    if love.math.random() < .01 then
+      self.decorations[#self.decorations].image = data.media.graphics.dinoland.ufo
+    end
+  end
 end
 
 function Dinoland:spawnHuts()
