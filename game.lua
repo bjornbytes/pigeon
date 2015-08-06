@@ -86,7 +86,7 @@ function Game:keypressed(key)
     ctx.sound:mute()
   elseif key == 'p' then
     self.paused = not self.paused
-  elseif key == 'return' and ctx.hud.win.active then
+  elseif (key == 'return' or key == ' ') and ctx.hud.win.active then
     Context:remove(ctx)
     local world
     local index

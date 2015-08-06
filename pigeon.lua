@@ -145,6 +145,8 @@ function Pigeon:init()
   self.jumps = 0
   self.pecks = 0
 
+  self.peckDirty = false
+
   self:initBeak()
   self:initFeet()
 
@@ -185,6 +187,9 @@ function Pigeon:update()
   skeleton.flipY = false
 
   self.crushGrace = timer.rot(self.crushGrace)
+  if not love.keyboard.isDown(' ') then
+    self.peckDirty = false
+  end
 
   self:updateBeak()
   self:updateFeet()
@@ -252,7 +257,8 @@ function Pigeon:draw()
 end
 
 function Pigeon:keypressed(key)
-  if key == 'return' and self.state == self.idle then
+  if (key == 'return' or key == ' ') and self.state == self.idle then
+    self.peckDirty = key == ' '
     self:changeState('walk')
   end
 end
@@ -507,7 +513,7 @@ function Pigeon.walk:update()
 
   if love.keyboard.isDown('up') then
     return self:changeState('air')
-  elseif love.keyboard.isDown(' ') then
+  elseif love.keyboard.isDown(' ') and not self.peckDirty then
     self:changeState('peck')
   end
 
