@@ -154,6 +154,8 @@ function Pigeon:init()
 
   self.rainbowShitTimer = 0
 
+  self.joystick = #love.joystick.getJoysticks() > 0 and love.joystick.getJoysticks()[1]
+
   ctx.event:emit('view.register', {object = self, depth = -10})
 end
 
@@ -508,9 +510,9 @@ function Pigeon.walk:update()
 
   self:recoverFuel()
 
-  if love.keyboard.isDown('up') then
+  if love.keyboard.isDown('up', 'w', 'z') then
     return self:changeState('air')
-  elseif love.keyboard.isDown(' ') and not self.peckDirty then
+  elseif love.keyboard.isDown(' ', 'down', 's', 'x') and not self.peckDirty then
     self:changeState('peck')
   end
 
