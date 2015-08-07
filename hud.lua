@@ -5,6 +5,7 @@ Hud.bonuses = {
     name = 'Wrecking Ball',
     description = 'Kill all buildings',
     score = 100000,
+    color = 'silver',
     check = function()
       local aliveBuilding = false
       table.each(ctx.buildings.objects, function(building)
@@ -20,6 +21,7 @@ Hud.bonuses = {
     name = 'Big Bad Pigeon',
     description = 'Kill no buildings',
     score = 50000,
+    color = 'bronze',
     check = function()
       return ctx.stats.buildingsDestroyed == 0
     end
@@ -28,6 +30,7 @@ Hud.bonuses = {
     name = 'Genocide',
     description = 'Kill all people',
     score = 250000,
+    color = 'gold',
     check = function()
       local aliveBuilding = false
       table.each(ctx.buildings.objects, function(building)
@@ -50,6 +53,7 @@ Hud.bonuses = {
     name = 'Hopper',
     description = 'Don\'t stop jumping',
     score = 100000,
+    color = 'silver',
     check = function()
       return ctx.pigeon.stepsTaken == 0
     end
@@ -58,6 +62,7 @@ Hud.bonuses = {
     name = 'Woodpecker',
     description = 'Kill everything by pecking',
     score = 250000,
+    color = 'gold',
     check = function()
       return ctx.nonPeckKill == false and ctx.pigeon.pecks > 0
     end
@@ -66,6 +71,7 @@ Hud.bonuses = {
     name = 'Vertically Challenged',
     description = 'Don\'t jump',
     score = 25000,
+    color = 'bronze',
     check = function()
       return ctx.pigeon.jumps == 0
     end
@@ -74,6 +80,7 @@ Hud.bonuses = {
     name = 'Stiff Neck',
     description = 'Don\'t peck',
     score = 25000,
+    color = 'bronze',
     check = function()
       return ctx.pigeon.pecks == 0
     end
@@ -82,6 +89,7 @@ Hud.bonuses = {
     name = 'Pacifist',
     description = 'Don\'t kill anything',
     score = 500000,
+    color = 'gold',
     check = function()
       return ctx.stats.buildingsDestroyed == 0 and ctx.stats.peopleKilled == 0
     end
@@ -90,6 +98,7 @@ Hud.bonuses = {
     name = 'Scrub',
     description = 'Get a max combo of 25 or less',
     score = 50000,
+    color = 'bronze',
     check = function()
       return ctx.stats.maxCombo <= 25
     end
@@ -98,6 +107,7 @@ Hud.bonuses = {
     name = 'Badass',
     description = 'Get a max combo of 100 or higher',
     score = 100000,
+    color = 'silver',
     check = function()
       return ctx.stats.maxCombo >= 100
     end
@@ -106,6 +116,7 @@ Hud.bonuses = {
     name = 'Korean',
     description = 'Get the highest possible max combo',
     score = 500000,
+    color = 'gold',
     check = function()
       return ctx.stats.maxCombo >= ctx.stats.maxMaxCombo
     end
@@ -114,6 +125,7 @@ Hud.bonuses = {
     name = 'Fabulous',
     description = 'End the game in turbo mode',
     score = 100000,
+    color = 'silver',
     check = function()
       return ctx.pigeon.rainbowShitTimer > 0
     end
@@ -122,6 +134,7 @@ Hud.bonuses = {
     name = 'You Tried',
     description = 'Get no medals',
     score = 250000,
+    color = 'silver',
     postCheck = function()
       return #ctx.hud.win.bonuses == 0
     end
@@ -133,6 +146,9 @@ function Hud:init()
 
   self.score = 0
   self.scoreDisplay = self.score
+
+  self.startTimer = 3
+  self.goTimer = 1.5
 
   self.bubble = {}
   self:resetBubble()
@@ -157,6 +173,15 @@ function Hud:update()
   self.bubble.prevy = self.bubble.y
   self.bubble.prevScale = self.bubble.scale
   self.bubble.prevTimer = self.bubble.timer
+
+  self.startTimer = timer.rot(self.startTimer, function()
+    ctx.pigeon:changeState('walk')
+    ctx.startTick = ls.tick
+  end)
+
+  if self.startTimer == 0 then
+    self.goTimer = timer.rot(self.goTimer)
+  end
 
   if self.bubble.active then
     self.bubble.y = math.lerp(self.bubble.y, self.bubble.targetY, 12 * ls.tickrate)
@@ -241,25 +266,130 @@ function Hud:gui()
   g.setColor(255, 0, 0)
   g.rectangle('fill', 2, 50 + baseHeight * (1 - prc), baseWidth, baseHeight * prc)
 
+  if self.startTimer > 0 then
+    local str = math.ceil(self.startTimer)
+    g.setFont('media/fonts/handDrawnShapes.ttf', 80)
+    g.setColor(0, 0, 0)
+    g.print(str, gw / 2 - g.getFont():getWidth(str) / 2 + 2, 200 - g.getFont():getHeight() / 2 + 2)
+    g.setColor(255, 255, 255)
+    g.print(str, gw / 2 - g.getFont():getWidth(str) / 2, 200 - g.getFont():getHeight() / 2)
+  elseif self.goTimer > 0 then
+    local str = 'GO!'
+    local alpha = 255 * math.clamp(self.goTimer, 0, 1)
+    g.setFont('media/fonts/handDrawnShapes.ttf', 80)
+    g.setColor(0, 0, 0, alpha)
+    g.print(str, gw / 2 - g.getFont():getWidth(str) / 2 + 2, 200 - g.getFont():getHeight() / 2 + 2)
+    g.setColor(255, 255, 255, alpha)
+    g.print(str, gw / 2 - g.getFont():getWidth(str) / 2, 200 - g.getFont():getHeight() / 2)
+  end
+
   if self.win.active then
-    g.setColor(0, 0, 0, 200)
+    g.setColor(0, 0, 0, 100)
     local x = math.lerp(self.win.prevx, self.win.x, ls.accum / ls.tickrate)
     local w, h = self.win.width, self.win.height
-    g.rectangle('fill', x - w / 2, gh / 2 - h / 2, w, h)
+    w = gw
+    g.rectangle('fill', 0, 0, gw, gh)
+    g.setFont('media/fonts/handDrawnShapes.ttf', 40)
+    local str = 'Congration you done it!'
+    local yy = 64
+    g.setColor(0, 0, 0)
+    g.print(str, x - g.getFont():getWidth(str) / 2 + 2, yy + 2)
     g.setColor(255, 255, 255)
-    g.setFont('media/fonts/BebasNeueBold.otf', 32)
-    local str = 'Congration you done it'
-    g.print(str, x - g.getFont():getWidth(str) / 2, gh / 2 - h / 2 + 32)
-
-    local yy = gh / 2 - h / 2 + 80
-    local str = math.round(self.scoreDisplay)
     g.print(str, x - g.getFont():getWidth(str) / 2, yy)
-    yy = yy + g.getFont():getHeight() + 1
+    yy = yy + g.getFont():getHeight() + 10
 
-    for i = 1, #self.win.bonuses do
+    local str = math.round(self.scoreDisplay)
+    g.setColor(0, 0, 0)
+    g.print('Your score:', x - g.getFont():getWidth('Your score:') / 2 + 2, yy + 2)
+    g.setColor(255, 255, 255)
+    g.print('Your score:', x - g.getFont():getWidth('Your score:') / 2, yy)
+    yy = yy + g.getFont():getHeight() + 10
+    g.setColor(0, 0, 0)
+    g.print(str, x - g.getFont():getWidth(str) / 2 + 2, yy + 2)
+    g.setColor(255, 255, 255)
+    g.print(str, x - g.getFont():getWidth(str) / 2, yy)
+    yy = yy + g.getFont():getHeight() + 32
+
+    g.setFont('media/fonts/runescape.ttf', 16)
+    local xx = gw / 4 - 100
+    local d = (gw / 2) - x
+    local yy = gh * .7
+    local function printShadow(str, x, y, off)
+      off = off or 1
+      g.setColor(0, 0, 0)
+      g.print(str, x - d + off, y + off)
+      g.setColor(255, 255, 255)
+      g.print(str, x - d, y)
+    end
+
+    printShadow('Time:', xx, yy)
+    local t = math.floor(ctx.stats.time)
+    local seconds = math.floor(t % 60)
+    local minutes = math.floor(t / 60)
+    if minutes < 10 then minutes = '0' .. minutes end
+    if seconds < 10 then seconds = '0' .. seconds end
+    printShadow(minutes .. ':' .. seconds, xx + 150, yy)
+    yy = yy + g.getFont():getHeight() + 6
+
+    printShadow('Max Combo:', xx, yy)
+    printShadow(ctx.stats.maxCombo, xx + 150, yy)
+    yy = yy + g.getFont():getHeight() + 6
+
+    printShadow('People Killed:', xx, yy)
+    printShadow(ctx.stats.peopleKilled .. ' (' .. (ctx.stats.peoplePercentage * 100) .. '%)', xx + 150, yy)
+    yy = yy + g.getFont():getHeight() + 6
+
+    xx = gw * .75 - 100
+    yy = gh * .7
+
+    printShadow('Buildings Destroyed:', xx, yy)
+    printShadow(ctx.stats.buildingsDestroyed .. ' (' .. (ctx.stats.buildingPercentage * 100) .. '%)', xx + 150, yy)
+    yy = yy + g.getFont():getHeight() + 6
+
+    printShadow('Pecks:', xx, yy)
+    printShadow(ctx.pigeon.pecks, xx + 150, yy)
+    yy = yy + g.getFont():getHeight() + 6
+
+    printShadow('Jumps:', xx, yy)
+    printShadow(ctx.pigeon.jumps, xx + 150, yy)
+    yy = yy + g.getFont():getHeight() + 6
+
+    --
+    local ct = #self.win.bonuses
+    local inc = 200
+    local xx = x - (inc * (ct - 1) / 2)
+    while inc * ct > gw do
+      inc = inc - 10
+    end
+    local mx, my = love.mouse.getPosition()
+    local flyoutService = nil
+    g.setFont('media/fonts/handDrawnShapes.ttf', 24)
+    for i = 1, ct do
       local name = self.win.bonuses[i]
-      g.print(self.bonuses[name].name .. ': ' .. self.bonuses[name].description .. ' (+' .. self.bonuses[name].score .. ')', x - w / 2 + 32, yy)
-      yy = yy + g.getFont():getHeight() + 1
+      local bonus = self.bonuses[name]
+      local image = data.media.graphics.ui[bonus.color]
+      local scale = 80 / image:getHeight()
+      g.setColor(255, 255, 255)
+      g.draw(image, xx, gh / 2 - 20, 0, scale, scale, image:getWidth() / 2, image:getHeight() / 2)
+      g.setColor(0, 0, 0)
+      local str = bonus.name
+      g.print(str, xx - g.getFont():getWidth(str) / 2 + 2, gh / 2 - 20 + 60 + 2)
+      g.setColor(255, 255, 255)
+      g.print(str, xx - g.getFont():getWidth(str) / 2, gh / 2 - 20 + 60)
+      if math.inside(mx, my, xx - image:getWidth() * scale / 2, gh / 2 - 20 - image:getHeight() * scale / 2, image:getWidth() * scale, image:getHeight() * scale) then
+        flyoutService = bonus.description
+      end
+      xx = xx + inc
+    end
+
+    g.setFont('media/fonts/runescape.ttf', 16)
+    if flyoutService then
+      g.setColor(0, 0, 0, 200)
+      local w = g.getFont():getWidth(flyoutService) + 8
+      local h = g.getFont():getHeight() + 8
+      g.rectangle('fill', mx + 8, my + 8, w, h)
+      g.setColor(255, 255, 255)
+      g.print(flyoutService, mx + 12, my + 12)
     end
   end
 end
@@ -319,8 +449,8 @@ function Hud:activateWin()
   ctx.stats.maxCombo = math.max(ctx.stats.maxCombo, self.bubble.multiplier)
   self:resetBubble()
 
-  ctx.stats.peoplePercentage = ctx.stats.peopleKilled / ctx.stats.originalPeople
-  ctx.stats.buildingPercentage = ctx.stats.buildingsDestroyed / ctx.stats.originalBuildings
+  ctx.stats.peoplePercentage = lume.round(ctx.stats.peopleKilled / ctx.stats.originalPeople, .01)
+  ctx.stats.buildingPercentage = lume.round(ctx.stats.buildingsDestroyed / ctx.stats.originalBuildings, .01)
   ctx.stats.time = (ls.tick - ctx.startTick) * ls.tickrate
 
   self.win.active = true

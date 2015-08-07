@@ -259,10 +259,6 @@ function Pigeon:draw()
 end
 
 function Pigeon:keypressed(key)
-  if (key == 'return' or key == ' ') and self.state == self.idle then
-    self.peckDirty = key == ' '
-    self:changeState('walk')
-  end
 end
 
 function Pigeon:paused()
