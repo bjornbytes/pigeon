@@ -1,4 +1,6 @@
-Pigeon = class()----------------
+Pigeon = class()
+
+----------------
 -- Constants
 ----------------
 Pigeon.walkForce = 600
