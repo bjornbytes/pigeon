@@ -96,7 +96,7 @@ function Game:keypressed(key)
     local world
     local index
     if ctx.map.name == 'kingdumb' and ctx.map.index == 3 then
-      -- Menu
+      Context:add(Menu)
       return
     elseif ctx.map.name == 'dinoland' and ctx.map.index == 3 then
       world = 'Kingdumb'

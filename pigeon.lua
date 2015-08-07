@@ -431,12 +431,14 @@ function Pigeon:updateFeet()
 end
 
 function Pigeon:activateRainbowShit()
-  self.rainbowShitTimer = self.rainbowShitTimer + 5
+  self.rainbowShitTimer = 5--self.rainbowShitTimer + 5
   self.rainbowShits = self.rainbowShits + 1
   ctx.backgroundSound:pause()
-  self.rainbowShitSound = ctx.sound:loop('disco', function(sound)
-    sound:setVolume(1)
-  end)
+  if not self.rainbowShitSound or self.rainbowShitSound:isStopped() then
+    self.rainbowShitSound = ctx.sound:loop('disco', function(sound)
+      sound:setVolume(1)
+    end)
+  end
   flux.to(self.animation, .2, {scale = 1}, 'elasticout')
 end
 

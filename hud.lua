@@ -303,7 +303,9 @@ function Hud:gui()
     g.print('Your score:', x - g.getFont():getWidth('Your score:') / 2 + 2, yy + 2)
     g.setColor(255, 255, 255)
     g.print('Your score:', x - g.getFont():getWidth('Your score:') / 2, yy)
-    yy = yy + g.getFont():getHeight() + 10
+    yy = yy + g.getFont():getHeight() + 15
+
+    g.setFont('media/fonts/handDrawnShapes.ttf', 48)
     g.setColor(0, 0, 0)
     g.print(str, x - g.getFont():getWidth(str) / 2 + 2, yy + 2)
     g.setColor(255, 255, 255)
@@ -441,7 +443,7 @@ function Hud:addScore(amount, kind, cause)
 
   if kind == 'person' then
     self.rainbowShitCounter = self.bubble.multiplier --self.rainbowShitCounter + 1
-    if self.rainbowShitCounter == Pigeon.rainbowShitThreshold then
+    if self.rainbowShitCounter % 50 == 0 then
       --self.rainbowShitCounter = 0
       ctx.pigeon:activateRainbowShit()
     end
