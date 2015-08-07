@@ -80,7 +80,7 @@ function Kingdumb:init(index)
       image = data.media.graphics.kingdumb['shrub' .. love.math.random(1, 2)],
       x = obstacle.body:getX() - obstacle.width / 2 + love.math.random() * obstacle.width,
       y = obstacle.body:getY() - obstacle.height / 2,
-      height = 30 + love.math.random() * 30,
+      height = 20 + love.math.random() * 20,
       direction = love.math.random() > .5 and -1 or 1
     })
 
