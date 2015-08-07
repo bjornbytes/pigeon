@@ -213,25 +213,25 @@ function Hud:gui()
   local gw, gh = g.getDimensions()
   if ctx.debug then
     local x, y = ctx.view:worldPoint(love.mouse.getPosition())
-    g.setFont('media/fonts/BebasNeueBold.otf', 24)
+    g.setFont('media/fonts/handDrawnShapes.ttf', 24)
     g.setColor(0, 0, 0)
-    g.print(x .. ', ' .. y, 3, 3)
+    g.print(x .. ', ' .. y, 9, 9)
     g.setColor(255, 255, 255)
-    g.print(x .. ', ' .. y, 2, 2)
+    g.print(x .. ', ' .. y, 8, 8)
     x, y = love.mouse.getPosition()
     g.line(x, 0, x, gh)
     g.line(0, y, gw, y)
   end
 
   if not self.win.active then
-    g.setFont('media/fonts/BebasNeueBold.otf', 24)
+    g.setFont('media/fonts/handDrawnShapes.ttf', 24)
     g.setColor(0, 0, 0, 150)
     local str = math.round(self.scoreDisplay)
     local w = math.max(g.getFont():getWidth(str), 80)
     local h = g.getFont():getHeight()
-    g.rectangle('fill', 0, 0, w + 8, h + 8)
+    g.rectangle('fill', 0, 0, w + 16, h + 16)
     g.setColor(255, 255, 255)
-    g.print(str, 4, 4)
+    g.print(str, 8, 8)
   end
 
   if self.bubble.active then
@@ -371,13 +371,13 @@ function Hud:gui()
       local scale = 80 / image:getHeight()
       g.setColor(255, 255, 255)
       g.draw(image, xx, gh / 2 - 20, 0, scale, scale, image:getWidth() / 2, image:getHeight() / 2)
-      g.setColor(0, 0, 0)
       local str = bonus.name
+      g.setColor(0, 0, 0)
       g.print(str, xx - g.getFont():getWidth(str) / 2 + 2, gh / 2 - 20 + 60 + 2)
       g.setColor(255, 255, 255)
       g.print(str, xx - g.getFont():getWidth(str) / 2, gh / 2 - 20 + 60)
       if math.inside(mx, my, xx - image:getWidth() * scale / 2, gh / 2 - 20 - image:getHeight() * scale / 2, image:getWidth() * scale, image:getHeight() * scale) then
-        flyoutService = bonus.description
+        flyoutService = bonus.description .. '\n' .. '+' .. bonus.score
       end
       xx = xx + inc
     end
@@ -386,11 +386,19 @@ function Hud:gui()
     if flyoutService then
       g.setColor(0, 0, 0, 200)
       local w = g.getFont():getWidth(flyoutService) + 8
-      local h = g.getFont():getHeight() + 8
+      local h = g.getFont():getHeight() * 2 + 8
       g.rectangle('fill', mx + 8, my + 8, w, h)
       g.setColor(255, 255, 255)
       g.print(flyoutService, mx + 12, my + 12)
     end
+
+    local alpha = math.abs(math.sin((ls.tick + ls.accum / ls.tickrate) / 25))
+    local str = 'Press space to continue'
+    g.setFont('media/fonts/handDrawnShapes.ttf', 30)
+    g.setColor(0, 0, 0, alpha * 255)
+    g.print(str, x - g.getFont():getWidth(str) / 2 + 2, gh - 55 + 2)
+    g.setColor(255, 255, 255, alpha * 255)
+    g.print(str, x - g.getFont():getWidth(str) / 2, gh - 55)
   end
 end
 

@@ -493,10 +493,6 @@ Pigeon.idle = {}
 function Pigeon.idle:update()
   self:recoverFuel()
   self.animation:set('idle')
-
-  if love.keyboard.isDown('return') then
-    return self:changeState('walk').update(self)
-  end
 end
 
 Pigeon.walk = {}
