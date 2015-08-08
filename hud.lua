@@ -449,6 +449,10 @@ function Hud:resetBubble()
 end
 
 function Hud:addScore(amount, kind, cause)
+  if cause == 'peck' then
+    amount = amount * 2
+  end
+
   self.bubble.active = true
   self.bubble.timer = 3
   self.bubble.amount = self.bubble.amount + amount
@@ -463,10 +467,6 @@ function Hud:addScore(amount, kind, cause)
     if self.rainbowShitCounter % 50 == 0 then
       --self.rainbowShitCounter = 0
       ctx.pigeon:activateRainbowShit()
-    end
-
-    if cause == 'peck' then
-      self.bubble.amount = self.bubble.amount + 5
     end
   end
 end
