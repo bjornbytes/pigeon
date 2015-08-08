@@ -33,10 +33,6 @@ function Menu:update()
   self.map:update()
   self.enemies:update()
   self.world:update(ls.tickrate)
-
-  if joystick and joystick:isGamepadDown('start') then
-    self:keypressed(' ')
-  end
 end
 
 function Menu:draw()
@@ -57,7 +53,7 @@ function Menu:draw()
   local str = 'FOWL PLAY'
   g.setColor(0, 0, 0)
   g.print(str, g.getWidth() / 2 - g.getFont():getWidth(str) / 2 + 2, 100 + 2)
-  g.setColor(255, 255, 255)
+  g.setColor(220, 80, 80)
   g.print(str, g.getWidth() / 2 - g.getFont():getWidth(str) / 2, 100)
 
   g.setColor(255, 255, 255)
@@ -69,7 +65,8 @@ function Menu:draw()
   local sw = font:getWidth(str)
   local sh = font:getHeight()
   if self.selectedIndex == 1 then
-    g.rectangle('line', gw / 2 - sw / 2 - 10, 250 - 10, sw + 20, sh + 20)
+    g.setColor(255, 255, 255, 80)
+    g.rectangle('fill', gw / 2 - sw / 2 - 10, 250 - 10, sw + 20, sh + 20)
   end
 
   g.setColor(0, 0, 0)
@@ -82,7 +79,8 @@ function Menu:draw()
   local sw = font:getWidth(str)
   local sh = font:getHeight()
   if self.selectedIndex == 2 then
-    g.rectangle('line', gw / 2 - sw / 2 - 10, 350 - 10, sw + 20, sh + 20)
+    g.setColor(255, 255, 255, 80)
+    g.rectangle('fill', gw / 2 - sw / 2 - 10, 350 - 10, sw + 20, sh + 20)
   end
 
   g.setColor(0, 0, 0)
@@ -90,12 +88,19 @@ function Menu:draw()
   g.setColor(255, 255, 255)
   g.print(str, gw / 2 - sw / 2, 350)
 
+  local height = 40
+  local image = data.media.graphics.ui.arrow
+  local scale = height / image:getHeight()
+  g.draw(image, gw / 2 + 75, 350 + sh / 2, 0, scale, scale, 0, image:getHeight() / 2)
+  g.draw(image, gw / 2 - 75, 350 + sh / 2, 0, -scale, scale, 0, image:getHeight() / 2)
+
   --
   local str = 'Quit'
   local sw = font:getWidth(str)
   local sh = font:getHeight()
   if self.selectedIndex == 3 then
-    g.rectangle('line', gw / 2 - sw / 2 - 10, 450 - 10, sw + 20, sh + 20)
+  g.setColor(255, 255, 255, 80)
+    g.rectangle('fill', gw / 2 - sw / 2 - 10, 450 - 10, sw + 20, sh + 20)
   end
 
   g.setColor(0, 0, 0)
@@ -119,7 +124,7 @@ function Menu:keypressed(key)
       Context:remove(ctx)
       Context:add(Game, world, self.levelIndex)
       return
-    elseif self.selectedIndex == 2 then
+    elseif self.selectedIndex == 3 then
       love.event.quit()
     end
   elseif key == 'left' then
@@ -137,4 +142,15 @@ function Menu:keypressed(key)
       else self.worldIndex = 1 end
     end
   end
+end
+
+function Menu:gamepadpressed(gamepad, button)
+  if button == 'dpup' then self:keypressed('up')
+  elseif button == 'dpdown' then self:keypressed('down')
+  elseif button == 'dpleft' then self:keypressed('left')
+  elseif button == 'dpright' then self:keypressed('right') end
+
+  if button == 'a' or button == 'start' then self:keypressed('return') end
+
+  if button == 'back' then self:keypressed('escape') end
 end
