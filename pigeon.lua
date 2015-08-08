@@ -510,9 +510,9 @@ function Pigeon.walk:update()
 
   self:recoverFuel()
 
-  if love.keyboard.isDown('up', 'w', 'z') then
+  if love.keyboard.isDown('up', 'w', 'z') or (self.joystick and (self.joystick:getGamepadAxis('lefty') < -.5 or self.joystick:isDown('a', 'dpup'))) then
     return self:changeState('air')
-  elseif love.keyboard.isDown(' ', 'down', 's', 'x') and not self.peckDirty then
+  elseif (love.keyboard.isDown(' ', 'down', 's', 'x') or (self.joystick and (self.joystick:getGamepadAxis('lefty') > .5 or self.joystick:isDown('b', 'dpdown')))) and not self.peckDirty then
     self:changeState('peck')
   end
 
