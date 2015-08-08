@@ -55,7 +55,7 @@ function Map:update()
   end
 
   table.each(self.obstacles, function(obstacle)
-    if ((love.keyboard.isDown('down') or (joystick and joystick:getGamepadAxis('lefty') > .5)) and ctx.pigeon.downDirty > 0) or ctx.pigeon.body:getY() + ctx.pigeon.shapeSize / 2 > obstacle.body:getY() - obstacle.height / 2 then
+    if ((love.keyboard.isDown('down') or (joystick and (joystick:getGamepadAxis('lefty') > .5 or joystick:isGamepadDown('dpdown')) ) and ctx.pigeon.downDirty > 0) or ctx.pigeon.body:getY() + ctx.pigeon.shapeSize / 2 > obstacle.body:getY() - obstacle.height / 2 then
       obstacle.fixture:setCategory(ctx.categories.oneWayPlatform)
     else
       obstacle.fixture:setCategory(ctx.categories.ground)
