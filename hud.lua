@@ -395,7 +395,7 @@ function Hud:gui()
     end
 
     local alpha = math.abs(math.sin((ls.tick + ls.accum / ls.tickrate) / 25))
-    local str = 'Press space to continue'
+    local str = 'Press ' .. (joystick and 'A' or 'space') .. ' to continue'
     g.setFont('media/fonts/handDrawnShapes.ttf', 30)
     g.setColor(0, 0, 0, alpha * 255)
     g.print(str, x - g.getFont():getWidth(str) / 2 + 2, gh - 55 + 2)
@@ -479,4 +479,11 @@ function Hud:activateWin()
     end
   end)
   self.scoreDisplay = 0
+end
+
+function Hud:share()
+  local level = ctx.map.name == 'dinoland' and 1 or 2
+  level = tostring(level) .. '-' .. tostring(ctx.map.index)
+  local url = 'http://twitter.com/intent/tweet?text=I%20got%20a%20new%20highscore%20of%20' .. math.round(self.scoreDisplay) .. '%20points%20on%20level%20' .. level .. '%20of%20%23FowlPlay!%20%20%23RobotPigeon'
+  love.system.openURL(url)
 end

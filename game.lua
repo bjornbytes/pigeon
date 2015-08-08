@@ -74,6 +74,20 @@ function Game:update()
 
   ls.timescale = love.keyboard.isDown('r') and 5 or 1
 
+  if joystick then
+    if ctx.hud.win.active and joystick:isGamepadDown('a') then
+      self:keypressed('return')
+    elseif joystick:isGamepadDown('back') then
+      self:keypressed('escape')
+    elseif joystick:isGamepadDown('start') then
+      if ctx.hud.win.active then
+        ctx.hud:share()
+      else
+        self:keypressed('p')
+      end
+    end
+  end
+
   lurker.update()
 end
 
@@ -85,12 +99,13 @@ end
 
 function Game:keypressed(key)
   if key == 'escape' then
-    love.event.quit()
+    Context:remove(ctx)
+    Context:add(Menu)
   elseif key == 'm' then
     ctx.sound:mute()
   elseif key == 'p' then
     self.paused = not self.paused
-  elseif (key == 'return' or key == ' ') and ctx.hud.win.active then
+  elseif ctx.hud.win.active and (key == 'return' or key == ' ') then
     if self.backgroundSound then self.backgroundSound:stop() end
     Context:remove(ctx)
     local world
