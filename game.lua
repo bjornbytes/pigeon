@@ -105,6 +105,11 @@ function Game:keypressed(key)
     ctx.sound:mute()
   elseif key == 'p' then
     self.paused = not self.paused
+  elseif key == 'r' and ctx.hud.win.active then
+    Context:remove(ctx)
+    local world = (ctx.map.name == 'dinoland') and 'Dinoland' or 'Kingdumb'
+    local index = ctx.map.index
+    Context:add(Game, world, index)
   elseif ctx.hud.win.active and (key == 'return' or key == ' ') then
     if self.backgroundSound then self.backgroundSound:stop() end
     Context:remove(ctx)

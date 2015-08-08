@@ -276,9 +276,9 @@ function Pigeon:collideWith(other, myFixture)
       other:changeState('dead', 'jump')
     end
   elseif isa(other, Building) and not other.destroyed and self.state == self.peck and (myFixture == self.beak.top.fixture or myFixture == self.beak.bottom.fixture) then
-    other:destroy()
+    other:destroy('peck')
   elseif isa(other, Building) and not other.destroyed and self.crushGrace > 0 and (myFixture == self.feet.left.fixture or myFixture == self.feet.right.fixture) then
-    other:destroy()
+    other:destroy('step')
   end
 
   if isa(other, Building) then return false end

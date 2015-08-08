@@ -99,7 +99,7 @@ function Building:collideWith(other)
   return true
 end
 
-function Building:destroy()
+function Building:destroy(cause)
   if self.destroyed then return end
   self.destroyed = true
   self.justDestroyed = true
@@ -108,7 +108,7 @@ function Building:destroy()
   self.fixture:setFriction(0.25)
   self.body:applyLinearImpulse(-400 + love.math.random() * 600, -2000 + love.math.random() * -2000)
   self.body:setAngularVelocity(-20 + love.math.random() * 40)
-  ctx.hud:addScore(50, 'building')
+  ctx.hud:addScore(50, 'building', cause)
   ctx.sound:play('wood', function(sound)
     sound:setVolume(1)
   end)
