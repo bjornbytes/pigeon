@@ -49,12 +49,12 @@ function Menu:draw()
   g.setColor(0, 0, 0, 100)
   g.rectangle('fill', 0, 0, g.getDimensions())
 
-  g.setFont('media/fonts/handDrawnShapes.ttf', 100)
+  g.setFont('media/fonts/handDrawnShapes.ttf', 120)
   local str = 'FOWL PLAY'
   g.setColor(0, 0, 0)
-  g.print(str, g.getWidth() / 2 - g.getFont():getWidth(str) / 2 + 2, 100 + 2)
+  g.print(str, g.getWidth() / 2 - g.getFont():getWidth(str) / 2 + 2, 90 + 2)
   g.setColor(220, 80, 80)
-  g.print(str, g.getWidth() / 2 - g.getFont():getWidth(str) / 2, 100)
+  g.print(str, g.getWidth() / 2 - g.getFont():getWidth(str) / 2, 90)
 
   g.setColor(255, 255, 255)
 
