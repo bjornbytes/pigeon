@@ -501,6 +501,6 @@ end
 function Hud:share()
   local level = ctx.map.name == 'dinoland' and 1 or 2
   level = tostring(level) .. '-' .. tostring(ctx.map.index)
-  local url = 'http://twitter.com/intent/tweet?text=I%20got%20a%20new%20highscore%20of%20' .. math.round(self.scoreDisplay) .. '%20points%20on%20level%20' .. level .. '%20of%20%23FowlPlay!%20%20%23RobotPigeon'
+  local url = 'http://twitter.com/intent/tweet?text=I%20got%20a%20new%20highscore%20of%20' .. math.round(self.scoreDisplay) .. '%20points%20on%20level%20' .. level .. '%20of%20%23FowlPlay!%20%23RobotPigeon'
   love.system.openURL(url)
 end
