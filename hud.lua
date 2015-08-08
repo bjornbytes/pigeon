@@ -401,6 +401,23 @@ function Hud:gui()
     g.print(str, x - g.getFont():getWidth(str) / 2 + 2, gh - 55 + 2)
     g.setColor(255, 255, 255, alpha * 255)
     g.print(str, x - g.getFont():getWidth(str) / 2, gh - 55)
+
+    g.setFont('media/fonts/runescape.ttf', 16)
+    local str = 'Press T to tweet your score!'
+    g.setColor(0, 0, 0)
+    g.print(str, x - g.getFont():getWidth(str) / 2 + 1, gh - 24 + 1)
+    g.setColor(255, 255, 255)
+    g.print(str, x - g.getFont():getWidth(str) / 2, gh - 24)
+  end
+
+  if ctx.map.name == 'dinoland' and ctx.map.index == 1 then
+    local x, y = ctx.view:screenPoint(1067 / 2, ctx.map.height - 40)
+    local str = 'Up = Jump, Space = Peck'
+    g.setFont('media/fonts/handDrawnShapes.ttf', 30)
+    g.setColor(0, 0, 0)
+    g.print(str, x - g.getFont():getWidth(str) / 2 + 1, y - g.getFont():getHeight() / 2 + 1)
+    g.setColor(255, 255, 255)
+    g.print(str, x - g.getFont():getWidth(str) / 2, y - g.getFont():getHeight() / 2)
   end
 end
 

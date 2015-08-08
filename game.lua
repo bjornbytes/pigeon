@@ -51,7 +51,7 @@ function Game:load(level, levelIndex)
 end
 
 function Game:update()
-  self.debug = love.keyboard.isDown('`')
+  self.debug = false--love.keyboard.isDown('`')
 
   if self.paused then
     self.pigeon:paused()
@@ -72,7 +72,7 @@ function Game:update()
   self.view:update()
   self.hud:update()
 
-  ls.timescale = love.keyboard.isDown('r') and 5 or 1
+  ls.timescale = 1--love.keyboard.isDown('r') and 5 or 1
 
   if joystick then
     if ctx.hud.win.active and joystick:isGamepadDown('a') then
@@ -121,6 +121,8 @@ function Game:keypressed(key)
       index = ctx.map.index + 1
     end
     Context:add(Game, world, index)
+  elseif ctx.hud.win.active and key == 't' then
+    ctx.hud:share()
   end
 
   self.pigeon:keypressed(key)

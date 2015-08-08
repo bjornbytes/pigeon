@@ -230,9 +230,9 @@ function View:worldPoint(x, y)
 end
 
 function View:screenPoint(x, y)
-  local vx, vy = lume.lerp(self.prevx, self.x, ls.accum / ls.tickrate), lume.lerp(self.prevy, self.y, ls.accum / ls.tickrate)
-  x = (x - vx) * self.scale
-  if y then y = (y - vy) * self.scale end
+  local vx, vy, s = unpack(table.interpolate({self.prevx, self.prevy, self.prevscale}, {self.x, self.y, self.scale}, ls.accum / ls.tickrate))
+  x = (x - vx) * s
+  if y then y = (y - vy) * s end
   return x, y
 end
 
