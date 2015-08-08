@@ -532,7 +532,7 @@ function Pigeon.air:enter()
     self.rightWhirr:stop()
   end
   self.jumped = false
-  if love.keyboard.isDown('up') then
+  if love.keyboard.isDown('up', 'w', 'z') or (self.joystick and (self.joystick:getGamepadAxis('lefty') < -.5 or self.joystick:isGamepadDown('a', 'dpup'))) then
     self.animation:set('jump')
   end
   self.jumps = self.jumps + 1
