@@ -173,7 +173,7 @@ function Pigeon:update()
     flux.to(self.animation, .2, {scale = .7}, 'elasticout')
   end)
 
-  if love.keyboard.isDown('down') then
+  if love.keyboard.isDown('down', 's') or (self.joystick and (self.joystick:getGamepadAxis('lefty') > .5) or (self.joystick:isGamepadDown('dpdown'))) then
     self.downDirty = timer.rot(self.downDirty)
   else
     self.downDirty = .1
@@ -512,7 +512,7 @@ function Pigeon.walk:update()
 
   if love.keyboard.isDown('up', 'w', 'z') or (self.joystick and (self.joystick:getGamepadAxis('lefty') < -.5 or self.joystick:isGamepadDown('a', 'dpup'))) then
     return self:changeState('air')
-  elseif (love.keyboard.isDown(' ', 'down', 's', 'x') or (self.joystick and (self.joystick:getGamepadAxis('lefty') > .5 or self.joystick:isGamepadDown('b', 'dpdown')))) and not self.peckDirty then
+  elseif (love.keyboard.isDown(' ', 'down', 's', 'x') or (self.joystick and (self.joystick:isGamepadDown('b', 'x', 'y')))) and not self.peckDirty then
     self:changeState('peck')
   end
 
