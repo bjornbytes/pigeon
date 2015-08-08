@@ -21,6 +21,8 @@ function Menu:load()
     ctx.enemies:add(Caveman, {x = 0 + love.math.random() * love.graphics.getWidth(), y = self.map.height - self.map.ground.height})
   end
 
+  joystick = #love.joystick.getJoysticks() > 0 and love.joystick.getJoysticks()[1]
+
   self.selectedButton = 'play'
 end
 
@@ -28,6 +30,10 @@ function Menu:update()
   self.map:update()
   self.enemies:update()
   self.world:update(ls.tickrate)
+
+  if joystick and joystick:isGamepadDown('start') then
+    self:keypressed(' ')
+  end
 end
 
 function Menu:draw()

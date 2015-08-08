@@ -154,7 +154,6 @@ function Pigeon:init()
 
   self.rainbowShitTimer = 0
 
-  self.joystick = #love.joystick.getJoysticks() > 0 and love.joystick.getJoysticks()[1]
 
   ctx.event:emit('view.register', {object = self, depth = -10})
 end
@@ -173,7 +172,7 @@ function Pigeon:update()
     flux.to(self.animation, .2, {scale = .7}, 'elasticout')
   end)
 
-  if love.keyboard.isDown('down', 's') or (self.joystick and (self.joystick:getGamepadAxis('lefty') > .5) or (self.joystick:isGamepadDown('dpdown'))) then
+  if love.keyboard.isDown('down', 's') or (joystick and (joystick:getGamepadAxis('lefty') > .5 or (joystick:isGamepadDown('dpdown')))) then
     self.downDirty = timer.rot(self.downDirty)
   else
     self.downDirty = .1
@@ -510,9 +509,9 @@ function Pigeon.walk:update()
 
   self:recoverFuel()
 
-  if love.keyboard.isDown('up', 'w', 'z') or (self.joystick and (self.joystick:getGamepadAxis('lefty') < -.5 or self.joystick:isGamepadDown('a', 'dpup'))) then
+  if love.keyboard.isDown('up', 'w', 'z') or (joystick and (joystick:getGamepadAxis('lefty') < -.5 or joystick:isGamepadDown('a', 'dpup'))) then
     return self:changeState('air')
-  elseif (love.keyboard.isDown(' ', 'down', 's', 'x') or (self.joystick and (self.joystick:isGamepadDown('b', 'x', 'y')))) and not self.peckDirty then
+  elseif (love.keyboard.isDown(' ', 'down', 's', 'x') or (joystick and (joystick:isGamepadDown('b', 'x', 'y')))) and not self.peckDirty then
     self:changeState('peck')
   end
 
@@ -532,7 +531,7 @@ function Pigeon.air:enter()
     self.rightWhirr:stop()
   end
   self.jumped = false
-  if love.keyboard.isDown('up', 'w', 'z') or (self.joystick and (self.joystick:getGamepadAxis('lefty') < -.5 or self.joystick:isGamepadDown('a', 'dpup'))) then
+  if love.keyboard.isDown('up', 'w', 'z') or (joystick and (joystick:getGamepadAxis('lefty') < -.5 or joystick:isGamepadDown('a', 'dpup'))) then
     self.animation:set('jump')
   end
   self.jumps = self.jumps + 1
